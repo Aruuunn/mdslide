@@ -1,0 +1,33 @@
+
+[data-name="edit"], [data-name="live"], [data-name="preview"] {
+  display: none;
+}
+
+.w-md-editor-content, .w-md-editor  {
+    height: calc(100% - 100px) !important; 
+}
+
+.w-md-editor-text {
+    font-size: large !important;
+    padding-top: 10px !important;
+    padding-left: 5px !important;
+    padding-right: 0px !important;
+}
+.w-md-editor-toolbar {
+  font-size: large !important;
+  background-color: #ECECEC !important;
+  margin-bottom: 6px !important;
+  margin-top: 13px !important;
+}
+
+.w-md-editor {
+    box-shadow: none !important;
+}
+
+.wmde-markdown-color code[class*="language-"] {
+	color: #495464 !important;
+}
+
+.w-md-editor-text-input::placeholder {
+  font-size: 1.1em;
+}
