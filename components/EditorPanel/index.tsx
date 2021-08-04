@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, SetStateAction, useState, Dispatch } from "react";
 import { Box, Text, Tooltip } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
 import MDEditor from "@uiw/react-md-editor";
@@ -6,12 +6,16 @@ import MDEditor from "@uiw/react-md-editor";
 import "@uiw/react-md-editor/dist/markdown-editor.css";
 import "@uiw/react-markdown-preview/dist/markdown.css";
 
-export interface EditorPanelProps {}
+export interface EditorPanelProps {
+  value: string;
+  setValue: Dispatch<SetStateAction<string>>;
+}
 
 export const EditorPanel: FC<EditorPanelProps> = (props) => {
-  const [value, setValue] = useState("");
+  const { value, setValue } = props;
   return (
     <Box
+      boxShadow="xl"
       style={{ backgroundColor: "F4F4F2" }}
       p="20px"
       width="100%"

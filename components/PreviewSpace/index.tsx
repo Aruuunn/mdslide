@@ -7,7 +7,7 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
   return (
     <Box
       p="20px"
-      style={{ backgroundColor: "#E8E8E8" }}
+      style={{ backgroundColor: "#F4F4F2" }}
       width="100%"
       height="100%"
     >

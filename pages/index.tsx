@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Head from "next/head";
 import { Grid, GridItem } from "@chakra-ui/react";
 
@@ -9,6 +10,8 @@ import {
 } from "../components";
 
 export default function Home() {
+  const [editorState, setEditorState] = useState("");
+
   return (
     <div>
       <Head>
@@ -22,7 +25,7 @@ export default function Home() {
         as="main"
       >
         <GridItem rowSpan={12} colSpan={1}>
-          <EditorPanel />
+          <EditorPanel value={editorState} setValue={setEditorState} />
         </GridItem>
         <GridItem rowSpan={11} colSpan={2}>
           <PreviewSpace />
