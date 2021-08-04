@@ -11,7 +11,14 @@ export interface SlideProps {
 export const Slide: FC<SlideProps> = (props) => {
   const { width, height, mdContent } = props;
   return (
-    <Box width={width} bg="white" overflow="hidden" p="20" height={height}>
+    <Box
+      boxShadow="lg"
+      width={width}
+      bg="white"
+      overflow="hidden"
+      p="20"
+      height={height}
+    >
       <MDEditor.Markdown source={mdContent} />
     </Box>
   );
