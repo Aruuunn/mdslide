@@ -1,5 +1,5 @@
 import { FC, SetStateAction, useState, Dispatch } from "react";
-import { Box, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Text, Flex, Tooltip } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
 import MDEditor from "@uiw/react-md-editor";
 
@@ -14,36 +14,31 @@ export interface EditorPanelProps {
 export const EditorPanel: FC<EditorPanelProps> = (props) => {
   const { value, setValue } = props;
   return (
-    <Box
-      boxShadow="xl"
-      style={{ backgroundColor: "F4F4F2" }}
-      p="20px"
-      width="100%"
-      height="100%"
-    >
+    <Box boxShadow="xl" p="20px" width="100%" height="100%" overflow="hidden">
       <Box width="100%" height="100px"></Box>
-      <Text
-        color="#BBBFCA"
-        style={{ letterSpacing: "0.15em" }}
-        fontWeight="bold"
-        pb="3"
-        ml="0.5"
-        fontSize="xs"
-      >
-        EDITOR{" "}
+      <Flex pb="3" alignItems="center" fontSize="xs" color="#495464">
+        <Text
+          style={{ letterSpacing: "0.15em" }}
+          fontWeight="bold"
+          ml="0.5"
+          mr="2"
+          mt="0.7"
+        >
+          EDITOR{" "}
+        </Text>
         <Tooltip
-          label="This editor uses Markdown format. To learn more about it, click it!"
-          aria-label="This editor uses Markdown format. To learn more about it, click it!"
+          label="This editor uses Markdown format. To learn more about it, click  "
+          aria-label="This editor uses Markdown format. To learn more about it, click  "
         >
           <a
             target="_blank"
             href="https://www.markdownguide.org/basic-syntax/"
             rel="noreferrer"
           >
-            <InfoIcon />
+            <InfoIcon color="#BBBFCA" fontSize="xs" />
           </a>
         </Tooltip>
-      </Text>
+      </Flex>
       <MDEditor
         preview={"edit"}
         value={value}

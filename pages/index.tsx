@@ -28,7 +28,7 @@ export default function Home() {
           <EditorPanel value={editorState} setValue={setEditorState} />
         </GridItem>
         <GridItem rowSpan={11} colSpan={2}>
-          <PreviewSpace />
+          <PreviewSpace mdContent={editorState} />
         </GridItem>
         <GridItem rowSpan={1} colSpan={2}>
           <SlideNavigator />
