@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Head from "next/head";
+import debounce from "debounce";
 import { Grid, GridItem } from "@chakra-ui/react";
 
 import {
@@ -30,9 +31,9 @@ export default function Home() {
           <EditorPanel
             value={editorState}
             bgColor={bg}
-            setBgColor={setBg}
+            setBgColor={debounce((value: string) => setBg(value), 200)}
             fontColor={fontColor}
-            setFontColor={setFontColor}
+            setFontColor={debounce((value: string) => setFontColor(value), 200)}
             setValue={setEditorState}
           />
         </GridItem>

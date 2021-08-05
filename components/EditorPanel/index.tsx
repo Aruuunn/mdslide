@@ -1,7 +1,8 @@
-import { FC, SetStateAction, useState, Dispatch } from "react";
+import { FC, SetStateAction, useState, Dispatch, useCallback } from "react";
 import { Box, Text, Flex, Tooltip, Input } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
 import MDEditor from "@uiw/react-md-editor";
+import debounce from "debounce";
 
 import "@uiw/react-md-editor/dist/markdown-editor.css";
 import "@uiw/react-markdown-preview/dist/markdown.css";
@@ -17,7 +18,7 @@ export interface EditorPanelProps {
 
 interface ColorPickerProps {
   value: string;
-  setValue: Dispatch<SetStateAction<string>>;
+  setValue: (value: string) => void;
   label: string;
   "aria-label": string;
   id: string;
@@ -42,7 +43,7 @@ const ColorPicker: FC<ColorPickerProps> = (props) => {
           id={id}
           value={value}
           onChange={(e) => {
-            setValue((bg) => (e.target as any)?.value || bg);
+            setValue((e.target as any)?.value || value);
           }}
           type="color"
           width="100%"
