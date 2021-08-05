@@ -4,3 +4,28 @@
 body {
   font-family: 'Inter', sans-serif;
 }
+
+.wmde-markdown {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+
+.wmde-markdown *{
+  width: 100%;
+  text-align: center;
+} 
+
+
+.wmde-markdown li{
+  text-align: start;
+} 
+
+/* TODO make it work without !important */
+.wmde-markdown h1, .wmde-markdown h2 {
+  border-bottom: none !important;
+  text-align: center;
+}
