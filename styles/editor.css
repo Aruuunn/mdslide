@@ -24,6 +24,10 @@
     box-shadow: none !important;
 }
 
+.w-md-editor svg[role="img"] {
+}
+
+
 .wmde-markdown-color code[class*="language-"] {
 	color: #495464 !important;
 }
