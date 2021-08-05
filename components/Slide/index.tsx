@@ -16,14 +16,19 @@ export const Slide: FC<SlideProps> = (props) => {
     <Box
       boxShadow="lg"
       width={width}
-      bg="white"
       overflow="hidden"
-      p="20"
       bg={bgColor}
       color={fontColor}
       height={height}
     >
-      <MDEditor.Markdown source={mdContent} />
+      <MDEditor.Markdown
+        style={{
+          fontSize: width / 34,
+          padding: width / 16,
+          fontFamily: "monospace",
+        }}
+        source={mdContent}
+      />
     </Box>
   );
 };
