@@ -11,6 +11,8 @@ import {
 
 export default function Home() {
   const [editorState, setEditorState] = useState("");
+  const [bg, setBg] = useState("white");
+  const [fontColor, setFontColor] = useState("black");
 
   return (
     <div>
@@ -25,10 +27,21 @@ export default function Home() {
         as="main"
       >
         <GridItem rowSpan={12} colSpan={1}>
-          <EditorPanel value={editorState} setValue={setEditorState} />
+          <EditorPanel
+            value={editorState}
+            bgColor={bg}
+            setBgColor={setBg}
+            fontColor={fontColor}
+            setFontColor={setFontColor}
+            setValue={setEditorState}
+          />
         </GridItem>
         <GridItem rowSpan={11} colSpan={2}>
-          <PreviewSpace mdContent={editorState} />
+          <PreviewSpace
+            bgColor={bg}
+            fontColor={fontColor}
+            mdContent={editorState}
+          />
         </GridItem>
         <GridItem rowSpan={1} colSpan={2}>
           <SlideNavigator />

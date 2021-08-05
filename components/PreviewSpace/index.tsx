@@ -4,6 +4,8 @@ import { Slide } from "../Slide";
 
 export interface PreviewSpaceProps {
   mdContent: string;
+  bgColor: string;
+  fontColor: string;
 }
 
 const getWidth = () => {
@@ -59,7 +61,7 @@ function getSlideSize(spaceWidth: number): { width: number; height: number } {
 }
 
 export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
-  const { mdContent } = props;
+  const { mdContent, fontColor, bgColor } = props;
   const spaceWidth = useSpaceWidth();
   const { width, height } = getSlideSize(spaceWidth);
 
@@ -74,7 +76,13 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
       alignItems="center"
     >
       {width !== 0 ? (
-        <Slide width={width} mdContent={mdContent} height={height} />
+        <Slide
+          bgColor={bgColor}
+          fontColor={fontColor}
+          width={width}
+          mdContent={mdContent}
+          height={height}
+        />
       ) : null}{" "}
     </Flex>
   );

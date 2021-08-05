@@ -10,7 +10,7 @@ export const Navbar: FC<NavbarProps> = (props) => {
       color="#495464"
       as="nav"
       p="20px"
-      boxShadow="sm"
+      boxShadow="xl"
       width="100%"
       height="70px"
       alignItems="center"
