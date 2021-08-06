@@ -22,7 +22,8 @@ body {
 
 
 .wmde-markdown ul{
-  width: auto; 
+  width: auto;
+  max-width: 100%; 
 }
 .wmde-markdown li{
   text-align: start;
