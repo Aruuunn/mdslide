@@ -9,11 +9,11 @@ import "@uiw/react-markdown-preview/dist/markdown.css";
 
 export interface EditorPanelProps {
   value: string;
-  setValue: Dispatch<SetStateAction<string>>;
+  setValue: (value: string) => any;
   bgColor: string;
-  setBgColor: Dispatch<SetStateAction<string>>;
+  setBgColor: (value: string) => any;
   fontColor: string;
-  setFontColor: Dispatch<SetStateAction<string>>;
+  setFontColor: (value: string) => any;
 }
 
 interface ColorPickerProps {
