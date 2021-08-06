@@ -82,6 +82,7 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
           width={width}
           mdContent={mdContent}
           height={height}
+          boxShadow="lg"
         />
       ) : null}{" "}
     </Flex>

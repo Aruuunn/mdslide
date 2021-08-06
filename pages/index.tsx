@@ -40,6 +40,13 @@ export default function Home() {
 
   const getCurrentSlide = (): Slide => state.slides[state.currentSlide];
 
+  const goToSlide = (idx: number) => {
+    setState((s) => ({
+      ...s,
+      currentSlide: idx,
+    }));
+  };
+
   const nextSlide = () => {
     setState((s) => ({
       ...s,
@@ -124,6 +131,9 @@ export default function Home() {
                 slides: [...s.slides, { ...defaultSlideValue }],
               }));
             }}
+            currentSlide={state.currentSlide}
+            onClickSlide={goToSlide}
+            slides={state.slides}
           />
         </GridItem>
       </Grid>
