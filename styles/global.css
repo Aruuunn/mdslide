@@ -8,6 +8,7 @@ body {
 .wmde-markdown {
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   flex-wrap: wrap;
   align-items: center;
@@ -20,8 +21,12 @@ body {
 } 
 
 
+.wmde-markdown ul{
+  width: auto; 
+}
 .wmde-markdown li{
   text-align: start;
+  width: auto;
 } 
 
 /* TODO make it work without !important */
