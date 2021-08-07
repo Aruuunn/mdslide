@@ -1,8 +1,7 @@
-import { FC, SetStateAction, useState, Dispatch, useCallback } from "react";
-import { Box, Text, Flex, Tooltip, Input } from "@chakra-ui/react";
+import { FC } from "react";
+import { Box, Text, Flex, Tooltip } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
 import MDEditor from "@uiw/react-md-editor";
-import debounce from "debounce";
 
 import "@uiw/react-md-editor/dist/markdown-editor.css";
 import "@uiw/react-markdown-preview/dist/markdown.css";

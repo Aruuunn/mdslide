@@ -19,11 +19,15 @@
     "next": "11.0.1",
     "next-remove-imports": "^1.0.5",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-virtualized-auto-sizer": "^1.0.5",
+    "react-window": "^1.8.6"
   },
   "devDependencies": {
     "@types/debounce": "^1.2.0",
     "@types/react": "17.0.15",
+    "@types/react-virtualized-auto-sizer": "^1.0.1",
+    "@types/react-window": "^1.8.5",
     "eslint": "7.32.0",
     "eslint-config-next": "11.0.1",
     "typescript": "4.3.5"

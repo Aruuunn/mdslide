@@ -1,6 +1,8 @@
 import { FC } from "react";
+import { FixedSizeList as List } from 'react-window';
 import { Flex, Box, IconButton } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
+import AutoSizer from "react-virtualized-auto-sizer";
 import { Slide } from "../Slide";
 
 interface Slide {
@@ -26,7 +28,7 @@ const NewSlideButton: FC<NewSlideButtonProps> = (props) => {
   return (
     <IconButton
       colorScheme="black"
-      height="54px"
+      height="57.25px"
       opacity="0.4"
       width="100px"
       onClick={onClick}
@@ -44,40 +46,57 @@ export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
 
   return (
     <Flex
-      p="20px"
-      alignItems="center"
-      justifyContent="center"
+        pl={"20px"}
+      alignItems="flex-start"
       bg="#F4F4F2"
       width="100%"
       height="100%"
     >
-      <Flex mr="5px">
-        {slides.map((slide, idx) => (
-          <Slide
-            key={idx}
-            width={100}
-            height={56.25}
-            mdContent={slide.mdContent}
-            fontColor={slide.fontColor}
-            bgColor={slide.bgColor}
-            onClick={() => {
-              onClickSlide(idx);
-            }}
-            opacity={currentSlide === idx ? 1 : 0.5}
-            border={currentSlide === idx ? "2px" : "1px"}
-            borderColor="black"
-            as="button"
-            _focus={{
-              outline: currentSlide === idx ? "none" : "2px solid lightblue",
-              opacity: 1,
-            }}
-            ml="5px"
-            p="3px"
-            borderRadius="5px"
-          />
-        ))}
-      </Flex>
       <NewSlideButton onClick={onAddNewSlide} />
+
+      <Box width={"calc(100% - 105px)"} height={"80px"}>
+          <AutoSizer>
+            {({ width, height}) => {
+              console.log({width, height})
+
+              return <List
+                  width={width}
+                  height={height}
+                  itemCount={slides.length}
+                  itemSize={105}
+                  layout="horizontal"
+              >
+                {({style, index}) => (
+                    <Slide
+                        key={index}
+                        width={100}
+                        height={56.25}
+                        mdContent={slides[index].mdContent}
+                        fontColor={slides[index].fontColor}
+                        bgColor={slides[index].bgColor}
+                        onClick={() => {
+                          onClickSlide(index);
+                        }}
+                        opacity={currentSlide === index ? 1 : 0.5}
+                        border={currentSlide === index ? "2px" : "1px"}
+                        borderColor="black"
+                        as="button"
+                        _focus={{
+                          outline: currentSlide === index ? "none" : "2px solid lightblue",
+                          opacity: 1,
+                        }}
+                        p="3px"
+                        ml="5px"
+                        borderRadius="5px"
+                        style={{...style, marginLeft: "5px", width: 100, height: 57}}
+                    />
+
+                )}
+              </List>
+            }
+            }
+          </AutoSizer>
+        </Box>
     </Flex>
   );
 };
