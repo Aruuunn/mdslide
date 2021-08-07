@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Head from "next/head";
 import debounce from "debounce";
 import { Grid, GridItem } from "@chakra-ui/react";
@@ -16,7 +17,7 @@ interface Slide {
   mdContent: string;
 }
 
-export default function Home() {
+export function Home() {
   const defaultSlideValue: Slide = {
     fontColor: "black",
     bgColor: "white",
@@ -140,3 +141,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default withPageAuthRequired(Home);
