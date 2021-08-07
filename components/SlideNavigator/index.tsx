@@ -57,8 +57,7 @@ export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
       <Box width={"calc(100% - 105px)"} height={"80px"}>
           <AutoSizer>
             {({ width, height}) => {
-              console.log({width, height})
-
+              
               return <List
                   width={width}
                   height={height}
