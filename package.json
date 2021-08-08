@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "ts-node src/index.ts",
     "lint": "next lint"
   },
   "dependencies": {
@@ -17,20 +17,28 @@
     "@uiw/react-md-editor": "^3.4.11",
     "debounce": "^1.2.1",
     "framer-motion": "^4.1.17",
+    "mongodb": "^3.0.8",
     "next": "11.0.1",
     "next-remove-imports": "^1.0.5",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-virtualized-auto-sizer": "^1.0.5",
-    "react-window": "^1.8.6"
+    "react-window": "^1.8.6",
+    "reflect-metadata": "^0.1.10",
+    "typeorm": "0.2.36"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/plugin-proposal-decorators": "^7.14.5",
     "@types/debounce": "^1.2.0",
+    "@types/node": "^8.0.29",
     "@types/react": "17.0.15",
     "@types/react-virtualized-auto-sizer": "^1.0.1",
     "@types/react-window": "^1.8.5",
+    "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "eslint": "7.32.0",
     "eslint-config-next": "11.0.1",
-    "typescript": "4.3.5"
+    "ts-node": "3.3.0",
+    "typescript": "4.3.2"
   }
 }
