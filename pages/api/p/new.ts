@@ -6,6 +6,11 @@ import {Presentation} from "../../../model/presentation.entity";
 
 
 export default withApiAuthRequired(async function (req: NextApiRequest, res: NextApiResponse)  {
+    if (req.method !== 'POST') {
+        res.status(404);
+        return;
+    }
+
     try {
         const { user } = getSession(req, res);
 
@@ -23,7 +28,7 @@ export default withApiAuthRequired(async function (req: NextApiRequest, res: Nex
 
         const savedPresentation =  await repository.save(newPresentation)
 
-        res.json({id: savedPresentation.id, slides: savedPresentation.slides, title: savedPresentation.title})
+        res.json({id: savedPresentation.id})
     } catch (e) {
         console.error(e);
         res.status(500);

@@ -1,5 +1,6 @@
+import { GetServerSideProps } from "next";
 import { useState, useEffect } from "react";
-import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Head from "next/head";
 import debounce from "debounce";
 import { Grid, GridItem } from "@chakra-ui/react";
@@ -9,7 +10,9 @@ import {
   Navbar,
   PreviewSpace,
   SlideNavigator,
-} from "../components";
+} from "../../components";
+import {getMongoConnection} from "../../lib/get-mongo-connection";
+import {Presentation} from "../../model/presentation.entity";
 
 interface Slide {
   bgColor: string;
@@ -17,16 +20,21 @@ interface Slide {
   mdContent: string;
 }
 
-export function Home() {
+interface HomeProps {
+  slides: Slide[],
+  title: string
+}
+
+export function Home(props: HomeProps) {
+  const { slides } = props;
+
   const defaultSlideValue: Slide = {
     fontColor: "black",
     bgColor: "white",
     mdContent: "",
   };
 
-  const [state, setState] = useState<{ currentSlide: number; slides: Slide[] }>(
-    { currentSlide: 0, slides: [{ ...defaultSlideValue }] }
-  );
+  const [state, setState] = useState<{ currentSlide: number; slides: Slide[] }>({currentSlide: 0, slides});
 
   const updateCurrentSlide = (map: (slide: Slide) => Slide) => {
     setState((s) => ({
@@ -142,4 +150,42 @@ export function Home() {
   );
 }
 
-export default withPageAuthRequired(Home);
+export const getServerSideProps: GetServerSideProps<{}> = withPageAuthRequired({
+  async getServerSideProps(ctx) {
+    const { req, res, params } = ctx;
+    const pid = params["pid"];
+
+    const {user} = await getSession(req, res)
+
+    if (!user) {
+      return  {
+        redirect: {
+          destination: "/api/login"
+        }
+      }
+    }
+
+    const conn = await getMongoConnection();
+    const repository = conn.getMongoRepository(Presentation)
+
+    const presentation = await repository.findOne(pid)
+
+    if (user.email !== presentation.userEmail) {
+      return {
+        redirect: {
+          destination: "/not-found",
+        },
+      };
+    }
+
+
+    return {
+      props: {
+        slides: presentation.slides.map(s => ({...s})),
+        title: presentation.title,
+      },
+    };
+  },
+});
+
+export default Home;

@@ -2,7 +2,8 @@ import Link from "next/link";
 import { useRouter } from 'next/router'
 import {useUser} from "@auth0/nextjs-auth0";
 import { FC } from "react";
-import { Flex, Spacer, Text, Avatar, Button } from "@chakra-ui/react";
+import { Flex, Spacer, Avatar, Button } from "@chakra-ui/react";
+import { Logo } from "../Logo";
 
 export interface NavbarProps {}
 
@@ -21,9 +22,7 @@ export const Navbar: FC<NavbarProps> = (props) => {
       alignItems="center"
     >
       <Link href="/">
-        <Text fontSize="xl">
-          <strong>MD</strong>SLIDE
-        </Text>
+        <Logo />
       </Link>
       <Spacer/>
       {user ? <Avatar size={"sm"} name={user.name ?? ""} src={user.picture ?? ""}/>: <Button onClick={e => {
