@@ -1,5 +1,5 @@
-import { createConnection, Connection } from "typeorm";
-import { Presentation } from "../model/presentation.entity";
+import {Connection, createConnection} from "typeorm";
+import {Presentation} from "../model/presentation.entity";
 
 let cachedConnection: Connection | null = null;
 
@@ -8,13 +8,19 @@ export async function getMongoConnection(): Promise<Connection> {
     return cachedConnection;
   }
 
-  const connection: Connection = await createConnection({
+  let connection: Connection = await createConnection({
     type: "mongodb",
     host: "localhost",
     port: 27017,
     database: "test",
-    entities: [Presentation],
+    entities: [
+      Presentation
+    ],
   });
+
+  if(!connection.isConnected){
+    await connection.connect();
+  }
 
   cachedConnection = connection;
 

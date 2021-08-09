@@ -1,7 +1,7 @@
 import { Entity, ObjectID, ObjectIdColumn, Column } from "typeorm";
 import { Slide } from "./slide";
 
-@Entity()
+@Entity({name: "presentation"})
 export class Presentation {
   @ObjectIdColumn()
   id: ObjectID;
