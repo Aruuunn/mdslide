@@ -2,6 +2,8 @@ import * as mongo from "mongodb";
 
 const client = new mongo.MongoClient(process.env.MONGO_URI || "mongodb://127.0.0.1:27017", {})
 
+let cachedDb: Db | null = null;
+
 export class Db {
     constructor(private db: mongo.Db) {}
 
@@ -30,10 +32,10 @@ export class Db {
 
 
 export async function getDb(): Promise<Db> {
-    if ((global as any).Db instanceof Db) {
+    if (cachedDb) {
         console.log("Using cached Db");
 
-        return (global as any).Db;
+        return cachedDb;
     }
 
     await client.connect()
@@ -44,8 +46,7 @@ export async function getDb(): Promise<Db> {
 
     const database = new Db(db);
 
-    (global as any).Db = database;
+    cachedDb = database;
 
-    
     return database;
 }
