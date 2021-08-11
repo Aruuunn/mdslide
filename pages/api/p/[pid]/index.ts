@@ -2,9 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { ObjectId } from "mongodb";
 import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
-import { Presentation } from "../../../model/presentation";
-import { getDb } from "../../../lib/db";
-import { mapUnderscoreIdToId } from "../../../lib/mapUnderscoreId";
+import { Presentation } from "../../../../model/presentation";
+import { getDb } from "../../../../lib/db";
+import { mapUnderscoreIdToId } from "../../../../lib/mapUnderscoreId";
 
 export default withApiAuthRequired(async function (
   req: NextApiRequest,
