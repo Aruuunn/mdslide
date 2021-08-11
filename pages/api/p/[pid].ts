@@ -1,8 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { ObjectId } from "mongodb";
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
-import { getMongoConnection } from "../../../lib/get-mongo-connection"
-import {Presentation} from "../../../model/presentation.entity";
+import {Presentation} from "../../../model/presentation";
+import { getDb } from '../../../lib/db';
+import { mapUnderscoreIdToId } from '../../../lib/mapUnderscoreId';
 
 
 export default withApiAuthRequired(async function (req: NextApiRequest, res: NextApiResponse) {
@@ -15,12 +17,15 @@ export default withApiAuthRequired(async function (req: NextApiRequest, res: Nex
         return;
     }
 
-    const conn = await getMongoConnection();
-    const repository = conn.getMongoRepository(Presentation)
+    const db = await getDb()
 
-    const presentation = await repository.findOne(req.query.pid as string)
+    const collection = db.getCollection(Presentation);
 
-    console.log({presentation})
+    const presentation = await collection.findOne<Presentation & { _id: ObjectId }>({
+        userEmail: {
+            $eq: user.email
+        }
+    })
 
      if (!presentation) {
         res.status(404);
@@ -32,5 +37,5 @@ export default withApiAuthRequired(async function (req: NextApiRequest, res: Nex
         return
     }
 
-    res.json(presentation);
+    res.json(mapUnderscoreIdToId(presentation));
 })

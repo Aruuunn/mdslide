@@ -11,8 +11,9 @@ import {
   PreviewSpace,
   SlideNavigator,
 } from "../../components";
-import {getMongoConnection} from "../../lib/get-mongo-connection";
-import {Presentation} from "../../model/presentation.entity";
+import {Presentation} from "../../model/presentation";
+import { getDb } from "../../lib/db";
+import { ObjectId } from "mongodb";
 
 interface Slide {
   bgColor: string;
@@ -34,7 +35,7 @@ export function Home(props: HomeProps) {
     mdContent: "",
   };
 
-  const [state, setState] = useState<{ currentSlide: number; slides: Slide[] }>({currentSlide: 0, slides});
+  const [state, setState] = useState<{ currentSlide: number; slides: Slide[] }>({currentSlide: 0, slides });
 
   const updateCurrentSlide = (map: (slide: Slide) => Slide) => {
     setState((s) => ({
@@ -155,29 +156,22 @@ export const getServerSideProps: GetServerSideProps<{}> = withPageAuthRequired({
     const { req, res, params } = ctx;
     const pid = params["pid"];
 
-    const {user} = await getSession(req, res)
+    const {user} = getSession(req, res)
 
-    if (!user) {
-      return  {
-        redirect: {
-          destination: "/api/login"
-        }
-      }
-    }
+    const db = await getDb()
 
-    const conn = await getMongoConnection();
-    const repository = conn.getMongoRepository(Presentation)
+    const collection = db.getCollection(Presentation);
 
-    const presentation = await repository.findOne(pid)
+    const presentation = await collection.findOne<Presentation>({ userEmail: user.email, _id: new ObjectId(pid as string) });
 
-    if (user.email !== presentation.userEmail) {
-      return {
+    if (!presentation) {
+      return ({
         redirect: {
           destination: "/not-found",
-        },
-      };
+          permanent: false,
+        }
+      })
     }
-
 
     return {
       props: {
