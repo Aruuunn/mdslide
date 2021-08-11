@@ -5,10 +5,12 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { Container, Text, Box, Flex } from "@chakra-ui/react";
 
 import { DashboardNavbar, Slide } from "../../components";
+import { useRouter } from "next/router";
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
 export function Index() {
+  const router = useRouter();
   const { data, error } = useSWR("/api/p/all", fetcher);
 
   if (error) {
@@ -40,6 +42,9 @@ export function Index() {
         <Flex mt="20px" wrap={"wrap"}>
           {presentations.map((presentation, idx) => (
             <Box
+              onClick={() => {
+                router.push(`/app/${presentation.id}`);
+              }}
               p="2"
               borderRadius="10px"
               mr="6"
