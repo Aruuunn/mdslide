@@ -1,0 +1,20 @@
+name: 'Bump Version'
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  bump-version:
+    name: 'Bump Version on master'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name:  'Automated Version Bump'
+        uses:  'phips28/gh-action-bump-version@master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          commit-message: 'CI: bumps version to {{version}} [skip ci]'
+
