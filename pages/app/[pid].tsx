@@ -29,7 +29,7 @@ interface HomeProps {
 }
 
 export function Home(props: HomeProps) {
-  const { slides, pid, title } = props;
+  const { slides: intialSlides, pid, title } = props;
 
 
   const defaultSlideValue: Slide = {
@@ -38,21 +38,28 @@ export function Home(props: HomeProps) {
     mdContent: "",
   };
 
-  const [state, setState] = useState<{ currentSlide: number; slides: Slide[] }>({currentSlide: 0, slides });
+  const [state, setState] = useState<{ currentSlide: number; slides: Slide[] }>({currentSlide: 0, slides: intialSlides });
 
+  const {currentSlide, slides} = state;
 
   const updateCurrentSlide = (map: (slide: Slide) => Slide) => {
-    setState((s) => ({
+    setState((s) => {
+      const slide =  map(s.slides[s.currentSlide]);
+      
+      updateSlideRemote(slide, s.currentSlide);
+
+      return ({
       ...s,
       slides: [
         ...s.slides.slice(0, s.currentSlide),
-        map(s.slides[s.currentSlide]),
+        slide,
         ...s.slides.slice(s.currentSlide + 1),
       ],
-    }));
+    }) }
+    );
   };
 
-  const getCurrentSlide = (): Slide => state.slides[state.currentSlide];
+  const getCurrentSlide = (): Slide => slides[currentSlide];
 
   const goToSlide = (idx: number) => {
     setState((s) => ({
@@ -78,8 +85,9 @@ export function Home(props: HomeProps) {
     }));
   };
 
-  const updateSlideRemote = debounce(async (slides: Slide,idx: number) => {
-      await axios.patch(`/api/p/${pid}/slide`, {slides, meta: { index: idx }});
+  const updateSlideRemote = debounce(async (slide: Slide,idx: number) => {
+      console.log({idx, slide})
+      await axios.patch(`/api/p/${pid}/slide`, {slides: slide, meta: { index: idx }});
   }, 300)
 
   useEffect(() => {
@@ -115,7 +123,6 @@ export function Home(props: HomeProps) {
                   ...s,
                   bgColor: value,
                 }));
-                updateSlideRemote({ ...state.slides[state.currentSlide],  bgColor: value,},state.currentSlide)
               },
               200
             )}
@@ -126,21 +133,18 @@ export function Home(props: HomeProps) {
                   ...s,
                   fontColor: value,
                 }))
-                updateSlideRemote({...state.slides[state.currentSlide],  fontColor: value, },state.currentSlide);
-              
+                
               },
               200
             )}
-            setValue={(value) =>
+            setValue={((value) =>
               {
                 updateCurrentSlide((s) => ({
                 ...s,
                 mdContent: value,
               }));
               
-              updateSlideRemote({...state.slides[state.currentSlide],   mdContent: value,  },state.currentSlide);
-              
-            }
+            })
             }
           />
         </GridItem>
