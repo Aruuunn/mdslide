@@ -22,12 +22,14 @@ interface Slide {
 }
 
 interface HomeProps {
-  slides: Slide[],
-  title: string
+  slides: Slide[];
+  title: string;
+  pid: string;
 }
 
 export function Home(props: HomeProps) {
-  const { slides } = props;
+  const { slides, pid, title } = props;
+
 
   const defaultSlideValue: Slide = {
     fontColor: "black",
@@ -36,6 +38,7 @@ export function Home(props: HomeProps) {
   };
 
   const [state, setState] = useState<{ currentSlide: number; slides: Slide[] }>({currentSlide: 0, slides });
+
 
   const updateCurrentSlide = (map: (slide: Slide) => Slide) => {
     setState((s) => ({
@@ -89,7 +92,7 @@ export function Home(props: HomeProps) {
       <Head>
         <title>MSLIDE</title>
       </Head>
-      <Navbar />
+      <Navbar title={title} pid={pid}/>
       <Grid
         height={"calc(100vh - 70px)"}
         templateRows="repeat(12, 1fr)"
@@ -177,6 +180,7 @@ export const getServerSideProps: GetServerSideProps<{}> = withPageAuthRequired({
       props: {
         slides: presentation.slides.map(s => ({...s})),
         title: presentation.title,
+        pid
       },
     };
   },
