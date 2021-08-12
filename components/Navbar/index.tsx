@@ -19,7 +19,7 @@ export const Navbar: FC<NavbarProps> = (props) => {
   const updateRemote = debounce(async (newTitle: string) => {
      // TODO handle error.
      await axios.patch(`/api/p/${pid}/title`, { title: newTitle });
-  }, 300);
+  }, 500);
 
   const updateTitle = async (newTitle: string) => {
     setTitle(newTitle);

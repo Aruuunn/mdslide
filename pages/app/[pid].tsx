@@ -14,6 +14,7 @@ import {
 import {Presentation} from "../../model/presentation";
 import { getDb } from "../../lib/db";
 import { ObjectId } from "mongodb";
+import axios from "axios";
 
 interface Slide {
   bgColor: string;
@@ -77,6 +78,10 @@ export function Home(props: HomeProps) {
     }));
   };
 
+  const updateSlideRemote = debounce(async (slides: Slide,idx: number) => {
+      await axios.patch(`/api/p/${pid}/slide`, {slides, meta: { index: idx }});
+  }, 300)
+
   useEffect(() => {
     window.onkeydown = (e) => {
       if (e.keyCode == 37) {
@@ -105,26 +110,37 @@ export function Home(props: HomeProps) {
             bgColor={getCurrentSlide().bgColor}
             setBgColor={debounce(
               (value: string) =>
-                updateCurrentSlide((s) => ({
+                {
+                  updateCurrentSlide((s) => ({
                   ...s,
                   bgColor: value,
-                })),
+                }));
+                updateSlideRemote({ ...state.slides[state.currentSlide],  bgColor: value,},state.currentSlide)
+              },
               200
             )}
             fontColor={getCurrentSlide().fontColor}
             setFontColor={debounce(
               (value: string) =>
-                updateCurrentSlide((s) => ({
+                {updateCurrentSlide((s) => ({
                   ...s,
                   fontColor: value,
-                })),
+                }))
+                updateSlideRemote({...state.slides[state.currentSlide],  fontColor: value, },state.currentSlide);
+              
+              },
               200
             )}
             setValue={(value) =>
-              updateCurrentSlide((s) => ({
+              {
+                updateCurrentSlide((s) => ({
                 ...s,
                 mdContent: value,
-              }))
+              }));
+              
+              updateSlideRemote({...state.slides[state.currentSlide],   mdContent: value,  },state.currentSlide);
+              
+            }
             }
           />
         </GridItem>
