@@ -1,21 +1,26 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { ObjectId } from "mongodb";
+import { getDb } from "lib/db";
+import { catchErrors } from "lib/exceptions/catcherrors";
+import {
+  UnAuthorizedException,
+  InternalServerException,
+  NotFoundException,
+} from "lib/exceptions/common";
+import type { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
 import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
 import { Presentation } from "model/presentation";
-import { getDb } from "lib/db";
-import { mapUnderscoreIdToId } from "lib/mapUnderscoreId";
+import { mapUnderscoreIdToId } from "lib/utils/mapUnderscoreId";
 
-export default withApiAuthRequired(async function (
+const handler: NextApiHandler = async function (
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { user } = getSession(req, res);
 
   if (!user?.email) {
-    res.status(500);
-    console.error("User.Email is empty.", user);
-    return;
+    console.error("got empty email from session");
+    throw new InternalServerException();
   }
 
   const db = await getDb();
@@ -31,14 +36,14 @@ export default withApiAuthRequired(async function (
   });
 
   if (!presentation) {
-    res.status(404);
-    return;
+    throw new NotFoundException();
   }
 
   if (presentation.userEmail !== user.email) {
-    res.status(401);
-    return;
+    throw new UnAuthorizedException();
   }
 
   res.json(mapUnderscoreIdToId(presentation));
-});
+};
+
+export default catchErrors(withApiAuthRequired(handler));

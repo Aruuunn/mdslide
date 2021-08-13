@@ -1,10 +1,15 @@
+import { BadRequestException } from "lib/exceptions/common";
 import { Slide } from "model/slide";
 import { patchFieldApi } from "lib/patch-field";
+import { isValidSlide } from "lib/utils/isValidSlide";
 
-// @TODO check validity of slide
 export default patchFieldApi("slides", (slide: Slide, meta) => {
   if (typeof meta?.index !== "number") {
-    throw new Error("index required");
+    throw new BadRequestException("index required");
+  }
+
+  if (!isValidSlide(slide)) {
+    throw new BadRequestException("invalid slide");
   }
 
   return {
