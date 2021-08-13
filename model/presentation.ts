@@ -1,6 +1,5 @@
-import { Entity } from "../lib/entity";
+import { Entity } from "lib/entity";
 import { Slide } from "./slide";
-
 
 @Entity({ name: "presentation" })
 export class Presentation {

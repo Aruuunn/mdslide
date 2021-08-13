@@ -16,7 +16,12 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "baseUrl": ".",
+    "jsx": "preserve",
+    "paths": {
+      "@lib/*": ["lib/*"],
+      "@model/*": ["model/*"]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

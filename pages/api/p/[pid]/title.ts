@@ -1,5 +1,7 @@
-import { patchFieldApi } from './../../../../lib/patch-field';
+import { patchFieldApi } from "@lib/patch-field";
 
-export default patchFieldApi("title",  (newTitle) => ({ $set: {
-    title: newTitle
-} }))
+export default patchFieldApi("title", (newTitle) => ({
+  $set: {
+    title: newTitle,
+  },
+}));

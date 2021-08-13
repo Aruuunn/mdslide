@@ -7,7 +7,10 @@ import { FC, useState } from "react";
 import { Input, Flex, Spacer, Avatar, Button } from "@chakra-ui/react";
 import { Logo } from "../Logo";
 
-export interface NavbarProps { title: string; pid: string; }
+export interface NavbarProps {
+  title: string;
+  pid: string;
+}
 
 export const Navbar: FC<NavbarProps> = (props) => {
   const { title: initialTitle, pid } = props;
@@ -17,20 +20,18 @@ export const Navbar: FC<NavbarProps> = (props) => {
   const [title, setTitle] = useState(initialTitle);
 
   const updateRemote = debounce(async (newTitle: string) => {
-     // TODO handle error.
-     await axios.patch(`/api/p/${pid}/title`, { title: newTitle });
+    // TODO handle error.
+    await axios.patch(`/api/p/${pid}/title`, { title: newTitle });
   }, 500);
 
   const updateTitle = async (newTitle: string) => {
     setTitle(newTitle);
 
-    if (newTitle.trim() === "") 
-      return;
+    if (newTitle.trim() === "") return;
 
-     await updateRemote(newTitle);
+    await updateRemote(newTitle);
   };
 
-  
   return (
     <Flex
       color="#495464"
@@ -45,7 +46,12 @@ export const Navbar: FC<NavbarProps> = (props) => {
         <Logo />
       </Link>
       <Spacer />
-      <Input maxWidth="400px" textAlign="center" value={title} onChange={(e) => updateTitle(e.target.value)}/>
+      <Input
+        maxWidth="400px"
+        textAlign="center"
+        value={title}
+        onChange={(e) => updateTitle(e.target.value)}
+      />
       <Spacer />
       {user ? (
         <Avatar size={"sm"} name={user.name ?? ""} src={user.picture ?? ""} />

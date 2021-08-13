@@ -1,52 +1,58 @@
 import * as mongo from "mongodb";
 
-const client = new mongo.MongoClient(process.env.MONGO_URI || "mongodb://127.0.0.1:27017", {})
+const client = new mongo.MongoClient(
+  process.env.MONGO_URI || "mongodb://127.0.0.1:27017",
+  {}
+);
 
 let cachedDb: Db | null = null;
 
 export class Db {
-    constructor(private db: mongo.Db) {}
+  constructor(private db: mongo.Db) {}
 
-    getCollectionName<T>(doc: T): string {
-        const collectionName = Reflect.getMetadata("entity", doc);
+  getCollectionName<T>(doc: T): string {
+    const collectionName = Reflect.getMetadata("entity", doc);
 
-        if (!collectionName) {
-            throw new Error("Entity must decorated @Entity");
-        }
-
-        return collectionName;
+    if (!collectionName) {
+      throw new Error("Entity must decorated @Entity");
     }
 
-    async insert<T>(doc: T): Promise<T & {id: string}>  {
-     const collectionName = this.getCollectionName(doc);
-       const { insertedId } =  await this.db.collection(collectionName).insertOne(doc)
-        return {...doc, id: insertedId.toHexString()};
-    }
+    return collectionName;
+  }
 
-    getCollection<T extends Function>(entity: T): mongo.Collection<mongo.Document> {
-        const collectionName = this.getCollectionName(entity);
-        console.log({collectionName})
-        return this.db.collection(collectionName)
-    }
+  async insert<T>(doc: T): Promise<T & { id: string }> {
+    const collectionName = this.getCollectionName(doc);
+    const { insertedId } = await this.db
+      .collection(collectionName)
+      .insertOne(doc);
+    return { ...doc, id: insertedId.toHexString() };
+  }
+
+  getCollection<T extends Function>(
+    entity: T
+  ): mongo.Collection<mongo.Document> {
+    const collectionName = this.getCollectionName(entity);
+    console.log({ collectionName });
+    return this.db.collection(collectionName);
+  }
 }
 
-
 export async function getDb(): Promise<Db> {
-    if (cachedDb) {
-        console.log("Using cached Db");
+  if (cachedDb) {
+    console.log("Using cached Db");
 
-        return cachedDb;
-    }
+    return cachedDb;
+  }
 
-    await client.connect()
-    
-    console.log("connected")
+  await client.connect();
 
-    const db = client.db(process.env.MONGO_DATABASE ||"mdslide_dev");
+  console.log("connected");
 
-    const database = new Db(db);
+  const db = client.db(process.env.MONGO_DATABASE || "mdslide_dev");
 
-    cachedDb = database;
+  const database = new Db(db);
 
-    return database;
+  cachedDb = database;
+
+  return database;
 }

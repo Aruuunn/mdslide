@@ -1,15 +1,17 @@
 {
   "name": "mslide",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "ts-node src/index.ts",
-    "lint": "next lint",
-    "migration:status": "migrate-mongo status",
-    "migration:up": "migrate-mongo up",
-    "migration:down": "migrate-mongo down"
+    "start": "next start",
+    "check-types": "tsc --pretty --noEmit",
+    "check-format": "prettier --check .",
+    "check-lint": "eslint . --ext ts --ext tsx --ext js",
+    "format": "prettier --write .",
+    "test-all": "npm run check-format && npm run check-lint && npm run check-types && npm run build",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^1.5.0",
@@ -23,6 +25,7 @@
     "dotenv": "^10.0.0",
     "framer-motion": "^4.1.17",
     "http-status-codes": "^2.1.4",
+    "module-alias": "^2.2.2",
     "mongodb": "^4.1.0",
     "next": "11.0.1",
     "next-remove-imports": "^1.0.5",
@@ -44,8 +47,16 @@
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "eslint": "7.32.0",
     "eslint-config-next": "11.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "husky": ">=6",
+    "lint-staged": ">=10",
     "migrate-mongo": "^8.2.3",
+    "prettier": "^2.3.2",
     "ts-node": "3.3.0",
     "typescript": "4.3.2"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
   }
 }

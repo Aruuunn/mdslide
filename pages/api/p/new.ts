@@ -1,10 +1,9 @@
 import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next'
 import { withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
-import {getDb} from "../../../lib/db";
-import {Presentation} from "../../../model/presentation";
-import { catchErrors } from './../../../lib/exceptions/catcherrors';
-
+import {getDb} from "lib/db";
+import {Presentation} from "model/presentation";
+import { catchErrors } from 'lib/exceptions/catcherrors';
 
 
 const handler: NextApiHandler = async function (req: NextApiRequest, res: NextApiResponse<{id: string}>)  {

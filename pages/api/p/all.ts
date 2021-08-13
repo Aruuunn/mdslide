@@ -1,10 +1,10 @@
-import { catchErrors } from './../../../lib/exceptions/catcherrors';
+import { catchErrors } from 'lib/exceptions/catcherrors';
 import { NextApiHandler} from "next";
-import { Presentation } from "./../../../model/presentation";
+import { Presentation } from "model/presentation";
 import { getSession } from "@auth0/nextjs-auth0";
 import { withApiAuthRequired } from "@auth0/nextjs-auth0";
-import { getDb } from "../../../lib/db";
-import { mapUnderscoreIdToId } from "../../../lib/utils/mapUnderscoreId";
+import { getDb } from "lib/db";
+import { mapUnderscoreIdToId } from "lib/utils/mapUnderscoreId";
 
 
 const handler: NextApiHandler = async function (req, res) {
