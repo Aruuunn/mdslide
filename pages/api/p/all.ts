@@ -1,8 +1,8 @@
-import { Presentation } from "./../../../model/presentation";
+import { Presentation } from "model/presentation";
 import { getSession } from "@auth0/nextjs-auth0";
 import { withApiAuthRequired } from "@auth0/nextjs-auth0";
-import { getDb } from "../../../lib/db";
-import { mapUnderscoreIdToId } from "../../../lib/mapUnderscoreId";
+import { getDb } from "lib/db";
+import { mapUnderscoreIdToId } from "lib/mapUnderscoreId";
 
 export default withApiAuthRequired(async function (req, res) {
   const { user } = getSession(req, res);

@@ -11,7 +11,7 @@ import {
   PreviewSpace,
   SlideNavigator,
 } from "../../components";
-import {Presentation} from "../../model/presentation";
+import { Presentation } from "../../model/presentation";
 import { getDb } from "../../lib/db";
 import { ObjectId } from "mongodb";
 import axios from "axios";
@@ -31,32 +31,33 @@ interface HomeProps {
 export function Home(props: HomeProps) {
   const { slides: intialSlides, pid, title } = props;
 
-
   const defaultSlideValue: Slide = {
     fontColor: "black",
     bgColor: "white",
     mdContent: "",
   };
 
-  const [state, setState] = useState<{ currentSlide: number; slides: Slide[] }>({currentSlide: 0, slides: intialSlides });
+  const [state, setState] = useState<{ currentSlide: number; slides: Slide[] }>(
+    { currentSlide: 0, slides: intialSlides }
+  );
 
-  const {currentSlide, slides} = state;
+  const { currentSlide, slides } = state;
 
   const updateCurrentSlide = (map: (slide: Slide) => Slide) => {
     setState((s) => {
-      const slide =  map(s.slides[s.currentSlide]);
-      
+      const slide = map(s.slides[s.currentSlide]);
+
       updateSlideRemote(slide, s.currentSlide);
 
-      return ({
-      ...s,
-      slides: [
-        ...s.slides.slice(0, s.currentSlide),
-        slide,
-        ...s.slides.slice(s.currentSlide + 1),
-      ],
-    }) }
-    );
+      return {
+        ...s,
+        slides: [
+          ...s.slides.slice(0, s.currentSlide),
+          slide,
+          ...s.slides.slice(s.currentSlide + 1),
+        ],
+      };
+    });
   };
 
   const getCurrentSlide = (): Slide => slides[currentSlide];
@@ -85,10 +86,13 @@ export function Home(props: HomeProps) {
     }));
   };
 
-  const updateSlideRemote = debounce(async (slide: Slide,idx: number) => {
-      console.log({idx, slide})
-      await axios.patch(`/api/p/${pid}/slide`, {slides: slide, meta: { index: idx }});
-  }, 300)
+  const updateSlideRemote = debounce(async (slide: Slide, idx: number) => {
+    console.log({ idx, slide });
+    await axios.patch(`/api/p/${pid}/slide`, {
+      slides: slide,
+      meta: { index: idx },
+    });
+  }, 300);
 
   useEffect(() => {
     window.onkeydown = (e) => {
@@ -105,7 +109,7 @@ export function Home(props: HomeProps) {
       <Head>
         <title>MSLIDE</title>
       </Head>
-      <Navbar title={title} pid={pid}/>
+      <Navbar title={title} pid={pid} />
       <Grid
         height={"calc(100vh - 70px)"}
         templateRows="repeat(12, 1fr)"
@@ -116,36 +120,25 @@ export function Home(props: HomeProps) {
           <EditorPanel
             value={getCurrentSlide().mdContent}
             bgColor={getCurrentSlide().bgColor}
-            setBgColor={debounce(
-              (value: string) =>
-                {
-                  updateCurrentSlide((s) => ({
-                  ...s,
-                  bgColor: value,
-                }));
-              },
-              200
-            )}
+            setBgColor={debounce((value: string) => {
+              updateCurrentSlide((s) => ({
+                ...s,
+                bgColor: value,
+              }));
+            }, 200)}
             fontColor={getCurrentSlide().fontColor}
-            setFontColor={debounce(
-              (value: string) =>
-                {updateCurrentSlide((s) => ({
-                  ...s,
-                  fontColor: value,
-                }))
-                
-              },
-              200
-            )}
-            setValue={((value) =>
-              {
-                updateCurrentSlide((s) => ({
+            setFontColor={debounce((value: string) => {
+              updateCurrentSlide((s) => ({
+                ...s,
+                fontColor: value,
+              }));
+            }, 200)}
+            setValue={(value) => {
+              updateCurrentSlide((s) => ({
                 ...s,
                 mdContent: value,
               }));
-              
-            })
-            }
+            }}
           />
         </GridItem>
         <GridItem rowSpan={11} colSpan={2}>
@@ -179,28 +172,31 @@ export const getServerSideProps: GetServerSideProps<{}> = withPageAuthRequired({
     const { req, res, params } = ctx;
     const pid = params["pid"];
 
-    const {user} = getSession(req, res)
+    const { user } = getSession(req, res);
 
-    const db = await getDb()
+    const db = await getDb();
 
     const collection = db.getCollection(Presentation);
 
-    const presentation = await collection.findOne<Presentation>({ userEmail: user.email, _id: new ObjectId(pid as string) });
+    const presentation = await collection.findOne<Presentation>({
+      userEmail: user.email,
+      _id: new ObjectId(pid as string),
+    });
 
     if (!presentation) {
-      return ({
+      return {
         redirect: {
           destination: "/not-found",
           permanent: false,
-        }
-      })
+        },
+      };
     }
 
     return {
       props: {
-        slides: presentation.slides.map(s => ({...s})),
+        slides: presentation.slides.map((s) => ({ ...s })),
         title: presentation.title,
-        pid
+        pid,
       },
     };
   },

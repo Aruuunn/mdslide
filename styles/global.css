@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .wmde-markdown {
@@ -14,24 +13,23 @@ body {
   align-items: center;
 }
 
-
-.wmde-markdown *{
+.wmde-markdown * {
   width: 100%;
   text-align: center;
-} 
-
-
-.wmde-markdown ul{
-  width: auto;
-  max-width: 100%; 
 }
-.wmde-markdown li{
+
+.wmde-markdown ul {
+  width: auto;
+  max-width: 100%;
+}
+.wmde-markdown li {
   text-align: start;
   width: auto;
-} 
+}
 
 /* TODO make it work without !important */
-.wmde-markdown h1, .wmde-markdown h2 {
+.wmde-markdown h1,
+.wmde-markdown h2 {
   border-bottom: none !important;
   text-align: center;
 }

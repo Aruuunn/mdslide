@@ -58,14 +58,8 @@ const ColorPicker: FC<ColorPickerProps> = (props) => {
 };
 
 export const EditorPanel: FC<EditorPanelProps> = (props) => {
-  const {
-    value,
-    setValue,
-    bgColor,
-    setBgColor,
-    fontColor,
-    setFontColor,
-  } = props;
+  const { value, setValue, bgColor, setBgColor, fontColor, setFontColor } =
+    props;
 
   return (
     <Box

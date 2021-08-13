@@ -3,7 +3,7 @@ export { EditorPanel } from "./EditorPanel";
 export { PreviewSpace } from "./PreviewSpace";
 export { DashboardNavbar } from "./DashboardNavbar";
 export { SlideNavigator } from "./SlideNavigator";
-export { Slide } from  "./Slide";
+export { Slide } from "./Slide";
 export { Logo } from "./Logo";
 
 export type { NavbarProps } from "./Navbar";
