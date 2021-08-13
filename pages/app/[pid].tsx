@@ -1,26 +1,17 @@
+import { useEffect } from "react";
+import axios from "axios";
+import create from "zustand";
 import { GetServerSideProps } from "next";
-import { useState, useEffect } from "react";
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Head from "next/head";
 import debounce from "debounce";
 import { Grid, GridItem } from "@chakra-ui/react";
 
-import {
-  EditorPanel,
-  Navbar,
-  PreviewSpace,
-  SlideNavigator,
-} from "../../components";
-import { Presentation } from "../../model/presentation";
-import { getDb } from "../../lib/db";
+import { EditorPanel, Navbar, PreviewSpace, SlideNavigator } from "components";
+import { Presentation } from "model/presentation";
+import { getDb } from "lib/db";
 import { ObjectId } from "mongodb";
-import axios from "axios";
-
-interface Slide {
-  bgColor: string;
-  fontColor: string;
-  mdContent: string;
-}
+import { Slide } from "@model/slide";
 
 interface HomeProps {
   slides: Slide[];
@@ -28,78 +19,120 @@ interface HomeProps {
   pid: string;
 }
 
-export function Home(props: HomeProps) {
-  const { slides: intialSlides, pid, title } = props;
+const defaultSlideValue: Slide = {
+  fontColor: "black",
+  bgColor: "white",
+  mdContent: "",
+};
 
-  const defaultSlideValue: Slide = {
-    fontColor: "black",
-    bgColor: "white",
-    mdContent: "",
-  };
-
-  const [state, setState] = useState<{ currentSlide: number; slides: Slide[] }>(
-    { currentSlide: 0, slides: intialSlides }
-  );
-
-  const { currentSlide, slides } = state;
-
-  const updateCurrentSlide = (map: (slide: Slide) => Slide) => {
-    setState((s) => {
-      const slide = map(s.slides[s.currentSlide]);
-
-      updateSlideRemote(slide, s.currentSlide);
-
-      return {
-        ...s,
-        slides: [
-          ...s.slides.slice(0, s.currentSlide),
-          slide,
-          ...s.slides.slice(s.currentSlide + 1),
-        ],
-      };
-    });
-  };
-
-  const getCurrentSlide = (): Slide => slides[currentSlide];
-
-  const goToSlide = (idx: number) => {
-    setState((s) => ({
-      ...s,
-      currentSlide: idx,
-    }));
-  };
-
-  const nextSlide = () => {
-    setState((s) => ({
-      ...s,
-      currentSlide:
-        s.slides.length !== s.currentSlide + 1
-          ? s.currentSlide + 1
-          : s.currentSlide,
-    }));
-  };
-
-  const prevSlide = () => {
-    setState((s) => ({
-      ...s,
-      currentSlide: s.currentSlide !== 0 ? s.currentSlide - 1 : s.currentSlide,
-    }));
-  };
-
-  const updateSlideRemote = debounce(async (slide: Slide, idx: number) => {
-    console.log({ idx, slide });
+const updateSlideRemote = debounce(
+  async (slide: Slide, pid: string, idx: number) => {
     await axios.patch(`/api/p/${pid}/slide`, {
       slides: slide,
       meta: { index: idx },
     });
-  }, 300);
+  },
+  300
+);
+
+type MapToPartial<T> = (value: T) => Partial<T>;
+
+type State = {
+  currentSlideIdx: number;
+  slides: Slide[];
+};
+
+type Actions = {
+  getCurrentSlide: () => Slide;
+  goToSlide: (index: number) => void;
+  updateCurrentSlide: (pid: string, map: MapToPartial<Slide>) => void;
+  goToNextSlide: () => void;
+  goToPrevSlide: () => void;
+  addNewSlide: () => void;
+  setSlides: (slides: Slide[]) => void;
+};
+
+const useStore = create<State & Actions>((set, get) => ({
+  currentSlideIdx: 0,
+  slides: [defaultSlideValue],
+  getCurrentSlide: () => get().slides[get().currentSlideIdx],
+  goToSlide: (index: number) => {
+    const { slides } = get();
+
+    if (index >= slides.length || index < 0) return;
+
+    set({ currentSlideIdx: index });
+  },
+  goToNextSlide: () => {
+    const { goToSlide, currentSlideIdx } = get();
+    goToSlide(currentSlideIdx + 1);
+  },
+  goToPrevSlide: () => {
+    const { goToSlide, currentSlideIdx } = get();
+    goToSlide(currentSlideIdx - 1);
+  },
+  updateCurrentSlide: (pid: string, map: (slide: Slide) => Partial<Slide>) => {
+    const { currentSlideIdx, slides } = get();
+
+    const partialSlide = map(slides[currentSlideIdx]);
+
+    const slide = { ...slides[currentSlideIdx], ...partialSlide };
+
+    updateSlideRemote(slide, pid, currentSlideIdx);
+
+    set({
+      slides: [
+        ...slides.slice(0, currentSlideIdx),
+        slide,
+        ...slides.slice(currentSlideIdx + 1),
+      ],
+    });
+  },
+  addNewSlide: () => {
+    const { currentSlideIdx, slides } = get();
+
+    set({
+      currentSlideIdx: currentSlideIdx + 1,
+      slides: [...slides, { ...defaultSlideValue }],
+    });
+  },
+  setSlides: (slides) => {
+    set({ slides });
+  },
+}));
+
+export function Home(props: HomeProps) {
+  const { slides: initialSlides, pid, title } = props;
+
+  const store = useStore();
+  const currentSlide = store.slides[store.currentSlideIdx];
+
+  const getUpdateCurrentSlideFn = (
+    field: keyof Slide,
+    shouldDebounce = false
+  ) => {
+    const updateFn = (value: string) =>
+      store.updateCurrentSlide(pid, () => ({ [field]: value }));
+
+    if (shouldDebounce) {
+      return debounce(updateFn, 300);
+    }
+
+    return updateFn;
+  };
+
+  const updateBgColor = getUpdateCurrentSlideFn("bgColor", true);
+  const updateFontColor = getUpdateCurrentSlideFn("fontColor", true);
+  const updateMdContent = getUpdateCurrentSlideFn("mdContent");
 
   useEffect(() => {
+    store.setSlides(initialSlides);
+
     window.onkeydown = (e) => {
       if (e.keyCode == 37) {
-        prevSlide();
+        store.goToNextSlide();
       } else if (e.keyCode == 39) {
-        nextSlide();
+        store.goToPrevSlide();
       }
     };
   }, []);
@@ -118,48 +151,27 @@ export function Home(props: HomeProps) {
       >
         <GridItem rowSpan={12} colSpan={1}>
           <EditorPanel
-            value={getCurrentSlide().mdContent}
-            bgColor={getCurrentSlide().bgColor}
-            setBgColor={debounce((value: string) => {
-              updateCurrentSlide((s) => ({
-                ...s,
-                bgColor: value,
-              }));
-            }, 200)}
-            fontColor={getCurrentSlide().fontColor}
-            setFontColor={debounce((value: string) => {
-              updateCurrentSlide((s) => ({
-                ...s,
-                fontColor: value,
-              }));
-            }, 200)}
-            setValue={(value) => {
-              updateCurrentSlide((s) => ({
-                ...s,
-                mdContent: value,
-              }));
-            }}
+            value={currentSlide.mdContent}
+            bgColor={currentSlide.bgColor}
+            setBgColor={updateBgColor}
+            fontColor={currentSlide.fontColor}
+            setFontColor={updateFontColor}
+            setValue={updateMdContent}
           />
         </GridItem>
         <GridItem rowSpan={11} colSpan={2}>
           <PreviewSpace
-            bgColor={getCurrentSlide().bgColor}
-            fontColor={getCurrentSlide().fontColor}
-            mdContent={getCurrentSlide().mdContent}
+            bgColor={currentSlide.bgColor}
+            fontColor={currentSlide.fontColor}
+            mdContent={currentSlide.mdContent}
           />
         </GridItem>
         <GridItem rowSpan={1} colSpan={2}>
           <SlideNavigator
-            onAddNewSlide={() => {
-              setState((s) => ({
-                ...s,
-                currentSlide: s.currentSlide + 1,
-                slides: [...s.slides, { ...defaultSlideValue }],
-              }));
-            }}
-            currentSlide={state.currentSlide}
-            onClickSlide={goToSlide}
-            slides={state.slides}
+            onAddNewSlide={store.addNewSlide}
+            currentSlide={store.currentSlideIdx}
+            onClickSlide={store.goToSlide}
+            slides={store.slides}
           />
         </GridItem>
       </Grid>

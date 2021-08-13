@@ -1,4 +1,4 @@
-export class Slide {
+export interface Slide {
   mdContent: string;
 
   bgColor: string;

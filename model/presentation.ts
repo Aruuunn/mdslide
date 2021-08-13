@@ -1,8 +1,9 @@
 import { Entity } from "lib/entity";
-import { Slide } from "./slide";
+import type { Slide } from "./slide";
+import type { Presentation as IPresentation } from "./interfaces/presentation";
 
 @Entity({ name: "presentation" })
-export class Presentation {
+export class Presentation implements IPresentation {
   id: string;
 
   title: string;
