@@ -32,21 +32,18 @@ export class Db {
     entity: T
   ): mongo.Collection<mongo.Document> {
     const collectionName = this.getCollectionName(entity);
-    console.log({ collectionName });
     return this.db.collection(collectionName);
   }
 }
 
 export async function getDb(): Promise<Db> {
   if (cachedDb) {
-    console.log("Using cached Db");
-
     return cachedDb;
   }
 
   await client.connect();
 
-  console.log("connected");
+  console.log("[DB]: connected");
 
   const db = client.db(process.env.MONGO_DATABASE || "mdslide_dev");
 
