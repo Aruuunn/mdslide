@@ -54,7 +54,9 @@ export const Navbar: FC<NavbarProps> = (props) => {
       />
       <Spacer />
 
-      <Avatar size={"sm"} name={user.name ?? ""} src={user.picture ?? ""} />
+      {!isLoading ? (
+        <Avatar size={"sm"} name={user.name ?? ""} src={user.picture ?? ""} />
+      ) : null}
     </Flex>
   );
 };
