@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useUser, } from "@auth0/nextjs-auth0";
+import { useUser } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import {
@@ -74,7 +74,9 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
               Actions
             </MenuButton>
             <MenuList>
-              <MenuItem as={"a"} href="/api/auth/logout">Logout</MenuItem>
+              <MenuItem as={"a"} href="/api/auth/logout">
+                Logout
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>

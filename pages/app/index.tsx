@@ -2,7 +2,7 @@ import Head from "next/head";
 import useSWR from "swr";
 import axios from "axios";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { Container, Text, Box, Flex } from "@chakra-ui/react";
+import { Container, Text, Box, Flex, Skeleton } from "@chakra-ui/react";
 
 import { DashboardNavbar, Slide } from "../../components";
 import { useRouter } from "next/router";
@@ -17,19 +17,17 @@ export function Index() {
     console.error(error);
   }
 
-  if (!data) {
-    return null;
-  }
+  const isLoading = !data;
 
-  const presentations = data;
+  const presentations = data ?? [{}, {}, {}];
 
   return (
-    <Box  bg="#fafafa" minHeight="100vh">
+    <Box bg="#fafafa" minHeight="100vh">
       <Head>
         <title>Dashboard</title>
       </Head>
       <DashboardNavbar />
-              
+
       <Container maxW="container.xl">
         <Text
           style={{ letterSpacing: "0.15em" }}
@@ -55,22 +53,30 @@ export function Index() {
               boxShadow="base"
               bg="white"
               tabIndex={0}
-              _hover={{boxShadow: "lg"}}
-              _focus={{boxShadow: "lg"}}
+              _hover={{ boxShadow: "lg" }}
+              _focus={{ boxShadow: "lg" }}
             >
-              <Slide
-                width={100 * 3}
-                borderWidth="1px"
-              borderColor="gray.100"
-                height={56.25 * 3}
-                bgColor={presentation.coverSlide.bgColor}
-                fontColor={presentation.coverSlide.fontColor}
-                mdContent={presentation.coverSlide.mdContent}
-              />
+              {isLoading ? (
+                <Skeleton width={100 * 3 + "px"} height={56.25 * 3 + "px"} />
+              ) : (
+                <Slide
+                  width={100 * 3}
+                  borderWidth="1px"
+                  borderColor="gray.100"
+                  height={56.25 * 3}
+                  bgColor={presentation.coverSlide.bgColor}
+                  fontColor={presentation.coverSlide.fontColor}
+                  mdContent={presentation.coverSlide.mdContent}
+                />
+              )}
 
-              <Text mt={"10px"} p="5px" ml="5px">
-                {presentation.title}
-              </Text>
+              {isLoading ? (
+                <Skeleton mt={"10px"} p="5px" width="100%" height="20px" />
+              ) : (
+                <Text mt={"10px"} p="5px" ml="5px">
+                  {presentation?.title}
+                </Text>
+              )}
             </Box>
           ))}
         </Flex>
