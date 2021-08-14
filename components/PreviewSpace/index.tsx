@@ -1,5 +1,8 @@
 import { FC, useState, useEffect } from "react";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Box } from "@chakra-ui/react";
+import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
+import { useStore } from "lib/stores/EditorPage";
+
 import { Slide } from "../Slide";
 
 export interface PreviewSpaceProps {
@@ -64,27 +67,64 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
   const { mdContent, fontColor, bgColor } = props;
   const spaceWidth = useSpaceWidth();
   const { width, height } = getSlideSize(spaceWidth);
+  const store = useStore();
 
   return (
-    <Flex
-      id="preview-space"
-      p="20px"
-      style={{ backgroundColor: "#F4F4F2" }}
-      width="100%"
-      height="100%"
-      justifyContent="center"
-      alignItems="center"
-    >
-      {width !== 0 ? (
-        <Slide
-          bgColor={bgColor}
-          fontColor={fontColor}
-          width={width}
-          mdContent={mdContent}
-          height={height}
-          boxShadow="lg"
-        />
-      ) : null}{" "}
-    </Flex>
+    <Box position="relative" width="100%" height="100%">
+      <Flex
+        position="absolute"
+        top="calc(50% - 15px)"
+        right="25px"
+        p="10px"
+        bg="white"
+        borderRadius="50%"
+        height="30px"
+        alignItems="center"
+        justify="center"
+        width="30px"
+        onClick={store.goToNextSlide}
+        boxShadow="lg"
+      >
+        <ChevronRightIcon />
+      </Flex>
+
+      <Flex
+        position="absolute"
+        top="calc(50% - 15px)"
+        left="25px"
+        p="10px"
+        bg="white"
+        borderRadius="50%"
+        height="30px"
+        alignItems="center"
+        justify="center"
+        width="30px"
+        onClick={store.goToPrevSlide}
+        boxShadow="lg"
+      >
+        <ChevronLeftIcon />
+      </Flex>
+
+      <Flex
+        id="preview-space"
+        p="20px"
+        style={{ backgroundColor: "#F4F4F2" }}
+        width="100%"
+        height="100%"
+        justifyContent="center"
+        alignItems="center"
+      >
+        {width !== 0 ? (
+          <Slide
+            bgColor={bgColor}
+            fontColor={fontColor}
+            width={width}
+            mdContent={mdContent}
+            height={height}
+            boxShadow="lg"
+          />
+        ) : null}{" "}
+      </Flex>
+    </Box>
   );
 };

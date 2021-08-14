@@ -1,6 +1,4 @@
 import { useEffect } from "react";
-import axios from "axios";
-import create from "zustand";
 import { GetServerSideProps } from "next";
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Head from "next/head";
@@ -12,105 +10,15 @@ import { Presentation } from "model/presentation";
 import { getDb } from "lib/db";
 import { ObjectId } from "mongodb";
 import { Slide } from "@model/slide";
+import { useStore } from "lib/stores/EditorPage";
 
-interface HomeProps {
+interface EditorPageProps {
   slides: Slide[];
   title: string;
   pid: string;
 }
 
-const defaultSlideValue: Slide = {
-  fontColor: "black",
-  bgColor: "white",
-  mdContent: "# Type Something..",
-};
-
-const updateSlideRemote = debounce(
-  async (slide: Slide, pid: string, idx: number) => {
-    await axios.patch(`/api/p/${pid}/slide`, {
-      slides: slide,
-      meta: { index: idx },
-    });
-  },
-  300
-);
-
-type MapToPartial<T> = (value: T) => Partial<T>;
-
-type State = {
-  currentSlideIdx: number;
-  slides: Slide[];
-};
-
-type Actions = {
-  getCurrentSlide: () => Slide;
-  goToSlide: (index: number) => void;
-  updateCurrentSlide: (pid: string, map: MapToPartial<Slide>) => void;
-  goToNextSlide: () => void;
-  goToPrevSlide: () => void;
-  addNewSlide: () => void;
-  setSlides: (slides: Slide[]) => void;
-};
-
-const useStore = create<State & Actions>((set, get) => ({
-  currentSlideIdx: 0,
-  slides: [defaultSlideValue],
-  getCurrentSlide: () => get().slides[get().currentSlideIdx],
-  goToSlide: (index: number) => {
-    const { slides } = get();
-
-    if (index >= slides.length || index < 0) return;
-
-    set({ currentSlideIdx: index });
-  },
-  goToNextSlide: () => {
-    const { goToSlide, currentSlideIdx } = get();
-    goToSlide(currentSlideIdx + 1);
-  },
-  goToPrevSlide: () => {
-    const { goToSlide, currentSlideIdx } = get();
-    goToSlide(currentSlideIdx - 1);
-  },
-  updateCurrentSlide: (pid: string, map: (slide: Slide) => Partial<Slide>) => {
-    const { currentSlideIdx, slides } = get();
-
-    const partialSlide = map(slides[currentSlideIdx]);
-
-    const slide = { ...slides[currentSlideIdx], ...partialSlide };
-
-    updateSlideRemote(slide, pid, currentSlideIdx);
-
-    set({
-      slides: [
-        ...slides.slice(0, currentSlideIdx),
-        slide,
-        ...slides.slice(currentSlideIdx + 1),
-      ],
-    });
-  },
-  addNewSlide: () => {
-    const { slides } = get();
-
-    const lastSlide = slides[slides.length - 1];
-
-    set({
-      currentSlideIdx: slides.length,
-      slides: [
-        ...slides,
-        {
-          ...defaultSlideValue,
-          bgColor: lastSlide?.bgColor ?? "white",
-          fontColor: lastSlide?.fontColor ?? "black",
-        },
-      ],
-    });
-  },
-  setSlides: (slides) => {
-    set({ slides });
-  },
-}));
-
-export function Home(props: HomeProps) {
+export function EditorPage(props: EditorPageProps) {
   const { slides: initialSlides, pid, title } = props;
 
   const store = useStore();
@@ -233,4 +141,4 @@ export const getServerSideProps: GetServerSideProps<{}> = withPageAuthRequired({
   },
 });
 
-export default Home;
+export default EditorPage;
