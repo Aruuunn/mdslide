@@ -29,7 +29,8 @@ const NewSlideButton: FC<NewSlideButtonProps> = (props) => {
     <IconButton
       colorScheme="black"
       height="57.25px"
-      opacity="0.4"
+      opacity="1"
+      borderRadius="3px"
       width="100px"
       onClick={onClick}
       variant="outline"
@@ -82,12 +83,12 @@ export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
                     as="button"
                     _focus={{
                       outline:
-                        currentSlide === index ? "none" : "2px solid lightblue",
+                        currentSlide === index ? "none" : "1px solid black",
                       opacity: 1,
                     }}
                     p="3px"
                     ml="5px"
-                    borderRadius="5px"
+                    borderRadius="3px"
                     style={{
                       ...style,
                       marginLeft: "5px",

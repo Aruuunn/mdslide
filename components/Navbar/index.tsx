@@ -27,9 +27,7 @@ export const Navbar: FC<NavbarProps> = (props) => {
   const updateTitle = async (newTitle: string) => {
     setTitle(newTitle);
 
-    if (newTitle.trim() === "") return;
-
-    await updateRemote(newTitle);
+    await updateRemote(newTitle.trim() || "Untitled");
   };
 
   return (
@@ -43,13 +41,16 @@ export const Navbar: FC<NavbarProps> = (props) => {
       alignItems="center"
     >
       <Link href="/">
-        <Logo />
+        <Logo fontSize="xl" />
       </Link>
       <Spacer />
       <Input
         maxWidth="400px"
         textAlign="center"
         value={title}
+        required
+        isInvalid={title?.trim() === ""}
+        focusBorderColor="black"
         onChange={(e) => updateTitle(e.target.value)}
       />
       <Spacer />

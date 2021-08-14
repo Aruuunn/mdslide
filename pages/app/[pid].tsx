@@ -22,7 +22,7 @@ interface HomeProps {
 const defaultSlideValue: Slide = {
   fontColor: "black",
   bgColor: "white",
-  mdContent: "",
+  mdContent: "# Type Something..",
 };
 
 const updateSlideRemote = debounce(
@@ -89,11 +89,20 @@ const useStore = create<State & Actions>((set, get) => ({
     });
   },
   addNewSlide: () => {
-    const { currentSlideIdx, slides } = get();
+    const { slides } = get();
+
+    const lastSlide = slides[slides.length - 1];
 
     set({
-      currentSlideIdx: currentSlideIdx + 1,
-      slides: [...slides, { ...defaultSlideValue }],
+      currentSlideIdx: slides.length,
+      slides: [
+        ...slides,
+        {
+          ...defaultSlideValue,
+          bgColor: lastSlide?.bgColor ?? "white",
+          fontColor: lastSlide?.fontColor ?? "black",
+        },
+      ],
     });
   },
   setSlides: (slides) => {
