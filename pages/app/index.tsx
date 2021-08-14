@@ -1,8 +1,16 @@
+import { useState } from "react";
 import Head from "next/head";
 import useSWR from "swr";
 import axios from "axios";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import { Container, Text, Box, Flex, Skeleton } from "@chakra-ui/react";
+import {
+  Container,
+  Text,
+  Box,
+  Flex,
+  Skeleton,
+  Progress,
+} from "@chakra-ui/react";
 
 import { DashboardNavbar, Slide } from "../../components";
 import { useRouter } from "next/router";
@@ -12,6 +20,8 @@ const fetcher = (url) => axios.get(url).then((res) => res.data);
 export function Index() {
   const router = useRouter();
   const { data, error } = useSWR("/api/p/all", fetcher);
+
+  const [isNextRouteLoading, setNextRouteLoading] = useState(false);
 
   if (error) {
     console.error(error);
@@ -26,6 +36,9 @@ export function Index() {
       <Head>
         <title>Dashboard</title>
       </Head>
+      {isNextRouteLoading ? (
+        <Progress size="xs" colorScheme="blackAlpha" isIndeterminate />
+      ) : null}
       <DashboardNavbar />
 
       <Container maxW="container.xl">
@@ -41,20 +54,24 @@ export function Index() {
         <Flex mt="30px" wrap={"wrap"}>
           {presentations.map((presentation, idx) => (
             <Box
+              as="button"
               onClick={() => {
+                setNextRouteLoading(true);
                 router.push(`/app/${presentation.id}`);
               }}
               p="2"
               borderRadius="8px"
               mr="6"
+              disabled={isNextRouteLoading}
               mb="6"
               key={idx}
               width="auto"
-              boxShadow="base"
               bg="white"
+              opacity={isNextRouteLoading ? 0.8 : 1}
               tabIndex={0}
-              _hover={{ boxShadow: "lg" }}
-              _focus={{ boxShadow: "lg" }}
+              boxShadow="base"
+              _hover={{ boxShadow: isNextRouteLoading ? "base" : "lg" }}
+              _focus={{ boxShadow: isNextRouteLoading ? "base" : "lg" }}
             >
               {isLoading ? (
                 <Skeleton width={100 * 3 + "px"} height={56.25 * 3 + "px"} />
