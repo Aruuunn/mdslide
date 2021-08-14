@@ -129,10 +129,20 @@ export function Home(props: HomeProps) {
     store.setSlides(initialSlides);
 
     window.onkeydown = (e) => {
+      if (typeof window !== "undefined") {
+        const editorEl = window.document.querySelector<HTMLTextAreaElement>(
+          ".w-md-editor-text-input"
+        );
+
+        if (window.document.activeElement === editorEl) {
+          return;
+        }
+      }
+
       if (e.keyCode == 37) {
-        store.goToNextSlide();
-      } else if (e.keyCode == 39) {
         store.goToPrevSlide();
+      } else if (e.keyCode == 39) {
+        store.goToNextSlide();
       }
     };
   }, []);
