@@ -76,7 +76,7 @@ export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
                     onClick={() => {
                       onClickSlide(index);
                     }}
-                    opacity={currentSlide === index ? 1 : 0.5}
+                    opacity={currentSlide === index ? 1 : 0.8}
                     border={currentSlide === index ? "2px" : "1px"}
                     borderColor="black"
                     as="button"
