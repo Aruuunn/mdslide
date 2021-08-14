@@ -24,53 +24,58 @@ export function Index() {
   const presentations = data;
 
   return (
-    <div>
+    <Box  bg="#fafafa" minHeight="100vh">
       <Head>
         <title>Dashboard</title>
       </Head>
       <DashboardNavbar />
+              
       <Container maxW="container.xl">
         <Text
           style={{ letterSpacing: "0.15em" }}
           fontWeight="bold"
-          mt={"30px"}
+          mt={"40px"}
           fontSize="xs"
         >
           YOUR PRESENTATIONS
         </Text>
 
-        <Flex mt="20px" wrap={"wrap"}>
+        <Flex mt="30px" wrap={"wrap"}>
           {presentations.map((presentation, idx) => (
             <Box
               onClick={() => {
                 router.push(`/app/${presentation.id}`);
               }}
               p="2"
-              borderRadius="10px"
+              borderRadius="8px"
               mr="6"
               mb="6"
               key={idx}
-              bg="#F4F4F2"
               width="auto"
-              borderWidth="1px"
-              borderColor="gray.200"
+              boxShadow="base"
+              bg="white"
+              tabIndex={0}
+              _hover={{boxShadow: "lg"}}
+              _focus={{boxShadow: "lg"}}
             >
               <Slide
                 width={100 * 3}
+                borderWidth="1px"
+              borderColor="gray.100"
                 height={56.25 * 3}
                 bgColor={presentation.coverSlide.bgColor}
                 fontColor={presentation.coverSlide.fontColor}
                 mdContent={presentation.coverSlide.mdContent}
               />
 
-              <Text mt={"10px"} ml="5px">
+              <Text mt={"10px"} p="5px" ml="5px">
                 {presentation.title}
               </Text>
             </Box>
           ))}
         </Flex>
       </Container>
-    </div>
+    </Box>
   );
 }
 

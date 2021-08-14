@@ -53,21 +53,8 @@ export const Navbar: FC<NavbarProps> = (props) => {
         onChange={(e) => updateTitle(e.target.value)}
       />
       <Spacer />
-      {user ? (
-        <Avatar size={"sm"} name={user.name ?? ""} src={user.picture ?? ""} />
-      ) : (
-        <Button
-          onClick={(e) => {
-            e.preventDefault();
-            router.push("/api/auth/login");
-          }}
-          isLoading={isLoading}
-          variant="outline"
-          colorScheme="black"
-        >
-          Sign Up
-        </Button>
-      )}
+
+      <Avatar size={"sm"} name={user.name ?? ""} src={user.picture ?? ""} />
     </Flex>
   );
 };
