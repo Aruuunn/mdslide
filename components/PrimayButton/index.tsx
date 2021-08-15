@@ -5,7 +5,7 @@ export const PrimaryButton = chakra(Button, {
     bg: "black",
     color: "white",
     borderRadius: "6px",
-      border: "1px solid black",
+    border: "1px solid black",
     _hover: {
       bg: "white",
       color: "black",

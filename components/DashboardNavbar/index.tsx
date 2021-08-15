@@ -7,7 +7,9 @@ import { Logo } from "../Logo";
 import { AccountOptions } from "../AccountOptions";
 import { PrimaryButton } from "../PrimayButton";
 
-export interface DashboardNavbarProps { isDisabled?: boolean }
+export interface DashboardNavbarProps {
+  isDisabled?: boolean;
+}
 
 export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
   const { isDisabled } = props;
@@ -39,13 +41,13 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
           <PrimaryButton
             size="md"
             isLoading={isLoading}
-            disabled={isDisabled}
+            disabled={isDisabled || isLoading}
             onClick={handleNewPresentation}
             leftIcon={<AddIcon fontSize={"sm"} />}
           >
             New
           </PrimaryButton>
-          <AccountOptions size="md" isDisabled={isDisabled}/>
+          <AccountOptions size="md" isDisabled={isDisabled} />
         </Flex>
       </Container>
     </Box>

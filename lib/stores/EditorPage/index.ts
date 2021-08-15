@@ -12,11 +12,17 @@ const defaultSlideValue: Slide = {
 };
 
 const updateSlideRemote = debounce(
-  async (slide: Slide, pid: string, idx: number) => {
-    await axios.patch(`/api/p/${pid}/slide`, {
+  (
+    slide: Slide,
+    pid: string,
+    idx: number,
+    callback: (promise: Promise<any>) => void
+  ) => {
+    const promise = axios.patch(`/api/p/${pid}/slide`, {
       slides: slide,
       meta: { index: idx },
     });
+    callback(promise);
   },
   300
 );
@@ -24,6 +30,8 @@ const updateSlideRemote = debounce(
 type State = {
   currentSlideIdx: number;
   slides: Slide[];
+  lastSlideUpdatePromise: Promise<void> | null;
+  isSaving: boolean;
 };
 
 type Actions = {
@@ -39,6 +47,8 @@ type Actions = {
 export const useStore = create<State & Actions>((set, get) => ({
   currentSlideIdx: 0,
   slides: [defaultSlideValue],
+  lastSlideUpdatePromise: null,
+  isSaving: false,
   getCurrentSlide: () => get().slides[get().currentSlideIdx],
   goToSlide: (index: number) => {
     const { slides } = get();
@@ -62,7 +72,17 @@ export const useStore = create<State & Actions>((set, get) => ({
 
     const slide = { ...slides[currentSlideIdx], ...partialSlide };
 
-    updateSlideRemote(slide, pid, currentSlideIdx);
+    updateSlideRemote(slide, pid, currentSlideIdx, (promise) => {
+      set({ lastSlideUpdatePromise: promise });
+
+      promise.then(() => {
+        const { lastSlideUpdatePromise } = get();
+        if (lastSlideUpdatePromise === promise) {
+          console.log("setting false");
+          set({ isSaving: false });
+        }
+      });
+    });
 
     set({
       slides: [
@@ -70,6 +90,7 @@ export const useStore = create<State & Actions>((set, get) => ({
         slide,
         ...slides.slice(currentSlideIdx + 1),
       ],
+      isSaving: true,
     });
   },
   addNewSlide: () => {

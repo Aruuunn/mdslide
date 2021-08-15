@@ -39,7 +39,7 @@ export function Index() {
       {isNextRouteLoading ? (
         <Progress size="xs" colorScheme="blackAlpha" isIndeterminate />
       ) : null}
-      <DashboardNavbar isDisabled={isNextRouteLoading}/>
+      <DashboardNavbar isDisabled={isNextRouteLoading} />
 
       <Container maxW="container.xl">
         <Text
