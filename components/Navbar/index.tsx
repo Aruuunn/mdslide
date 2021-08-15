@@ -53,8 +53,7 @@ export const Navbar: FC<NavbarProps> = (props) => {
         onChange={(e) => updateTitle(e.target.value)}
       />
       <Spacer />
-        <AccountOptions  size="sm"/>
-
+      <AccountOptions size="sm" />
     </Flex>
   );
 };

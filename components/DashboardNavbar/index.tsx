@@ -1,20 +1,16 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
-import {
-  Container,
-  Flex,
-  Spacer,
-  Box,
-} from "@chakra-ui/react";
+import { Container, Flex, Spacer, Box } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import { Logo } from "../Logo";
 import { AccountOptions } from "../AccountOptions";
 import { PrimaryButton } from "../PrimayButton";
 
-export interface DashboardNavbarProps {}
+export interface DashboardNavbarProps { isDisabled?: boolean }
 
 export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
+  const { isDisabled } = props;
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
 
@@ -43,12 +39,13 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
           <PrimaryButton
             size="md"
             isLoading={isLoading}
+            disabled={isDisabled}
             onClick={handleNewPresentation}
             leftIcon={<AddIcon fontSize={"sm"} />}
           >
             New
           </PrimaryButton>
-          <AccountOptions size="md"/>
+          <AccountOptions size="md" isDisabled={isDisabled}/>
         </Flex>
       </Container>
     </Box>
