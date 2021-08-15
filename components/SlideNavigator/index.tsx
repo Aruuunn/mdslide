@@ -79,7 +79,7 @@ export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
                     }}
                     opacity={currentSlide === index ? 1 : 0.8}
                     border={currentSlide === index ? "2px" : "1px"}
-                    borderColor="black"
+                    borderColor="#495464"
                     as="button"
                     _focus={{
                       outline:
