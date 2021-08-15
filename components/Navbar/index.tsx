@@ -2,9 +2,9 @@ import axios from "axios";
 import { debounce } from "debounce";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useUser } from "@auth0/nextjs-auth0";
 import { FC, useState } from "react";
 import { Input, Flex, Spacer, Avatar, Button } from "@chakra-ui/react";
+import { AccountOptions } from "../AccountOptions";
 import { Logo } from "../Logo";
 
 export interface NavbarProps {
@@ -14,7 +14,6 @@ export interface NavbarProps {
 
 export const Navbar: FC<NavbarProps> = (props) => {
   const { title: initialTitle, pid } = props;
-  const { user, isLoading } = useUser();
   const router = useRouter();
 
   const [title, setTitle] = useState(initialTitle);
@@ -54,10 +53,8 @@ export const Navbar: FC<NavbarProps> = (props) => {
         onChange={(e) => updateTitle(e.target.value)}
       />
       <Spacer />
+        <AccountOptions  size="sm"/>
 
-      {!isLoading ? (
-        <Avatar size={"sm"} name={user.name ?? ""} src={user.picture ?? ""} />
-      ) : null}
     </Flex>
   );
 };

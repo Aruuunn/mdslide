@@ -14,6 +14,6 @@ export const PrimaryButton = chakra(Button, {
       bg: "white",
       color: "black",
       border: "1px solid black",
-    }
+    },
   },
 });
