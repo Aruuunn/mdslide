@@ -71,7 +71,7 @@ export function Index() {
               tabIndex={0}
               boxShadow="base"
               _hover={{ boxShadow: isNextRouteLoading ? "base" : "lg" }}
-              _focus={{ boxShadow: isNextRouteLoading ? "base" : "lg" }}
+              _focus={{ boxShadow: isNextRouteLoading ? "base" : "lg", outline:  "black solid 2px" }}
             >
               {isLoading ? (
                 <Skeleton width={100 * 3 + "px"} height={56.25 * 3 + "px"} />

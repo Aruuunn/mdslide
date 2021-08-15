@@ -59,6 +59,7 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
           <Menu>
             <MenuButton
               as={IconButton}
+              _focus={{outline:  "black solid 2px"}}
               borderRadius="50%"
               bg="transparent"
               ml="25px"

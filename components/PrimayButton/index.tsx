@@ -10,5 +10,10 @@ export const PrimaryButton = chakra(Button, {
       color: "black",
       border: "1px solid black",
     },
+    _focus: {
+      bg: "white",
+      color: "black",
+      border: "1px solid black",
+    }
   },
 });
