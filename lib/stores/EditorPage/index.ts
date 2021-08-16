@@ -32,6 +32,7 @@ type State = {
   slides: Slide[];
   lastSlideUpdatePromise: Promise<void> | null;
   isSaving: boolean;
+  isPresentationMode: boolean;
 };
 
 type Actions = {
@@ -42,6 +43,8 @@ type Actions = {
   goToPrevSlide: () => void;
   addNewSlide: () => void;
   setSlides: (slides: Slide[]) => void;
+  startPresentationMode: () => void;
+  stopPresentationMode: () => void;
 };
 
 export const useStore = create<State & Actions>((set, get) => ({
@@ -49,6 +52,7 @@ export const useStore = create<State & Actions>((set, get) => ({
   slides: [defaultSlideValue],
   lastSlideUpdatePromise: null,
   isSaving: false,
+  isPresentationMode: false,
   getCurrentSlide: () => get().slides[get().currentSlideIdx],
   goToSlide: (index: number) => {
     const { slides } = get();
@@ -112,5 +116,11 @@ export const useStore = create<State & Actions>((set, get) => ({
   },
   setSlides: (slides) => {
     set({ slides });
+  },
+  startPresentationMode: () => {
+    set({ isPresentationMode: true });
+  },
+  stopPresentationMode: () => {
+    set({ isPresentationMode: false });
   },
 }));

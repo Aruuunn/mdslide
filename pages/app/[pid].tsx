@@ -5,7 +5,13 @@ import Head from "next/head";
 import debounce from "debounce";
 import { Grid, GridItem } from "@chakra-ui/react";
 
-import { EditorPanel, Navbar, PreviewSpace, SlideNavigator } from "components";
+import {
+  EditorPanel,
+  Navbar,
+  PreviewSpace,
+  SlideNavigator,
+  FullScreenPresentation,
+} from "components";
 import { Presentation } from "model/presentation";
 import { getDb } from "lib/db";
 import { ObjectId } from "mongodb";
@@ -69,39 +75,45 @@ export function EditorPage(props: EditorPageProps) {
       <Head>
         <title>MSLIDE</title>
       </Head>
-      <Navbar title={title} pid={pid} />
-      <Grid
-        height={"calc(100vh - 70px)"}
-        templateRows="repeat(12, 1fr)"
-        templateColumns="repeat(3, 1fr)"
-        as="main"
-      >
-        <GridItem rowSpan={12} colSpan={1}>
-          <EditorPanel
-            value={currentSlide.mdContent}
-            bgColor={currentSlide.bgColor}
-            setBgColor={updateBgColor}
-            fontColor={currentSlide.fontColor}
-            setFontColor={updateFontColor}
-            setValue={updateMdContent}
-          />
-        </GridItem>
-        <GridItem rowSpan={11} colSpan={2}>
-          <PreviewSpace
-            bgColor={currentSlide.bgColor}
-            fontColor={currentSlide.fontColor}
-            mdContent={currentSlide.mdContent}
-          />
-        </GridItem>
-        <GridItem rowSpan={1} colSpan={2}>
-          <SlideNavigator
-            onAddNewSlide={store.addNewSlide}
-            currentSlide={store.currentSlideIdx}
-            onClickSlide={store.goToSlide}
-            slides={store.slides}
-          />
-        </GridItem>
-      </Grid>
+      {!store.isPresentationMode ? (
+        <>
+          <Navbar title={title} pid={pid} />
+          <Grid
+            height={"calc(100vh - 70px)"}
+            templateRows="repeat(12, 1fr)"
+            templateColumns="repeat(3, 1fr)"
+            as="main"
+          >
+            <GridItem rowSpan={12} colSpan={1}>
+              <EditorPanel
+                value={currentSlide.mdContent}
+                bgColor={currentSlide.bgColor}
+                setBgColor={updateBgColor}
+                fontColor={currentSlide.fontColor}
+                setFontColor={updateFontColor}
+                setValue={updateMdContent}
+              />
+            </GridItem>
+            <GridItem rowSpan={11} colSpan={2}>
+              <PreviewSpace
+                bgColor={currentSlide.bgColor}
+                fontColor={currentSlide.fontColor}
+                mdContent={currentSlide.mdContent}
+              />
+            </GridItem>
+            <GridItem rowSpan={1} colSpan={2}>
+              <SlideNavigator
+                onAddNewSlide={store.addNewSlide}
+                currentSlide={store.currentSlideIdx}
+                onClickSlide={store.goToSlide}
+                slides={store.slides}
+              />
+            </GridItem>
+          </Grid>{" "}
+        </>
+      ) : (
+        <FullScreenPresentation />
+      )}
     </div>
   );
 }
