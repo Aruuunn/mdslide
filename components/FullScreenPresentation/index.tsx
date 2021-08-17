@@ -1,5 +1,6 @@
 import { FC, useEffect } from "react";
 import { Slide } from "../Slide";
+import { Box } from "@chakra-ui/react";
 import { useStore } from "lib/stores/EditorPage";
 
 export interface FullScreenPresentationProps {}
@@ -35,12 +36,29 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
   }, []);
 
   return (
-    <Slide
-      bgColor={currentSlide.bgColor}
-      fontColor={currentSlide.fontColor}
-      mdContent={currentSlide.mdContent}
-      height={window.screen.height}
-      width={window.screen.width}
-    />
+    <Box
+      bg={currentSlide.bgColor}
+      width="100vw"
+      height="100vh"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      position="fixed"
+      top="0"
+      left="0"
+      overflow="hidden"
+    >
+      <Slide
+        constraintSize={{
+          width: window.screen.width,
+          height: window.screen.height,
+        }}
+        bgColor={currentSlide.bgColor}
+        fontColor={currentSlide.fontColor}
+        mdContent={currentSlide.mdContent}
+        height={window.screen.height}
+        width={window.screen.width}
+      />
+    </Box>
   );
 };

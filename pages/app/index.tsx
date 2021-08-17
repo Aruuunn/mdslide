@@ -56,6 +56,8 @@ export function Index() {
             <Box
               as="button"
               onClick={() => {
+                if (isLoading) return;
+
                 setNextRouteLoading(true);
                 router.push(`/app/${presentation.id}`);
               }}
@@ -80,10 +82,9 @@ export function Index() {
                 <Skeleton width={100 * 3 + "px"} height={56.25 * 3 + "px"} />
               ) : (
                 <Slide
-                  width={100 * 3}
+                  constraintSize={{ width: 300, height: 1000 }}
                   borderWidth="1px"
                   borderColor="gray.100"
-                  height={56.25 * 3}
                   bgColor={presentation.coverSlide.bgColor}
                   fontColor={presentation.coverSlide.fontColor}
                   mdContent={presentation.coverSlide.mdContent}

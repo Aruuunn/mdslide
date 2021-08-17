@@ -1,34 +1,48 @@
 import { Box, BoxProps } from "@chakra-ui/react";
 import MDEditor from "@uiw/react-md-editor";
 import { FC } from "react";
+import { getScaleFactor } from "./getScaleFactor";
+import { getSlideSize } from "./getSlideSize";
 
 export type SlideProps = {
-  width: number;
-  height: number;
+  constraintSize: { height: number; width: number };
   mdContent: string;
   bgColor: string;
   fontColor: string;
 } & BoxProps;
 
 export const Slide: FC<SlideProps> = (props) => {
-  const { width, height, mdContent, bgColor, fontColor, ...rest } = props;
+  const { constraintSize, mdContent, bgColor, fontColor, ...rest } = props;
+
+  const slideSize = getSlideSize(constraintSize);
+
   return (
     <Box
-      width={width}
-      overflow="hidden"
-      bg={bgColor}
-      color={fontColor}
-      height={height}
       {...rest}
+      width={slideSize.width}
+      overflow="hidden"
+      height={slideSize.height}
+      id="slide-outer"
+      position="relative"
     >
-      <MDEditor.Markdown
-        style={{
-          fontSize: width / 34,
-          padding: width / 16,
-          fontFamily: "monospace",
-        }}
-        source={mdContent}
-      />
+      <Box
+        width={1920}
+        bg={bgColor}
+        position="absolute"
+        top={-1 * 540 + slideSize.height / 2}
+        left={-1 * (1920 / 2) + slideSize.width / 2}
+        transform={`scale(${getScaleFactor(constraintSize)})`}
+        color={fontColor}
+        height={1080}
+      >
+        <MDEditor.Markdown
+          style={{
+            fontSize: 1920 / 34,
+            fontFamily: "monospace",
+          }}
+          source={mdContent}
+        />
+      </Box>
     </Box>
   );
 };

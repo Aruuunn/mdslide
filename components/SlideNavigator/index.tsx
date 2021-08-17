@@ -69,8 +69,7 @@ export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
                 {({ style, index }) => (
                   <Slide
                     key={index}
-                    width={100}
-                    height={56.25}
+                    constraintSize={{ width: 100, height: 1000 }}
                     mdContent={slides[index].mdContent}
                     fontColor={slides[index].fontColor}
                     bgColor={slides[index].bgColor}
@@ -86,14 +85,13 @@ export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
                         currentSlide === index ? "none" : "1px solid black",
                       opacity: 1,
                     }}
-                    p="3px"
                     ml="5px"
                     borderRadius="3px"
                     style={{
                       ...style,
                       marginLeft: "5px",
                       width: 100,
-                      height: 57,
+                      height: 60,
                     }}
                   />
                 )}

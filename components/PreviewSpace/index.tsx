@@ -11,14 +11,19 @@ export interface PreviewSpaceProps {
   fontColor: string;
 }
 
-const getWidth = () => {
-  if (typeof window === "undefined") return 0;
+type Size = { height: number; width: number };
+
+const getConstraint = (): Size => {
+  if (typeof window === "undefined") return { width: 0, height: 0 };
 
   const element = window.document.querySelector("#preview-space");
   if (element) {
-    return element.getBoundingClientRect().width;
+    return {
+      width: element.getBoundingClientRect().width,
+      height: element.getBoundingClientRect().height,
+    };
   }
-  return 0;
+  return { width: 0, height: 0 };
 };
 
 function untilAsync(fn: () => any, predicate: () => boolean, interval: number) {
@@ -34,39 +39,30 @@ function untilAsync(fn: () => any, predicate: () => boolean, interval: number) {
   }, interval);
 }
 
-function useSpaceWidth(): number {
-  const [width, setWidth] = useState<number>(getWidth);
+function useConstraint(): Size {
+  const [constraint, setConstraint] = useState<Size>(getConstraint);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.addEventListener("resize", () => {
-        setWidth(getWidth);
+        setConstraint(getConstraint);
       });
 
       untilAsync(
-        () => setWidth(getWidth),
-        () => width !== 0,
+        () => setConstraint(getConstraint),
+        () => constraint.width !== 0,
         500
       );
     }
   }, []);
 
-  return width;
-}
-
-function getSlideSize(spaceWidth: number): { width: number; height: number } {
-  const width = spaceWidth > 100 ? spaceWidth - 100 : 0;
-
-  return {
-    width: width,
-    height: 9 * (width / 16),
-  };
+  return constraint;
 }
 
 export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
   const { mdContent, fontColor, bgColor } = props;
-  const spaceWidth = useSpaceWidth();
-  const { width, height } = getSlideSize(spaceWidth);
+  const constraint = useConstraint();
+
   const store = useStore();
 
   return (
@@ -124,13 +120,12 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
         justifyContent="center"
         alignItems="center"
       >
-        {width !== 0 ? (
+        {constraint.width !== 0 ? (
           <Slide
             bgColor={bgColor}
             fontColor={fontColor}
-            width={width}
+            constraintSize={{ ...constraint, width: constraint.width - 100 }}
             mdContent={mdContent}
-            height={height}
             boxShadow="lg"
           />
         ) : null}{" "}
