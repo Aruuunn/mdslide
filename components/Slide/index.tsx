@@ -22,6 +22,7 @@ export const Slide: FC<SlideProps> = (props) => {
       width={slideSize.width}
       overflow="hidden"
       height={slideSize.height}
+      bg={bgColor}
       id="slide-outer"
       position="relative"
     >
