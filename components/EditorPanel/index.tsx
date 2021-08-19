@@ -135,6 +135,9 @@ export const EditorPanel: FC<EditorPanelProps> = (props) => {
           </Tooltip>
         </Flex>
         <MDEditor
+          fullscreen={false}
+          autoFocus={true}
+          enableScroll={true}
           preview={"edit"}
           value={value}
           color="gray"

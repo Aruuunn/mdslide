@@ -17,9 +17,10 @@
 }
 .w-md-editor-toolbar {
   font-size: large !important;
-  background-color: #ececec !important;
+  background-color: #f4f4f4 !important;
   margin-bottom: 13px !important;
   margin-top: 13px !important;
+  border: 1px solid #e2e8f0 !important;
 }
 
 .w-md-editor {
