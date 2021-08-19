@@ -91,10 +91,9 @@ export const Navbar: FC<NavbarProps> = (props) => {
         </Tooltip>
       )}
 
-      <Divider orientation="vertical" ml="15px" mr="15px" />
-
       <Tooltip label="Start Presenting" aria-label="Start Presenting">
         <IconButton
+          ml="25px"
           aria-label="present"
           onClick={startPresentationMode}
           bg="transparent"
@@ -115,7 +114,7 @@ export const Navbar: FC<NavbarProps> = (props) => {
         />
       </Tooltip>
 
-      <AccountOptions size="sm" ml="20px" />
+      <AccountOptions size="sm" ml="25px" />
     </Flex>
   );
 };

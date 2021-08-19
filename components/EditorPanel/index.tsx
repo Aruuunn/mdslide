@@ -94,7 +94,6 @@ export const EditorPanel: FC<EditorPanelProps> = (props) => {
             value={bgColor}
             setValue={setBgColor}
           />
-
           <ColorPicker
             id="font-color-picker"
             aria-label="Font Color Picker"
