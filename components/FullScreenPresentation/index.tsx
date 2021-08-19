@@ -1,6 +1,6 @@
 import { FC, useEffect } from "react";
 import { Slide } from "../Slide";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, useToast } from "@chakra-ui/react";
 import { useStore } from "lib/stores/EditorPage";
 
 export interface FullScreenPresentationProps {}
@@ -9,6 +9,7 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
   props
 ) => {
   const store = useStore();
+  const toast = useToast();
   const currentSlide = store.slides[store.currentSlideIdx];
 
   useEffect(() => {
@@ -33,6 +34,13 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
           break;
       }
     };
+
+    toast({
+      status: "info",
+      isClosable: true,
+      title: "Use Left/Right Arrow key to navigate!",
+      duration: 5000,
+    });
   }, []);
 
   return (
