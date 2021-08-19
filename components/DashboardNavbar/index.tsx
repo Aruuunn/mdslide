@@ -47,7 +47,8 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
           >
             New
           </PrimaryButton>
-          <AccountOptions size="md" isDisabled={isDisabled} />
+
+          <AccountOptions size="md" isDisabled={isDisabled} ml="25px" />
         </Flex>
       </Container>
     </Box>

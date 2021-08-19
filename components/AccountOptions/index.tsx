@@ -6,16 +6,17 @@ import {
   Avatar,
   IconButton,
   MenuList,
+  MenuButtonProps,
 } from "@chakra-ui/react";
 import { useUser } from "@auth0/nextjs-auth0";
 
-export interface AccountOptionsProps {
+export type AccountOptionsProps = {
   size: "sm" | "md";
   isDisabled?: boolean;
-}
+} & MenuButtonProps;
 
 export const AccountOptions: FC<AccountOptionsProps> = (props) => {
-  const { size, isDisabled } = props;
+  const { size, isDisabled, ...rest } = props;
   const { user } = useUser();
 
   const avatarSize = size === "sm" ? "28px" : "37px";
@@ -28,7 +29,6 @@ export const AccountOptions: FC<AccountOptionsProps> = (props) => {
         isRound
         disabled={isDisabled}
         bg="transparent"
-        ml="25px"
         size={size}
         icon={
           <Avatar
@@ -38,6 +38,7 @@ export const AccountOptions: FC<AccountOptionsProps> = (props) => {
             src={user?.picture ?? ""}
           />
         }
+        {...rest}
       >
         Actions
       </MenuButton>
