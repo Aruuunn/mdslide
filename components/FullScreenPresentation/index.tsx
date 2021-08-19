@@ -1,6 +1,6 @@
 import { FC, useEffect } from "react";
 import { Slide } from "../Slide";
-import { Box } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { useStore } from "lib/stores/EditorPage";
 
 export interface FullScreenPresentationProps {}
@@ -48,6 +48,15 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
       left="0"
       overflow="hidden"
     >
+      <Text
+        position="fixed"
+        top="5"
+        zIndex={1}
+        color={currentSlide.fontColor}
+        right="5"
+      >
+        {store.currentSlideIdx + 1}/{store.slides.length}
+      </Text>
       <Slide
         constraintSize={{
           width: window.screen.width,
