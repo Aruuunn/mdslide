@@ -6,7 +6,7 @@
 
 .w-md-editor-content,
 .w-md-editor {
-  height: calc(100% - 100px) !important;
+  height: calc(100% - 150px) !important;
 }
 
 .w-md-editor-text {
@@ -27,7 +27,9 @@
   box-shadow: none !important;
 }
 
-.w-md-editor svg[role="img"] {
+.w-md-editor-toolbar-divider,
+.w-md-editor-toolbar li > button[data-name="fullscreen"] {
+  display: none !important;
 }
 
 .wmde-markdown-color code[class*="language-"] {
