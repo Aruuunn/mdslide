@@ -57,20 +57,16 @@ export const Navbar: FC<NavbarProps> = (props) => {
         <Logo fontSize="xl" />
       </Link>
       <Spacer />
-      <Tooltip
-        label="title of the presentation"
-        aria-label="title of the presentation"
-      >
-        <Input
-          maxWidth="400px"
-          textAlign="center"
-          value={title}
-          required
-          isInvalid={title?.trim() === ""}
-          focusBorderColor="black"
-          onChange={(e) => updateTitle(e.target.value)}
-        />
-      </Tooltip>
+
+      <Input
+        maxWidth="400px"
+        textAlign="center"
+        value={title}
+        required
+        isInvalid={title?.trim() === ""}
+        focusBorderColor="black"
+        onChange={(e) => updateTitle(e.target.value)}
+      />
 
       <Spacer />
 
