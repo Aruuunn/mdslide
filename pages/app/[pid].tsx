@@ -12,6 +12,7 @@ import {
   SlideNavigator,
   FullScreenPresentation,
 } from "components";
+import { Presentation as IPresentation } from "model/interfaces/presentation";
 import { Presentation } from "model/presentation";
 import { getDb } from "lib/db";
 import { ObjectId } from "mongodb";
@@ -19,16 +20,18 @@ import { Slide } from "@model/slide";
 import { useStore } from "lib/stores/EditorPage";
 
 interface EditorPageProps {
-  slides: Slide[];
-  title: string;
+  presentation: IPresentation;
   pid: string;
 }
 
 export function EditorPage(props: EditorPageProps) {
-  const { slides: initialSlides, pid, title } = props;
+  const { pid, presentation } = props;
 
   const store = useStore();
-  const currentSlide = store.slides[store.currentSlideIdx];
+
+  const { title } = presentation;
+  const slides = useStore((state) => state.presentation.slides);
+  const currentSlide = slides[store.currentSlideIdx];
 
   const getUpdateCurrentSlideFn = (
     field: keyof Slide,
@@ -49,7 +52,7 @@ export function EditorPage(props: EditorPageProps) {
   const updateMdContent = getUpdateCurrentSlideFn("mdContent");
 
   useEffect(() => {
-    store.setSlides(initialSlides);
+    store.setPresentation(presentation);
 
     window.onkeydown = (e) => {
       if (typeof window !== "undefined") {
@@ -106,7 +109,7 @@ export function EditorPage(props: EditorPageProps) {
                 onAddNewSlide={store.addNewSlide}
                 currentSlide={store.currentSlideIdx}
                 onClickSlide={store.goToSlide}
-                slides={store.slides}
+                slides={slides}
               />
             </GridItem>
           </Grid>{" "}
@@ -143,10 +146,13 @@ export const getServerSideProps: GetServerSideProps<{}> = withPageAuthRequired({
       };
     }
 
+    const { _id, ...payload } = presentation as Presentation & {
+      _id: ObjectId;
+    };
+
     return {
       props: {
-        slides: presentation.slides.map((s) => ({ ...s })),
-        title: presentation.title,
+        presentation: { ...payload, id: _id.toHexString() },
         pid,
       },
     };

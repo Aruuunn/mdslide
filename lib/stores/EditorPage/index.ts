@@ -1,3 +1,4 @@
+import { Presentation } from "model/interfaces/presentation";
 import axios from "axios";
 import create from "zustand";
 import { debounce } from "debounce";
@@ -29,7 +30,8 @@ const updateSlideRemote = debounce(
 
 type State = {
   currentSlideIdx: number;
-  slides: Slide[];
+  presentation: Pick<Presentation, "slides" | "isPublished" | "pubmeta"> &
+    Partial<Pick<Presentation, "id">>;
   lastSlideUpdatePromise: Promise<void> | null;
   isSaving: boolean;
   isPresentationMode: boolean;
@@ -42,20 +44,22 @@ type Actions = {
   goToNextSlide: () => void;
   goToPrevSlide: () => void;
   addNewSlide: () => void;
-  setSlides: (slides: Slide[]) => void;
+  setPresentation: (presentation: Presentation) => void;
   startPresentationMode: () => void;
   stopPresentationMode: () => void;
 };
 
 export const useStore = create<State & Actions>((set, get) => ({
   currentSlideIdx: 0,
-  slides: [defaultSlideValue],
+  presentation: { slides: [defaultSlideValue], isPublished: false },
   lastSlideUpdatePromise: null,
   isSaving: false,
   isPresentationMode: false,
-  getCurrentSlide: () => get().slides[get().currentSlideIdx],
+  getCurrentSlide: () => get().presentation.slides[get().currentSlideIdx],
   goToSlide: (index: number) => {
-    const { slides } = get();
+    const {
+      presentation: { slides },
+    } = get();
 
     if (index >= slides.length || index < 0) return;
 
@@ -70,7 +74,9 @@ export const useStore = create<State & Actions>((set, get) => ({
     goToSlide(currentSlideIdx - 1);
   },
   updateCurrentSlide: (pid: string, map: (slide: Slide) => Partial<Slide>) => {
-    const { currentSlideIdx, slides } = get();
+    const { currentSlideIdx, presentation } = get();
+
+    const { slides } = presentation;
 
     const partialSlide = map(slides[currentSlideIdx]);
 
@@ -89,33 +95,40 @@ export const useStore = create<State & Actions>((set, get) => ({
     });
 
     set({
-      slides: [
-        ...slides.slice(0, currentSlideIdx),
-        slide,
-        ...slides.slice(currentSlideIdx + 1),
-      ],
+      presentation: {
+        ...presentation,
+        slides: [
+          ...slides.slice(0, currentSlideIdx),
+          slide,
+          ...slides.slice(currentSlideIdx + 1),
+        ],
+      },
       isSaving: true,
     });
   },
   addNewSlide: () => {
-    const { slides } = get();
+    const { presentation } = get();
+    const { slides } = presentation;
 
     const lastSlide = slides[slides.length - 1];
 
     set({
       currentSlideIdx: slides.length,
-      slides: [
-        ...slides,
-        {
-          ...defaultSlideValue,
-          bgColor: lastSlide?.bgColor ?? "white",
-          fontColor: lastSlide?.fontColor ?? "black",
-        },
-      ],
+      presentation: {
+        ...presentation,
+        slides: [
+          ...slides,
+          {
+            ...defaultSlideValue,
+            bgColor: lastSlide?.bgColor ?? "white",
+            fontColor: lastSlide?.fontColor ?? "black",
+          },
+        ],
+      },
     });
   },
-  setSlides: (slides) => {
-    set({ slides });
+  setPresentation: (presentation) => {
+    set({ presentation });
   },
   startPresentationMode: () => {
     set({ isPresentationMode: true });
