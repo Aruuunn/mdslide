@@ -13,4 +13,8 @@ export class Presentation implements IPresentation {
   userEmail: string;
 
   slides: Slide[];
+
+  isPublished: boolean;
+
+  pubmeta?: { slug: string };
 }
