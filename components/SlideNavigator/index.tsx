@@ -45,7 +45,7 @@ const NewSlideButton: FC<NewSlideButtonProps> = (props) => {
 export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
   const { onAddNewSlide, slides, currentSlide, onClickSlide } = props;
 
-  const listRef = useRef<{ scrollToItem: (idx: number) => void }>();
+  const listRef = useRef<List<any>>();
 
   useEffect(() => {
     if (listRef.current) {
