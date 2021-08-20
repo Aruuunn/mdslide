@@ -32,10 +32,6 @@
   display: none !important;
 }
 
-.wmde-markdown-color pre {
-  width: auto;
-}
-
 .w-md-editor-text-input::placeholder {
   font-size: 1.1em;
 }

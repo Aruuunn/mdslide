@@ -40,6 +40,8 @@ export const Slide: FC<SlideProps> = (props) => {
           style={{
             fontSize: 1920 / 34,
             fontFamily: "monospace",
+            paddingLeft: "200px",
+            paddingRight: "200px",
           }}
           source={mdContent}
         />
