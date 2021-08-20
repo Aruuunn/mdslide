@@ -1,6 +1,7 @@
 import { FC, useEffect } from "react";
 import { Slide } from "../Slide";
-import { Box, Text, useToast } from "@chakra-ui/react";
+import { Box, Text, useToast, Flex } from "@chakra-ui/react";
+import { InfoIcon } from "@chakra-ui/icons";
 import { useStore } from "lib/stores/EditorPage";
 
 export interface FullScreenPresentationProps {}
@@ -38,8 +39,16 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
     toast({
       status: "info",
       isClosable: true,
-      title: "Use Left/Right Arrow key to navigate!",
-      duration: 5000,
+      title: "",
+      duration: 4000,
+      render: () => {
+        return (
+          <Flex alignItems="center" color="white" bg="black" p="5">
+            <InfoIcon mr="4" />
+            Use Left and Right Arrow keys to navigate
+          </Flex>
+        );
+      },
     });
   }, []);
 
