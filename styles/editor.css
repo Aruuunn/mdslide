@@ -32,8 +32,8 @@
   display: none !important;
 }
 
-.wmde-markdown-color code[class*="language-"] {
-  color: #495464 !important;
+.wmde-markdown-color pre {
+  width: auto;
 }
 
 .w-md-editor-text-input::placeholder {
