@@ -11,7 +11,7 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
 ) => {
   const store = useStore();
   const toast = useToast();
-  const currentSlide = store.slides[store.currentSlideIdx];
+  const currentSlide = store.presentation.slides[store.currentSlideIdx];
 
   useEffect(() => {
     document.body.onfullscreenchange = () => {
@@ -72,7 +72,7 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
         color={currentSlide.fontColor}
         right="5"
       >
-        {store.currentSlideIdx + 1}/{store.slides.length}
+        {store.currentSlideIdx + 1}/{store.presentation.slides.length}
       </Text>
       <Slide
         constraintSize={{
