@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useRef, useEffect } from "react";
 import { FixedSizeList as List } from "react-window";
 import { Flex, Box, IconButton } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
@@ -45,6 +45,14 @@ const NewSlideButton: FC<NewSlideButtonProps> = (props) => {
 export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
   const { onAddNewSlide, slides, currentSlide, onClickSlide } = props;
 
+  const listRef = useRef<{ scrollToItem: (idx: number) => void }>();
+
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current?.scrollToItem(slides.length);
+    }
+  }, [slides.length]);
+
   return (
     <Flex
       pl={"20px"}
@@ -55,11 +63,12 @@ export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
     >
       <NewSlideButton onClick={onAddNewSlide} />
 
-      <Box width={"calc(100% - 105px)"} height={"80px"}>
+      <Box width={"calc(100% - 115px)"} height={"80px"}>
         <AutoSizer>
           {({ width, height }) => {
             return (
               <List
+                ref={listRef}
                 width={width}
                 height={height}
                 itemCount={slides.length}
@@ -85,7 +94,7 @@ export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
                         currentSlide === index ? "none" : "1px solid black",
                       opacity: 1,
                     }}
-                    ml="5px"
+                    mr="5px"
                     borderRadius="3px"
                     style={{
                       ...style,
