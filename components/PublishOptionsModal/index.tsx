@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import axios from "axios";
 import {
   Modal,
@@ -16,6 +16,7 @@ import {
 import { PrimaryButton } from "components/PrimayButton";
 import { useStore } from "lib/stores/EditorPage";
 import { Presentation } from "model/interfaces/presentation";
+import { isValidSlug } from "utils/isValidSlug";
 
 export interface PublishOptionsModalProps {
   isOpen: boolean;
@@ -27,9 +28,13 @@ export const PublishOptionsModal: FC<PublishOptionsModalProps> = (props) => {
 
   const store = useStore();
   const [isLoading, setLoading] = useState(false);
-
+  const [isSaving, setSaved] = useState(false);
   const presentation = store.presentation;
-  const publishedURL = `/p/${presentation.pubmeta?.slug}`;
+
+  const [slug, setSlug] = useState(presentation?.pubmeta?.slug ?? "");
+  const [error, setError] = useState(null);
+
+  const publishedURL = `/p/${presentation?.pubmeta?.slug}`;
 
   const onPublish = async () => {
     try {
@@ -70,6 +75,45 @@ export const PublishOptionsModal: FC<PublishOptionsModalProps> = (props) => {
       setLoading(false);
     }
   };
+
+  const onSave = async () => {
+    setSaved(true);
+
+    try {
+      await axios.patch(`/api/p/${presentation.id}/slug`, { slug });
+      store.setPresentation({
+        ...presentation,
+        pubmeta: {
+          ...presentation.pubmeta,
+          slug,
+        },
+      } as Presentation);
+    } catch (e) {
+      // @TODO handle error
+
+      if (typeof e?.response?.data?.message === "string") {
+        setError(e?.response?.data?.message);
+      }
+    } finally {
+      setSaved(false);
+    }
+  };
+
+  useEffect(() => {
+    if (slug.trim().length === 0) {
+      setError("should not be empty.");
+    } else if (!isValidSlug(slug)) {
+      setError(
+        "should contain only alphabets, numbers, - and _ . should start with a alphabet."
+      );
+    } else {
+      setError(null);
+    }
+  }, [slug]);
+
+  useEffect(() => {
+    if (presentation?.pubmeta?.slug) setSlug(presentation?.pubmeta.slug);
+  }, [presentation?.pubmeta?.slug]);
 
   if (typeof window === "undefined") return null;
 
@@ -123,8 +167,17 @@ export const PublishOptionsModal: FC<PublishOptionsModalProps> = (props) => {
                 placeholder="slug"
                 mt="2"
                 id="slug"
-                value={presentation.pubmeta?.slug}
+                value={slug}
+                isInvalid={!isValidSlug(slug) || !!error}
+                onChange={(e) => {
+                  setSlug(e.target.value);
+                }}
               />
+              {error && (
+                <Text color="red" fontSize="sm" mt="1">
+                  * {error}
+                </Text>
+              )}
             </>
           ) : null}
         </ModalBody>
@@ -139,14 +192,26 @@ export const PublishOptionsModal: FC<PublishOptionsModalProps> = (props) => {
               Publish Now
             </PrimaryButton>
           ) : (
-            <Button
-              color="#495464"
-              isLoading={isLoading}
-              disabled={isLoading}
-              onClick={onUnPublish}
-            >
-              Un Publish
-            </Button>
+            <>
+              <PrimaryButton
+                mr="3"
+                onClick={onSave}
+                isLoading={isSaving}
+                disabled={
+                  isLoading || isSaving || slug === presentation?.pubmeta?.slug
+                }
+              >
+                Save
+              </PrimaryButton>
+              <Button
+                color="#495464"
+                isLoading={isLoading}
+                disabled={isLoading}
+                onClick={onUnPublish}
+              >
+                Un Publish
+              </Button>
+            </>
           )}
         </ModalFooter>
       </ModalContent>
