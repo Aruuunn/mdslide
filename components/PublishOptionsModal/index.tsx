@@ -10,6 +10,8 @@ import {
   ModalContent,
   ModalCloseButton,
   Box,
+  Input,
+  Button,
 } from "@chakra-ui/react";
 import { PrimaryButton } from "components/PrimayButton";
 import { useStore } from "lib/stores/EditorPage";
@@ -51,13 +53,31 @@ export const PublishOptionsModal: FC<PublishOptionsModalProps> = (props) => {
     }
   };
 
+  const onUnPublish = async () => {
+    setLoading(true);
+
+    try {
+      await axios.post(`/api/p/${presentation.id}/unpublish`);
+
+      store.setPresentation({
+        ...presentation,
+        isPublished: false,
+      } as Presentation);
+    } catch (e) {
+      // @TODO handle error
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (typeof window === "undefined") return null;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} size="lg">
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Publish Settings</ModalHeader>
+        <ModalHeader color="#495464">Publish Settings</ModalHeader>
         <ModalCloseButton />
         <Text
           bg="#fafafa"
@@ -67,6 +87,7 @@ export const PublishOptionsModal: FC<PublishOptionsModalProps> = (props) => {
           borderWidth="1px"
           borderColor="#e2e8f0"
           width="100%"
+          color="#495464"
         >
           {presentation.isPublished ? (
             <>
@@ -76,10 +97,37 @@ export const PublishOptionsModal: FC<PublishOptionsModalProps> = (props) => {
               </Box>
             </>
           ) : (
-            "You can publish your presentation as a webpage."
+            <>
+              {" "}
+              You're presentation is not published. You can publish it as a
+              webpage.{" "}
+            </>
           )}
         </Text>
-        <ModalBody></ModalBody>
+        <ModalBody mt="4">
+          {presentation.isPublished ? (
+            <>
+              <Text
+                as="label"
+                htmlFor="slug"
+                fontSize="xs"
+                color="#495464"
+                style={{ letterSpacing: "0.15em" }}
+                fontWeight="bold"
+              >
+                SLUG
+              </Text>
+
+              <Input
+                focusBorderColor="black"
+                placeholder="slug"
+                mt="2"
+                id="slug"
+                value={presentation.pubmeta?.slug}
+              />
+            </>
+          ) : null}
+        </ModalBody>
 
         <ModalFooter>
           {!presentation.isPublished ? (
@@ -88,9 +136,18 @@ export const PublishOptionsModal: FC<PublishOptionsModalProps> = (props) => {
               isLoading={isLoading}
               disabled={isLoading}
             >
-              Publish
+              Publish Now
             </PrimaryButton>
-          ) : null}
+          ) : (
+            <Button
+              color="#495464"
+              isLoading={isLoading}
+              disabled={isLoading}
+              onClick={onUnPublish}
+            >
+              Un Publish
+            </Button>
+          )}
         </ModalFooter>
       </ModalContent>
     </Modal>
