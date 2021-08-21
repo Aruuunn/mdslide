@@ -115,7 +115,13 @@ export function EditorPage(props: EditorPageProps) {
           </Grid>{" "}
         </>
       ) : (
-        <FullScreenPresentation />
+        <FullScreenPresentation
+          slides={slides}
+          currentSlideIdx={store.currentSlideIdx}
+          onNextSlide={store.goToNextSlide}
+          onPrevSlide={store.goToPrevSlide}
+          onClose={store.stopPresentationMode}
+        />
       )}
     </div>
   );
