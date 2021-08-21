@@ -143,7 +143,7 @@ export const PublishOptionsModal: FC<PublishOptionsModalProps> = (props) => {
           ) : (
             <>
               {" "}
-              You're presentation is not published. You can publish it as a
+              You&apos;re presentation is not published. You can publish it as a
               webpage.{" "}
             </>
           )}

@@ -41,7 +41,7 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
       isClosable: true,
       title: "",
       duration: 4000,
-      render: () => {
+      render() {
         return (
           <Flex alignItems="center" color="white" bg="black" p="5">
             <InfoIcon mr="4" />
