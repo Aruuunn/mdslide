@@ -61,7 +61,7 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const collection = db.getCollection(Presentation);
 
   const presentation = await collection.findOne(
-    { pubmeta: { slug } },
+    { pubmeta: { slug }, isPublished: true },
     { projection: { slides: 1 } }
   );
 
