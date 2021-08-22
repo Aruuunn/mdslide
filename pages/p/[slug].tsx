@@ -55,7 +55,15 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
     <>
       {!presentationMode ? (
         <>
-          <Flex as="nav" height="70px" alignItems="center" p="5" width="100%">
+          <Flex
+            as="nav"
+            height="70px"
+            alignItems="center"
+            p="5"
+            width="100%"
+            borderWidth="1px"
+            borderColor="#e2e8f0"
+          >
             <Logo fontSize="xl" />
             <Spacer />
             <IconButton
@@ -69,7 +77,7 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
                   height="30px"
                   viewBox="0 0 24 24"
                   width="30px"
-                  fill="gray.500"
+                  fill="#495464"
                 >
                   <g>
                     <rect fill="none" height="24" width="24" />
@@ -82,7 +90,7 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
           <Flex
             alignItems="center"
             justifyContent="center"
-            bg="#F4F4F2"
+            bg="#f6f5f5"
             height="calc(100vh - 70px)"
           >
             <Flex
@@ -99,7 +107,7 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
               boxShadow="base"
               aria-hidden={idx === 0}
               onClick={prevSlide}
-              opacity={idx !== 0 ? 1 : 0}
+              opacity={idx !== 0 ? 1 : 0.5}
               color="#495464"
               _hover={{ boxShadow: "md" }}
               _focus={{ boxShadow: "md" }}
@@ -131,7 +139,7 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
               boxShadow="base"
               color="#495464"
               aria-hidden={idx === slides.length - 1}
-              opacity={idx !== slides.length - 1 ? 1 : 0}
+              opacity={idx !== slides.length - 1 ? 1 : 0.5}
               onClick={nextSlide}
               _hover={{ boxShadow: "md" }}
               _focus={{ boxShadow: "md" }}
