@@ -1,10 +1,13 @@
-import { FC, useState } from "react";
+import dynamic from "next/dynamic";
+import { FC } from "react";
 import { Box, Text, Flex, Tooltip } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
-import dynamic from "next/dynamic";
-const FontPicker = dynamic(() => import("font-picker-react"), { ssr: false });
-
 import MDEditor from "@uiw/react-md-editor";
+import { useStore } from "lib/stores/EditorPage";
+
+const FontPicker = dynamic(() => import("@arunmurugan/font-picker-react"), {
+  ssr: false,
+});
 
 import "@uiw/react-md-editor/dist/markdown-editor.css";
 import "@uiw/react-markdown-preview/dist/markdown.css";
@@ -16,6 +19,8 @@ export interface EditorPanelProps {
   setBgColor: (value: string) => any;
   fontColor: string;
   setFontColor: (value: string) => any;
+  fontFamily: string;
+  setFontFamily: (value: string) => any;
 }
 
 interface ColorPickerProps {
@@ -60,10 +65,18 @@ const ColorPicker: FC<ColorPickerProps> = (props) => {
 };
 
 export const EditorPanel: FC<EditorPanelProps> = (props) => {
-  const { value, setValue, bgColor, setBgColor, fontColor, setFontColor } =
-    props;
+  const {
+    value,
+    setValue,
+    bgColor,
+    setBgColor,
+    fontColor,
+    setFontColor,
+    fontFamily,
+    setFontFamily,
+  } = props;
 
-  const [fontFamily, setFontFamily] = useState("Open Sans");
+  const currentSlideIdx = useStore((state) => state.currentSlideIdx);
 
   return (
     <Box width="100%" height="100%" overflow="hidden">
@@ -105,9 +118,14 @@ export const EditorPanel: FC<EditorPanelProps> = (props) => {
           <FontPicker
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_FONT_API_KEY}
             activeFontFamily={fontFamily}
-            limit={200}
+            pickerId={currentSlideIdx.toString()}
+            limit={50}
             sort="popularity"
-            onChange={(nextFont) => setFontFamily(nextFont.family)}
+            onChange={(nextFont) => {
+              if (nextFont.family !== fontFamily) {
+                setFontFamily(nextFont.family);
+              }
+            }}
           />
         ) : null}
       </Box>

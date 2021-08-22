@@ -4,4 +4,6 @@ export interface Slide {
   bgColor: string;
 
   fontColor: string;
+
+  fontFamily: string;
 }

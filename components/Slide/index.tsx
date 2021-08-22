@@ -9,10 +9,11 @@ export type SlideProps = {
   mdContent: string;
   bgColor: string;
   fontColor: string;
+  idx: number;
 } & BoxProps;
 
 export const Slide: FC<SlideProps> = (props) => {
-  const { constraintSize, mdContent, bgColor, fontColor, ...rest } = props;
+  const { constraintSize, mdContent, bgColor, fontColor, idx, ...rest } = props;
 
   const slideSize = getSlideSize(constraintSize);
 
@@ -42,7 +43,7 @@ export const Slide: FC<SlideProps> = (props) => {
             paddingLeft: "200px",
             paddingRight: "200px",
           }}
-          className="apply-font"
+          className={`apply-font-${idx.toString()}`}
           source={mdContent}
         />
       </Box>

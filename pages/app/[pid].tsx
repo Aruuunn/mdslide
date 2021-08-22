@@ -50,6 +50,7 @@ export function EditorPage(props: EditorPageProps) {
   const updateBgColor = getUpdateCurrentSlideFn("bgColor", true);
   const updateFontColor = getUpdateCurrentSlideFn("fontColor", true);
   const updateMdContent = getUpdateCurrentSlideFn("mdContent");
+  const updateFontFamily = getUpdateCurrentSlideFn("fontFamily");
 
   useEffect(() => {
     store.setPresentation(presentation);
@@ -95,6 +96,8 @@ export function EditorPage(props: EditorPageProps) {
                 fontColor={currentSlide.fontColor}
                 setFontColor={updateFontColor}
                 setValue={updateMdContent}
+                fontFamily={currentSlide.fontFamily}
+                setFontFamily={updateFontFamily}
               />
             </GridItem>
             <GridItem rowSpan={11} colSpan={2}>

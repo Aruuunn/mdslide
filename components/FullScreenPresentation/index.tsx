@@ -90,6 +90,7 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
           width: window.screen.width,
           height: window.screen.height,
         }}
+        idx={currentSlideIdx}
         bgColor={currentSlide.bgColor}
         fontColor={currentSlide.fontColor}
         mdContent={currentSlide.mdContent}

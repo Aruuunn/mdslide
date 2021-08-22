@@ -6,6 +6,9 @@ function isString(s: any): boolean {
 
 export function isValidSlide(s: any): s is Slide {
   return (
-    isString(s?.mdContent) && isString(s?.bgColor) && isString(s?.fontColor)
+    isString(s?.mdContent) &&
+    isString(s?.bgColor) &&
+    isString(s?.fontColor) &&
+    isString(s?.fontFamily)
   );
 }

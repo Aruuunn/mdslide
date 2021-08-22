@@ -129,6 +129,7 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
         {constraint.width !== 0 ? (
           <Slide
             bgColor={bgColor}
+            idx={store.currentSlideIdx}
             fontColor={fontColor}
             constraintSize={{ ...constraint, width: constraint.width - 100 }}
             mdContent={mdContent}

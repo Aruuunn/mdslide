@@ -90,6 +90,7 @@ export function Index() {
                   constraintSize={{ width: 300, height: 1000 }}
                   borderWidth="1px"
                   borderColor="gray.100"
+                  idx={idx}
                   bgColor={presentation.coverSlide.bgColor}
                   fontColor={presentation.coverSlide.fontColor}
                   mdContent={presentation.coverSlide.mdContent}

@@ -122,6 +122,7 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
               bgColor={currentSlide.bgColor}
               fontColor={currentSlide.fontColor}
               height={constraint.height}
+              idx={idx}
               width={constraint.width}
               boxShadow="lg"
             />

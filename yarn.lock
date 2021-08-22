@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@arunmurugan/font-picker-react@^3.6.3":
+  version "3.6.3"
+  resolved "https://registry.yarnpkg.com/@arunmurugan/font-picker-react/-/font-picker-react-3.6.3.tgz#cf156f6802c87a95408f0c78df784eef309d8edb"
+  integrity sha512-KjcY70pF4KD3VRM5Xf/BOqG6qTBrXtJWYntlALya+4JK6c/zoMSeBPV6EaZ3qV9O82XKf9116jIE9Xpc/B8WCg==
+  dependencies:
+    "@samuelmeuli/font-manager" "^1.4.0"
+
 "@auth0/nextjs-auth0@^1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@auth0/nextjs-auth0/-/nextjs-auth0-1.5.0.tgz#d55cb34545ee2ddc394acce796edc368a2871206"

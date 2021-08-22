@@ -24,6 +24,7 @@ const handler: NextApiHandler = async function (
       mdContent: `# Slide One \n\n by ${user.name ?? "Unknown"}`,
       bgColor: "#fff",
       fontColor: "#000",
+      fontFamily: "Inter",
     },
   ];
   newPresentation.title = "Untitled";
