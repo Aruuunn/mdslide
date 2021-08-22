@@ -107,7 +107,8 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
               boxShadow="base"
               aria-hidden={idx === 0}
               onClick={prevSlide}
-              opacity={idx !== 0 ? 1 : 0.5}
+              disabled={idx === 0}
+              _disabled={{ cursor: "not-allowed" }}
               color="#495464"
               _hover={{ boxShadow: "md" }}
               _focus={{ boxShadow: "md" }}
@@ -139,7 +140,8 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
               boxShadow="base"
               color="#495464"
               aria-hidden={idx === slides.length - 1}
-              opacity={idx !== slides.length - 1 ? 1 : 0.5}
+              disabled={idx === slides.length - 1}
+              _disabled={{ cursor: "not-allowed" }}
               onClick={nextSlide}
               _hover={{ boxShadow: "md" }}
               _focus={{ boxShadow: "md" }}
