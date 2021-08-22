@@ -114,7 +114,7 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
       <Flex
         id="preview-space"
         p="20px"
-        style={{ backgroundColor: "#F4F4F2" }}
+        style={{ backgroundColor: "#f6f5f5" }}
         width="100%"
         height="100%"
         justifyContent="center"

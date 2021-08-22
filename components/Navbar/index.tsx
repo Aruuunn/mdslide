@@ -57,6 +57,8 @@ export const Navbar: FC<NavbarProps> = (props) => {
         width="100%"
         height="70px"
         alignItems="center"
+        borderWidth="1px"
+        borderColor="#e2e8f0"
       >
         <Link href="/">
           <Logo fontSize="xl" />
