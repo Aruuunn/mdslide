@@ -205,8 +205,8 @@ export const PublishSettingsModal: FC<PublishSettingsModalProps> = (props) => {
               </PrimaryButton>
               <Button
               bg="white"
-              color="black"
-               border="1px solid black"
+              color="#495464"
+               border="1px solid #495464"
 
                _hover={{bg: "black", color: "white"}}
                 isLoading={isLoading}

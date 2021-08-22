@@ -67,28 +67,7 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
 
   return (
     <Box position="relative" width="100%" height="100%">
-      <Flex
-        position="absolute"
-        as="button"
-        aria-label="go to next slide"
-        top="calc(50% - 15px)"
-        right="15px"
-        p="10px"
-        bg="#fafafa"
-        borderRadius="50%"
-        height="30px"
-        alignItems="center"
-        justify="center"
-        width="30px"
-        onClick={store.goToNextSlide}
-        boxShadow="base"
-        color="#495464"
-        _hover={{ boxShadow: "md" }}
-        _focus={{ boxShadow: "md" }}
-      >
-        <ChevronRightIcon />
-      </Flex>
-
+     
       <Flex
         as="button"
         aria-label="go to previous slide"
@@ -105,11 +84,38 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
         onClick={store.goToPrevSlide}
         boxShadow="base"
         color="#495464"
+        disabled={store.currentSlideIdx === 0}
+        _disabled={{ cursor: "not-allowed" }}
         _hover={{ boxShadow: "md" }}
         _focus={{ boxShadow: "md" }}
       >
         <ChevronLeftIcon />
       </Flex>
+
+      <Flex
+        position="absolute"
+        as="button"
+        aria-label="go to next slide"
+        top="calc(50% - 15px)"
+        right="15px"
+        p="10px"
+        bg="#fafafa"
+        borderRadius="50%"
+        height="30px"
+        alignItems="center"
+        justify="center"
+        width="30px"
+        onClick={store.goToNextSlide}
+        boxShadow="base"
+        color="#495464"
+        disabled={store.currentSlideIdx === store.presentation.slides.length - 1}
+        _disabled={{ cursor: "not-allowed" }}
+        _hover={{ boxShadow: "md" }}
+        _focus={{ boxShadow: "md" }}
+      >
+        <ChevronRightIcon />
+      </Flex>
+
 
       <Flex
         id="preview-space"
