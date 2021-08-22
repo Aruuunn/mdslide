@@ -21,6 +21,22 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
 
   const currentSlide = slides[currentSlideIdx];
 
+  const createToast = (text: string) =>
+    toast({
+      status: "info",
+      isClosable: true,
+      title: "",
+      duration: 4000,
+      render() {
+        return (
+          <Flex alignItems="center" color="white" bg="black" p="5">
+            <InfoIcon mr="4" />
+            {text}
+          </Flex>
+        );
+      },
+    });
+
   useEffect(() => {
     document.body.onfullscreenchange = () => {
       if (document.fullscreenElement !== document.body) {
@@ -44,20 +60,7 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
       }
     };
 
-    toast({
-      status: "info",
-      isClosable: true,
-      title: "",
-      duration: 4000,
-      render() {
-        return (
-          <Flex alignItems="center" color="white" bg="black" p="5">
-            <InfoIcon mr="4" />
-            Use Left and Right Arrow keys to navigate
-          </Flex>
-        );
-      },
-    });
+    createToast("Use Left and Right Arrow keys to navigate");
   }, []);
 
   return (
