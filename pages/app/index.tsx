@@ -52,6 +52,11 @@ export function Index() {
         </Text>
 
         <Flex mt="30px" wrap={"wrap"}>
+          {presentations.length === 0 && !isLoading ? (
+            <Text color="gray.500" fontSize="md">
+              Your presentations show up here.
+            </Text>
+          ) : null}
           {presentations.map((presentation, idx) => (
             <Box
               as="button"
