@@ -39,10 +39,10 @@ export const Slide: FC<SlideProps> = (props) => {
         <MDEditor.Markdown
           style={{
             fontSize: 1920 / 34,
-            fontFamily: "monospace",
             paddingLeft: "200px",
             paddingRight: "200px",
           }}
+          className="apply-font"
           source={mdContent}
         />
       </Box>

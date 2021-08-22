@@ -1,6 +1,9 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Box, Text, Flex, Tooltip } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
+import dynamic from "next/dynamic";
+const FontPicker = dynamic(() => import("font-picker-react"), { ssr: false });
+
 import MDEditor from "@uiw/react-md-editor";
 
 import "@uiw/react-md-editor/dist/markdown-editor.css";
@@ -25,7 +28,6 @@ interface ColorPickerProps {
 
 const ColorPicker: FC<ColorPickerProps> = (props) => {
   const { value, setValue, label, id, "aria-label": ariaLabel } = props;
-
   return (
     <Flex mr="13px" direction="column" alignItems="center" width="40px">
       <Box
@@ -61,6 +63,8 @@ export const EditorPanel: FC<EditorPanelProps> = (props) => {
   const { value, setValue, bgColor, setBgColor, fontColor, setFontColor } =
     props;
 
+  const [fontFamily, setFontFamily] = useState("Open Sans");
+
   return (
     <Box width="100%" height="100%" overflow="hidden">
       <Box
@@ -80,7 +84,7 @@ export const EditorPanel: FC<EditorPanelProps> = (props) => {
         >
           APPEARANCE
         </Text>
-        <Flex mt="18px" width="100%" height="100%">
+        <Flex mt="18px" width="100%">
           <ColorPicker
             id="bg-color-picker"
             aria-label="Background Color Picker"
@@ -96,6 +100,16 @@ export const EditorPanel: FC<EditorPanelProps> = (props) => {
             setValue={setFontColor}
           />
         </Flex>
+        {typeof window !== "undefined" ? (
+          // @ts-ignore
+          <FontPicker
+            apiKey={process.env.NEXT_PUBLIC_GOOGLE_FONT_API_KEY}
+            activeFontFamily={fontFamily}
+            limit={200}
+            sort="popularity"
+            onChange={(nextFont) => setFontFamily(nextFont.family)}
+          />
+        ) : null}
       </Box>
       <Box
         p="20px"
