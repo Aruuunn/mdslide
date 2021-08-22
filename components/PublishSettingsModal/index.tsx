@@ -198,17 +198,19 @@ export const PublishSettingsModal: FC<PublishSettingsModalProps> = (props) => {
                 onClick={onSave}
                 isLoading={isSaving}
                 disabled={
-                   error !== null || isLoading || isSaving || slug.trim() === presentation?.pubmeta?.slug
+                  error !== null ||
+                  isLoading ||
+                  isSaving ||
+                  slug.trim() === presentation?.pubmeta?.slug
                 }
               >
                 Save
               </PrimaryButton>
               <Button
-              bg="white"
-              color="#495464"
-               border="1px solid #495464"
-
-               _hover={{bg: "black", color: "white"}}
+                bg="white"
+                color="#495464"
+                border="1px solid #495464"
+                _hover={{ bg: "black", color: "white" }}
                 isLoading={isLoading}
                 disabled={isLoading}
                 onClick={onUnPublish}

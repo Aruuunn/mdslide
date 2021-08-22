@@ -21,7 +21,7 @@ const handler: NextApiHandler = async function (
   const newPresentation = new Presentation();
   newPresentation.slides = [
     {
-      mdContent: `# Slide One \n by ${user.name ?? "Some One"}`,
+      mdContent: `# Slide One \n\n by ${user.name ?? "Unknown"}`,
       bgColor: "#fff",
       fontColor: "#000",
     },

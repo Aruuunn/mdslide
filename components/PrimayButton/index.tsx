@@ -12,7 +12,7 @@ export const PrimaryButton = chakra(Button, {
       "&:disabled": {
         bg: "black",
         color: "white",
-      }
+      },
     },
     _focus: {
       bg: "white",
@@ -21,6 +21,6 @@ export const PrimaryButton = chakra(Button, {
     _disabled: {
       bg: "black",
       color: "white",
-    }
+    },
   },
 });

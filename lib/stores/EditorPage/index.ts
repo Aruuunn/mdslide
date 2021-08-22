@@ -40,7 +40,8 @@ type State = {
 type Actions = {
   getCurrentSlide: () => Slide;
   goToSlide: (index: number) => void;
-  updateCurrentSlide: (pid: string, map: MapToPartial<Slide>) => void;
+  updateSlide: (idx: number, map: MapToPartial<Slide>) => void;
+  updateCurrentSlide: (map: MapToPartial<Slide>) => void;
   goToNextSlide: () => void;
   goToPrevSlide: () => void;
   addNewSlide: () => void;
@@ -73,16 +74,16 @@ export const useStore = create<State & Actions>((set, get) => ({
     const { goToSlide, currentSlideIdx } = get();
     goToSlide(currentSlideIdx - 1);
   },
-  updateCurrentSlide: (pid: string, map: (slide: Slide) => Partial<Slide>) => {
-    const { currentSlideIdx, presentation } = get();
-
+  updateSlide: (idx: number, map: (slide: Slide) => Partial<Slide>) => {
+    const { presentation } = get();
     const { slides } = presentation;
+    const pid = presentation.id;
 
-    const partialSlide = map(slides[currentSlideIdx]);
+    const partialSlide = map(slides[idx]);
 
-    const slide = { ...slides[currentSlideIdx], ...partialSlide };
+    const slide = { ...slides[idx], ...partialSlide };
 
-    updateSlideRemote(slide, pid, currentSlideIdx, (promise) => {
+    updateSlideRemote(slide, pid, idx, (promise) => {
       set({ lastSlideUpdatePromise: promise });
 
       promise.then(() => {
@@ -97,17 +98,18 @@ export const useStore = create<State & Actions>((set, get) => ({
     set({
       presentation: {
         ...presentation,
-        slides: [
-          ...slides.slice(0, currentSlideIdx),
-          slide,
-          ...slides.slice(currentSlideIdx + 1),
-        ],
+        slides: [...slides.slice(0, idx), slide, ...slides.slice(idx + 1)],
       },
       isSaving: true,
     });
   },
+  updateCurrentSlide: (map: (slide: Slide) => Partial<Slide>) => {
+    const { currentSlideIdx, updateSlide } = get();
+
+    updateSlide(currentSlideIdx, map);
+  },
   addNewSlide: () => {
-    const { presentation } = get();
+    const { presentation, updateSlide } = get();
     const { slides } = presentation;
 
     const lastSlide = slides[slides.length - 1];
@@ -119,13 +121,15 @@ export const useStore = create<State & Actions>((set, get) => ({
         slides: [
           ...slides,
           {
-            ...defaultSlideValue,
+            mdContent: `# Slide ${slides.length + 1} \n`,
             bgColor: lastSlide?.bgColor ?? "white",
             fontColor: lastSlide?.fontColor ?? "black",
           },
         ],
       },
     });
+
+    updateSlide(slides.length, (s) => s);
   },
   setPresentation: (presentation) => {
     set({ presentation });

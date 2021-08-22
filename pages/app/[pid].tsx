@@ -38,7 +38,7 @@ export function EditorPage(props: EditorPageProps) {
     shouldDebounce = false
   ) => {
     const updateFn = (value: string) =>
-      store.updateCurrentSlide(pid, () => ({ [field]: value }));
+      store.updateCurrentSlide(() => ({ [field]: value }));
 
     if (shouldDebounce) {
       return debounce(updateFn, 300);
