@@ -15,7 +15,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { AccountOptions } from "../AccountOptions";
-import { PublishOptionsModal } from "../PublishOptionsModal";
+import { PublishSettingsModal } from "../PublishSettingsModal";
 import { Logo } from "../Logo";
 import { useStore } from "lib/stores/EditorPage";
 
@@ -48,7 +48,7 @@ export const Navbar: FC<NavbarProps> = (props) => {
 
   return (
     <>
-      <PublishOptionsModal isOpen={isOpen} onClose={onClose} />
+      <PublishSettingsModal isOpen={isOpen} onClose={onClose} />
       <Flex
         as="nav"
         p="20px"
@@ -127,7 +127,7 @@ export const Navbar: FC<NavbarProps> = (props) => {
           />
         </Tooltip>
 
-        <Tooltip label="Publish Options">
+        <Tooltip label="Publish Settings">
           <IconButton
             bg="transparent"
             aria-label=""

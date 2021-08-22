@@ -9,10 +9,18 @@ export const PrimaryButton = chakra(Button, {
     _hover: {
       bg: "white",
       color: "black",
+      "&:disabled": {
+        bg: "black",
+        color: "white",
+      }
     },
     _focus: {
       bg: "white",
       color: "black",
     },
+    _disabled: {
+      bg: "black",
+      color: "white",
+    }
   },
 });

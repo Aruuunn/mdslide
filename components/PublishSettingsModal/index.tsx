@@ -18,12 +18,12 @@ import { useStore } from "lib/stores/EditorPage";
 import { Presentation } from "model/interfaces/presentation";
 import { isValidSlug } from "utils/isValidSlug";
 
-export interface PublishOptionsModalProps {
+export interface PublishSettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const PublishOptionsModal: FC<PublishOptionsModalProps> = (props) => {
+export const PublishSettingsModal: FC<PublishSettingsModalProps> = (props) => {
   const { isOpen, onClose } = props;
 
   const store = useStore();
@@ -121,7 +121,7 @@ export const PublishOptionsModal: FC<PublishOptionsModalProps> = (props) => {
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader color="#495464">Publish Settings</ModalHeader>
+        <ModalHeader>Publish Settings</ModalHeader>
         <ModalCloseButton />
         <Text
           bg="#fafafa"
@@ -198,13 +198,17 @@ export const PublishOptionsModal: FC<PublishOptionsModalProps> = (props) => {
                 onClick={onSave}
                 isLoading={isSaving}
                 disabled={
-                  isLoading || isSaving || slug === presentation?.pubmeta?.slug
+                   error !== null || isLoading || isSaving || slug.trim() === presentation?.pubmeta?.slug
                 }
               >
                 Save
               </PrimaryButton>
               <Button
-                color="#495464"
+              bg="white"
+              color="black"
+               border="1px solid black"
+
+               _hover={{bg: "black", color: "white"}}
                 isLoading={isLoading}
                 disabled={isLoading}
                 onClick={onUnPublish}
