@@ -10,6 +10,7 @@ const defaultSlideValue: Slide = {
   fontColor: "black",
   bgColor: "white",
   mdContent: "# Type Something..",
+  fontFamily: "Inter",
 };
 
 const updateSlideRemote = debounce(
@@ -124,6 +125,7 @@ export const useStore = create<State & Actions>((set, get) => ({
             mdContent: `# Slide ${slides.length + 1} \n`,
             bgColor: lastSlide?.bgColor ?? "white",
             fontColor: lastSlide?.fontColor ?? "black",
+            fontFamily: lastSlide?.fontFamily ?? "Inter",
           },
         ],
       },

@@ -41,3 +41,27 @@ body {
   border-bottom: none !important;
   text-align: center;
 }
+
+#font-picker {
+  box-shadow: none;
+  border: 1px solid #e2e8f0;
+  margin-top: 20px;
+  width: 100%;
+}
+
+#font-picker > .dropdown-button {
+  background-color: #f8f8f8;
+}
+
+.font-button {
+  background-color: #fafafa !important;
+}
+
+div[id^="font-picker"] ul li button.active-font {
+  background-color: #f3f3f3 !important;
+}
+
+div[id^="font-picker"] ul li button:hover,
+div[id^="font-picker"] ul li button:focus {
+  background-color: #f6f6f6;
+}

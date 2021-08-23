@@ -78,6 +78,7 @@ export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
                 {({ style, index }) => (
                   <Slide
                     key={index}
+                    idx={index}
                     constraintSize={{ width: 100, height: 1000 }}
                     mdContent={slides[index].mdContent}
                     fontColor={slides[index].fontColor}
