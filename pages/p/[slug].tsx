@@ -1,6 +1,7 @@
 import { FC, useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
-import { Flex, Spacer, IconButton, Icon } from "@chakra-ui/react";
+import dynamic from "next/dynamic";
+import { Flex, Spacer, IconButton, Icon, Box } from "@chakra-ui/react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { Slide as ISlide } from "model/slide";
 import { Logo } from "components/Logo";
@@ -8,6 +9,10 @@ import { FullScreenPresentation } from "components/FullScreenPresentation";
 import { Presentation } from "model/presentation";
 import Slide from "components/Slide";
 import { getDb } from "lib/db";
+
+const FontPicker = dynamic(() => import("@arunmurugan/font-picker-react"), {
+  ssr: false,
+});
 
 import "@uiw/react-md-editor/dist/markdown-editor.css";
 import "@uiw/react-markdown-preview/dist/markdown.css";
@@ -115,6 +120,17 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
             >
               <ChevronLeftIcon w={6} h={6} />
             </Flex>
+
+            <Box display="none">
+              {/* @ts-ignore */}
+              <FontPicker
+                apiKey={process.env.NEXT_PUBLIC_GOOGLE_FONT_API_KEY}
+                activeFontFamily={currentSlide.fontFamily}
+                pickerId={idx.toString()}
+                limit={50}
+                onChange={() => {}}
+              />
+            </Box>
 
             <Slide
               constraintSize={constraint}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import useSWR from "swr";
 import axios from "axios";
@@ -14,6 +15,10 @@ import {
 
 import { DashboardNavbar, Slide } from "../../components";
 import { useRouter } from "next/router";
+
+const FontPicker = dynamic(() => import("@arunmurugan/font-picker-react"), {
+  ssr: false,
+});
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
@@ -86,15 +91,27 @@ export function Index() {
               {isLoading ? (
                 <Skeleton width={100 * 3 + "px"} height={56.25 * 3 + "px"} />
               ) : (
-                <Slide
-                  constraintSize={{ width: 300, height: 1000 }}
-                  borderWidth="1px"
-                  borderColor="gray.100"
-                  idx={idx}
-                  bgColor={presentation.coverSlide.bgColor}
-                  fontColor={presentation.coverSlide.fontColor}
-                  mdContent={presentation.coverSlide.mdContent}
-                />
+                <>
+                  <Box display="none">
+                    {/* @ts-ignore */}
+                    <FontPicker
+                      apiKey={process.env.NEXT_PUBLIC_GOOGLE_FONT_API_KEY}
+                      activeFontFamily={presentation.coverSlide.fontFamily}
+                      pickerId={idx.toString()}
+                      limit={50}
+                      onChange={() => {}}
+                    />
+                  </Box>
+                  <Slide
+                    constraintSize={{ width: 300, height: 1000 }}
+                    borderWidth="1px"
+                    borderColor="gray.100"
+                    idx={idx}
+                    bgColor={presentation.coverSlide.bgColor}
+                    fontColor={presentation.coverSlide.fontColor}
+                    mdContent={presentation.coverSlide.mdContent}
+                  />
+                </>
               )}
 
               {isLoading ? (

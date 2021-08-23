@@ -1,9 +1,14 @@
 import { FC, useEffect } from "react";
+import dynamic from "next/dynamic";
+
 import { Slide } from "../Slide";
 import { Box, Text, useToast, Flex } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
-import { useStore } from "lib/stores/EditorPage";
 import { Slide as ISlide } from "model/slide";
+
+const FontPicker = dynamic(() => import("@arunmurugan/font-picker-react"), {
+  ssr: false,
+});
 
 export interface FullScreenPresentationProps {
   onNextSlide: () => void;
@@ -64,39 +69,51 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
   }, []);
 
   return (
-    <Box
-      bg={currentSlide.bgColor}
-      width="100vw"
-      height="100vh"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      position="fixed"
-      top="0"
-      left="0"
-      overflow="hidden"
-    >
-      <Text
+    <>
+      <Box display="none">
+        {/* @ts-ignore */}
+        <FontPicker
+          apiKey={process.env.NEXT_PUBLIC_GOOGLE_FONT_API_KEY}
+          activeFontFamily={currentSlide.fontFamily}
+          pickerId={currentSlideIdx.toString()}
+          limit={50}
+          onChange={() => {}}
+        />
+      </Box>
+      <Box
+        bg={currentSlide.bgColor}
+        width="100vw"
+        height="100vh"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
         position="fixed"
-        top="5"
-        zIndex={1}
-        color={currentSlide.fontColor}
-        right="5"
+        top="0"
+        left="0"
+        overflow="hidden"
       >
-        {currentSlideIdx + 1}/{slides.length}
-      </Text>
-      <Slide
-        constraintSize={{
-          width: window.screen.width,
-          height: window.screen.height,
-        }}
-        idx={currentSlideIdx}
-        bgColor={currentSlide.bgColor}
-        fontColor={currentSlide.fontColor}
-        mdContent={currentSlide.mdContent}
-        height={window.screen.height}
-        width={window.screen.width}
-      />
-    </Box>
+        <Text
+          position="fixed"
+          top="5"
+          zIndex={1}
+          color={currentSlide.fontColor}
+          right="5"
+        >
+          {currentSlideIdx + 1}/{slides.length}
+        </Text>
+        <Slide
+          constraintSize={{
+            width: window.screen.width,
+            height: window.screen.height,
+          }}
+          idx={currentSlideIdx}
+          bgColor={currentSlide.bgColor}
+          fontColor={currentSlide.fontColor}
+          mdContent={currentSlide.mdContent}
+          height={window.screen.height}
+          width={window.screen.width}
+        />
+      </Box>
+    </>
   );
 };
