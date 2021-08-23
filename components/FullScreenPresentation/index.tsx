@@ -51,7 +51,7 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
 
     document.body.requestFullscreen();
 
-    window.onkeydown = (e) => {
+    const keydownEventHandler = (e) => {
       switch (e.key) {
         case "Escape":
           onClose();
@@ -65,7 +65,13 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
       }
     };
 
+    window.addEventListener("keydown", keydownEventHandler);
+
     createToast("Use Left and Right Arrow keys to navigate");
+
+    return () => {
+      window.removeEventListener("keydown", keydownEventHandler);
+    };
   }, []);
 
   return (
