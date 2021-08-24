@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Head from "next/head";
 import useSWR from "swr";
 import axios from "axios";
@@ -32,16 +32,16 @@ export function Index() {
 
   const presentations = data ?? [{}, {}, {}];
 
+  const fontFamilies = presentations
+    .map((p) => p?.coverSlide?.fontFamily)
+    .filter(Boolean);
+
   return (
     <Box bg="#fafafa" minHeight="100vh">
       <Head>
         <title>Dashboard</title>
       </Head>
-      <LoadFonts
-        fontFamilies={presentations
-          .map((p) => p?.coverSlide?.fontFamily)
-          .filter(Boolean)}
-      />
+      <LoadFonts fontFamilies={fontFamilies} />
       {isNextRouteLoading ? (
         <Progress size="xs" colorScheme="blackAlpha" isIndeterminate />
       ) : null}

@@ -4,6 +4,7 @@ import { Slide } from "../Slide";
 import { Box, Text, useToast, Flex } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
 import { Slide as ISlide } from "model/slide";
+import { LoadFonts } from "components/LoadFonts";
 
 export interface FullScreenPresentationProps {
   onNextSlide: () => void;
@@ -51,6 +52,7 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
 
   return (
     <>
+      <LoadFonts fontFamilies={slides.map((s) => s.fontFamily)} />
       <Box
         bg={currentSlide.bgColor}
         width="100vw"
