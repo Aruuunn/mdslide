@@ -9,6 +9,7 @@ export interface PreviewSpaceProps {
   mdContent: string;
   bgColor: string;
   fontColor: string;
+  fontFamily: string;
 }
 
 type Size = { height: number; width: number };
@@ -60,7 +61,7 @@ function useConstraint(): Size {
 }
 
 export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
-  const { mdContent, fontColor, bgColor } = props;
+  const { mdContent, fontColor, bgColor, fontFamily } = props;
   const constraint = useConstraint();
 
   const store = useStore();
@@ -129,7 +130,7 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
         {constraint.width !== 0 ? (
           <Slide
             bgColor={bgColor}
-            idx={store.currentSlideIdx}
+            fontFamily={fontFamily}
             fontColor={fontColor}
             constraintSize={{ ...constraint, width: constraint.width - 100 }}
             mdContent={mdContent}

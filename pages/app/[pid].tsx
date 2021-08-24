@@ -102,6 +102,7 @@ export function EditorPage(props: EditorPageProps) {
             </GridItem>
             <GridItem rowSpan={11} colSpan={2}>
               <PreviewSpace
+                fontFamily={currentSlide.fontFamily}
                 bgColor={currentSlide.bgColor}
                 fontColor={currentSlide.fontColor}
                 mdContent={currentSlide.mdContent}
