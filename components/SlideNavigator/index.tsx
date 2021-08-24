@@ -4,16 +4,11 @@ import { Flex, Box, IconButton } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { Slide } from "../Slide";
-
-interface Slide {
-  bgColor: string;
-  fontColor: string;
-  mdContent: string;
-}
+import { Slide as ISlide } from "model/slide";
 
 export interface SlideNavigatorProps {
   onAddNewSlide: () => void;
-  slides: Slide[];
+  slides: ISlide[];
   currentSlide: number;
   onClickSlide: (idx: number) => any;
 }
@@ -78,7 +73,7 @@ export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
                 {({ style, index }) => (
                   <Slide
                     key={index}
-                    idx={index}
+                    fontFamily={slides[index].fontFamily}
                     constraintSize={{ width: 100, height: 1000 }}
                     mdContent={slides[index].mdContent}
                     fontColor={slides[index].fontColor}

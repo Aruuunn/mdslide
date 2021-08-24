@@ -3,9 +3,8 @@ import { FC } from "react";
 import { Box, Text, Flex, Tooltip } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
 import MDEditor from "@uiw/react-md-editor";
-import { useStore } from "lib/stores/EditorPage";
 
-const FontPicker = dynamic(() => import("@arunmurugan/font-picker-react"), {
+const FontPicker = dynamic(() => import("font-picker-react"), {
   ssr: false,
 });
 
@@ -76,8 +75,6 @@ export const EditorPanel: FC<EditorPanelProps> = (props) => {
     setFontFamily,
   } = props;
 
-  const currentSlideIdx = useStore((state) => state.currentSlideIdx);
-
   return (
     <Box width="100%" height="100%" overflow="hidden">
       <Box
@@ -118,7 +115,6 @@ export const EditorPanel: FC<EditorPanelProps> = (props) => {
           <FontPicker
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_FONT_API_KEY}
             activeFontFamily={fontFamily}
-            pickerId={currentSlideIdx.toString()}
             limit={50}
             sort="popularity"
             onChange={(nextFont) => {

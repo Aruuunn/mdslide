@@ -1,14 +1,9 @@
 import { FC, useEffect } from "react";
-import dynamic from "next/dynamic";
 
 import { Slide } from "../Slide";
 import { Box, Text, useToast, Flex } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
 import { Slide as ISlide } from "model/slide";
-
-const FontPicker = dynamic(() => import("@arunmurugan/font-picker-react"), {
-  ssr: false,
-});
 
 export interface FullScreenPresentationProps {
   onNextSlide: () => void;
@@ -51,41 +46,11 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
 
     document.body.requestFullscreen();
 
-    const keydownEventHandler = (e) => {
-      switch (e.key) {
-        case "Escape":
-          onClose();
-          break;
-        case "ArrowLeft":
-          onPrevSlide();
-          break;
-        case "ArrowRight":
-          onNextSlide();
-          break;
-      }
-    };
-
-    window.addEventListener("keydown", keydownEventHandler);
-
     createToast("Use Left and Right Arrow keys to navigate");
-
-    return () => {
-      window.removeEventListener("keydown", keydownEventHandler);
-    };
   }, []);
 
   return (
     <>
-      <Box display="none">
-        {/* @ts-ignore */}
-        <FontPicker
-          apiKey={process.env.NEXT_PUBLIC_GOOGLE_FONT_API_KEY}
-          activeFontFamily={currentSlide.fontFamily}
-          pickerId={currentSlideIdx.toString()}
-          limit={50}
-          onChange={() => {}}
-        />
-      </Box>
       <Box
         bg={currentSlide.bgColor}
         width="100vw"
@@ -112,7 +77,7 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
             width: window.screen.width,
             height: window.screen.height,
           }}
-          idx={currentSlideIdx}
+          fontFamily={currentSlide.fontFamily}
           bgColor={currentSlide.bgColor}
           fontColor={currentSlide.fontColor}
           mdContent={currentSlide.mdContent}

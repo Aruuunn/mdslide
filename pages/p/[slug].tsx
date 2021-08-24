@@ -8,9 +8,10 @@ import { Logo } from "components/Logo";
 import { FullScreenPresentation } from "components/FullScreenPresentation";
 import { Presentation } from "model/presentation";
 import Slide from "components/Slide";
+import { LoadFonts } from "components/LoadFonts";
 import { getDb } from "lib/db";
 
-const FontPicker = dynamic(() => import("@arunmurugan/font-picker-react"), {
+const FontPicker = dynamic(() => import("font-picker-react"), {
   ssr: false,
 });
 
@@ -58,6 +59,7 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
 
   return (
     <>
+      <LoadFonts fontFamilies={slides.map((s) => s.fontFamily)} />
       {!presentationMode ? (
         <>
           <Flex
@@ -138,7 +140,7 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
               bgColor={currentSlide.bgColor}
               fontColor={currentSlide.fontColor}
               height={constraint.height}
-              idx={idx}
+              fontFamily={currentSlide.fontFamily}
               width={constraint.width}
               boxShadow="lg"
             />
