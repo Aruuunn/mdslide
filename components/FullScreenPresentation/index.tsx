@@ -5,16 +5,14 @@ import LoadFonts from "components/LoadFonts";
 import createToast from "lib/createInfoToast";
 import { useStore } from "lib/stores/presentation";
 
-export interface FullScreenPresentationProps {
-  onClose: () => void;
-}
+export interface FullScreenPresentationProps {}
 
 export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
   props
 ) => {
-  const { onClose } = props;
   const slides = useStore((state) => state.presentation.slides);
   const currentSlideIndex = useStore((state) => state.currentSlideIdx);
+  const onClose = useStore((store) => store.stopPresentationMode);
 
   const currentSlide = slides[currentSlideIndex];
 

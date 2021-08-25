@@ -113,7 +113,7 @@ export function EditorPage(props: EditorPageProps) {
           </Grid>{" "}
         </>
       ) : (
-        <FullScreenPresentation onClose={store.stopPresentationMode} />
+        <FullScreenPresentation />
       )}
     </>
   );

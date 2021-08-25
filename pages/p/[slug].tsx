@@ -26,12 +26,12 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
   const currentSlideIndex = store.currentSlideIdx;
   const currentSlide = slides[currentSlideIndex];
 
+  const IsPresentationMode = store.isPresentationMode;
+  const startPresentationMode = store.startPresentationMode;
+
   const [constraint, setConstraint] = useState({ height: 1080, width: 1920 });
-  const [presentationMode, setPresentationMode] = useState(false);
 
   const fontFamilies = slides.map((s) => s.fontFamily);
-
-  const startPresentationMode = () => setPresentationMode(true);
 
   useEffect(() => {
     const setScreenSize = () =>
@@ -54,7 +54,7 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
 
   return (
     <>
-      {!presentationMode ? (
+      {!IsPresentationMode ? (
         <>
           <LoadFonts fontFamilies={fontFamilies} />
           <Flex
@@ -154,7 +154,7 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
           </Flex>
         </>
       ) : (
-        <FullScreenPresentation onClose={() => setPresentationMode(false)} />
+        <FullScreenPresentation />
       )}
     </>
   );
