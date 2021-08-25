@@ -2,19 +2,17 @@ import { FC, useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import { Flex, Spacer, IconButton, Icon } from "@chakra-ui/react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
-import { Slide as ISlide } from "model/slide";
-import { Logo } from "components/Logo";
-import { FullScreenPresentation } from "components/FullScreenPresentation";
-import { Presentation } from "model/presentation";
-import Slide from "components/Slide";
-import { LoadFonts } from "components/LoadFonts";
+
+import SlideInterface from "model/slide";
+import Presentation from "model/presentation";
 import { getDb } from "lib/db";
+import { Logo, FullScreenPresentation, Slide, LoadFonts } from "components";
 
 import "@uiw/react-md-editor/dist/markdown-editor.css";
 import "@uiw/react-markdown-preview/dist/markdown.css";
 
 interface PageProps {
-  slides: ISlide[];
+  slides: SlideInterface[];
 }
 
 const PublishedPresentationPage: FC<PageProps> = (props) => {

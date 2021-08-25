@@ -1,26 +1,26 @@
-import { useEffect } from "react";
-import { GetServerSideProps } from "next";
-import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Head from "next/head";
 import debounce from "debounce";
+import { useEffect } from "react";
+import { ObjectId } from "mongodb";
+import { GetServerSideProps } from "next";
+import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import { Grid, GridItem } from "@chakra-ui/react";
 
+import PresentationModel from "model/presentation";
+import PresentationType from "model/interfaces/presentation";
 import {
   EditorPanel,
-  Navbar,
+  EditorNavbar,
   PreviewSpace,
   SlideNavigator,
   FullScreenPresentation,
 } from "components";
-import { Presentation as IPresentation } from "model/interfaces/presentation";
-import { Presentation } from "model/presentation";
 import { getDb } from "lib/db";
-import { ObjectId } from "mongodb";
 import { Slide } from "@model/slide";
 import { useStore } from "lib/stores/EditorPage";
 
 interface EditorPageProps {
-  presentation: IPresentation;
+  presentation: PresentationType;
   pid: string;
 }
 
@@ -75,13 +75,13 @@ export function EditorPage(props: EditorPageProps) {
   }, []);
 
   return (
-    <div>
+    <>
       <Head>
         <title>MSLIDE</title>
       </Head>
       {!store.isPresentationMode ? (
         <>
-          <Navbar title={title} pid={pid} />
+          <EditorNavbar title={title} pid={pid} />
           <Grid
             height={"calc(100vh - 70px)"}
             templateRows="repeat(12, 1fr)"
@@ -122,12 +122,10 @@ export function EditorPage(props: EditorPageProps) {
         <FullScreenPresentation
           slides={slides}
           currentSlideIdx={store.currentSlideIdx}
-          onNextSlide={store.goToNextSlide}
-          onPrevSlide={store.goToPrevSlide}
           onClose={store.stopPresentationMode}
         />
       )}
-    </div>
+    </>
   );
 }
 
@@ -140,9 +138,9 @@ export const getServerSideProps: GetServerSideProps<{}> = withPageAuthRequired({
 
     const db = await getDb();
 
-    const collection = db.getCollection(Presentation);
+    const collection = db.getCollection(PresentationModel);
 
-    const presentation = await collection.findOne<Presentation>({
+    const presentation = await collection.findOne<PresentationModel>({
       userEmail: user.email,
       _id: new ObjectId(pid as string),
     });
@@ -156,7 +154,7 @@ export const getServerSideProps: GetServerSideProps<{}> = withPageAuthRequired({
       };
     }
 
-    const { _id, ...payload } = presentation as Presentation & {
+    const { _id, ...payload } = presentation as PresentationModel & {
       _id: ObjectId;
     };
 

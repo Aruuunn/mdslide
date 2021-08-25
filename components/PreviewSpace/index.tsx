@@ -1,9 +1,9 @@
 import { FC, useState, useEffect } from "react";
 import { Flex, Box } from "@chakra-ui/react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
-import { useStore } from "lib/stores/EditorPage";
 
-import { Slide } from "../Slide";
+import Slide from "components/Slide";
+import { useStore } from "lib/stores/EditorPage";
 
 export interface PreviewSpaceProps {
   mdContent: string;
@@ -141,3 +141,5 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
     </Box>
   );
 };
+
+export default PreviewSpace;

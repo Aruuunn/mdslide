@@ -1,23 +1,21 @@
 import { FC, useEffect } from "react";
-
-import { Slide } from "../Slide";
 import { Box, Text, useToast, Flex } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
-import { Slide as ISlide } from "model/slide";
-import { LoadFonts } from "components/LoadFonts";
+
+import Slide from "components/Slide";
+import SlideType from "model/slide";
+import LoadFonts from "components/LoadFonts";
 
 export interface FullScreenPresentationProps {
-  onNextSlide: () => void;
-  onPrevSlide: () => void;
   onClose: () => void;
   currentSlideIdx: number;
-  slides: ISlide[];
+  slides: SlideType[];
 }
 
 export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
   props
 ) => {
-  const { onNextSlide, slides, onPrevSlide, onClose, currentSlideIdx } = props;
+  const { slides, onClose, currentSlideIdx } = props;
   const toast = useToast();
 
   const currentSlide = slides[currentSlideIdx];

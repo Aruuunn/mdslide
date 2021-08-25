@@ -18,3 +18,5 @@ export class Presentation implements IPresentation {
 
   pubmeta?: { slug: string };
 }
+
+export default Presentation;

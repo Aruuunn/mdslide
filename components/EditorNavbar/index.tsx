@@ -14,25 +14,25 @@ import {
   Divider,
   useDisclosure,
 } from "@chakra-ui/react";
-import { AccountOptions } from "../AccountOptions";
-import { PublishSettingsModal } from "../PublishSettingsModal";
-import { Logo } from "../Logo";
+
+import Logo from "components/Logo";
+import AccountActions from "components/AccountActions";
+import PublishSettingsModal from "components/PublishSettingsModal";
 import { useStore } from "lib/stores/EditorPage";
 
-export interface NavbarProps {
+export interface EditorNavbarProps {
   title: string;
   pid: string;
 }
 
-export const Navbar: FC<NavbarProps> = (props) => {
+export const EditorNavbar: FC<EditorNavbarProps> = (props) => {
   const { title: initialTitle, pid } = props;
+
   const isSaving = useStore((state) => state.isSaving);
   const startPresentationMode = useStore(
     (store) => store.startPresentationMode
   );
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const router = useRouter();
-
   const [title, setTitle] = useState(initialTitle);
 
   const updateRemote = debounce(async (newTitle: string) => {
@@ -148,8 +148,10 @@ export const Navbar: FC<NavbarProps> = (props) => {
           />
         </Tooltip>
 
-        <AccountOptions aria-label="account options" ml="20px" size="sm" />
+        <AccountActions aria-label="account options" ml="20px" size="sm" />
       </Flex>
     </>
   );
 };
+
+export default EditorNavbar;

@@ -24,3 +24,5 @@ export const PrimaryButton = chakra(Button, {
     },
   },
 });
+
+export default PrimaryButton;

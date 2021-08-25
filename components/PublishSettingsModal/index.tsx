@@ -224,3 +224,5 @@ export const PublishSettingsModal: FC<PublishSettingsModalProps> = (props) => {
     </Modal>
   );
 };
+
+export default PublishSettingsModal;

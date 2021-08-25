@@ -13,3 +13,5 @@ export interface Presentation {
 
   pubmeta?: { slug: string };
 }
+
+export default Presentation;

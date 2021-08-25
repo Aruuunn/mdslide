@@ -12,13 +12,13 @@ import {
 } from "@chakra-ui/react";
 import { useUser } from "@auth0/nextjs-auth0";
 
-export type AccountOptionsProps = {
+export type AccountActionsProps = {
   size: "sm" | "md";
   isDisabled?: boolean;
 } & MenuButtonProps &
   IconButtonProps;
 
-export const AccountOptions: FC<AccountOptionsProps> = (props) => {
+export const AccountActions: FC<AccountActionsProps> = (props) => {
   const { isDisabled, size, ...rest } = props;
   const { user } = useUser();
 
@@ -52,3 +52,5 @@ export const AccountOptions: FC<AccountOptionsProps> = (props) => {
     </Menu>
   );
 };
+
+export default AccountActions;
