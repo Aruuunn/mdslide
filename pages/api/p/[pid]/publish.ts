@@ -1,11 +1,11 @@
-import { UnAuthorizedException } from "./../../../../lib/exceptions/common";
 import { ObjectId } from "mongodb";
-import { Presentation } from "model/presentation";
-import { getDb } from "lib/db";
-import { getSession } from "@auth0/nextjs-auth0";
 import { NextApiHandler } from "next";
-import { withApiAuthRequired } from "@auth0/nextjs-auth0";
+import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
+
+import { getDb } from "lib/db/getDb";
+import { Presentation } from "model/presentation";
 import { catchErrors } from "lib/exceptions/catcherrors";
+import { UnAuthorizedException } from "lib/exceptions/common";
 
 const handler: NextApiHandler<{ pubmeta: { slug: string } }> = async (
   req,

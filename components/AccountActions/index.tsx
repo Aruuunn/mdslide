@@ -7,7 +7,6 @@ import {
   IconButton,
   MenuList,
   MenuButtonProps,
-  Icon,
   IconButtonProps,
 } from "@chakra-ui/react";
 import { useUser } from "@auth0/nextjs-auth0";

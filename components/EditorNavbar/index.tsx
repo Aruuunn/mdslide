@@ -1,8 +1,5 @@
-import axios from "axios";
-import { debounce } from "debounce";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   Input,
   Flex,
@@ -18,32 +15,26 @@ import {
 import Logo from "components/Logo";
 import AccountActions from "components/AccountActions";
 import PublishSettingsModal from "components/PublishSettingsModal";
-import { useStore } from "lib/stores/EditorPage";
+import { useStore } from "lib/stores/presentation";
+import { updateRemoteForId } from "lib/updateRemoteTitle";
 
-export interface EditorNavbarProps {
-  title: string;
-  pid: string;
-}
+export interface EditorNavbarProps {}
 
-export const EditorNavbar: FC<EditorNavbarProps> = (props) => {
-  const { title: initialTitle, pid } = props;
-
+export const EditorNavbar: FC<EditorNavbarProps> = () => {
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const pid = useStore((state) => state.presentation.id);
   const isSaving = useStore((state) => state.isSaving);
+  const title = useStore((state) => state.presentation.title);
+
+  const updateRemoteTitle = updateRemoteForId(pid);
+  const updateLocalTitle = useStore((store) => store.updateLocalTitle);
   const startPresentationMode = useStore(
     (store) => store.startPresentationMode
   );
-  const { isOpen, onClose, onOpen } = useDisclosure();
-  const [title, setTitle] = useState(initialTitle);
-
-  const updateRemote = debounce(async (newTitle: string) => {
-    // TODO handle error.
-    await axios.patch(`/api/p/${pid}/title`, { title: newTitle });
-  }, 500);
 
   const updateTitle = async (newTitle: string) => {
-    setTitle(newTitle);
-
-    await updateRemote(newTitle.trim() || "Untitled");
+    updateLocalTitle(newTitle);
+    updateRemoteTitle(newTitle.trim() || "Untitled");
   };
 
   return (

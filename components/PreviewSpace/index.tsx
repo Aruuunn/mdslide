@@ -1,63 +1,16 @@
-import { FC, useState, useEffect } from "react";
+import { FC } from "react";
 import { Flex, Box } from "@chakra-ui/react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 
 import Slide from "components/Slide";
-import { useStore } from "lib/stores/EditorPage";
+import useConstraint from "./useConstraint";
+import { useStore } from "lib/stores/presentation";
 
 export interface PreviewSpaceProps {
   mdContent: string;
   bgColor: string;
   fontColor: string;
   fontFamily: string;
-}
-
-type Size = { height: number; width: number };
-
-const getConstraint = (): Size => {
-  if (typeof window === "undefined") return { width: 0, height: 0 };
-
-  const element = window.document.querySelector("#preview-space");
-  if (element) {
-    return {
-      width: element.getBoundingClientRect().width,
-      height: element.getBoundingClientRect().height,
-    };
-  }
-  return { width: 0, height: 0 };
-};
-
-function untilAsync(fn: () => any, predicate: () => boolean, interval: number) {
-  const intv = setInterval(() => {
-    fn();
-
-    console.debug("Called fn");
-
-    if (predicate()) {
-      console.log("Predicate satisfied");
-      clearInterval(intv);
-    }
-  }, interval);
-}
-
-function useConstraint(): Size {
-  const [constraint, setConstraint] = useState<Size>(getConstraint);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.addEventListener("resize", () => {
-        setConstraint(getConstraint);
-      });
-
-      untilAsync(
-        () => setConstraint(getConstraint),
-        () => constraint.width !== 0,
-        500
-      );
-    }
-  }, []);
-
-  return constraint;
 }
 
 export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {

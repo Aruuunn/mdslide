@@ -15,9 +15,10 @@ import {
   SlideNavigator,
   FullScreenPresentation,
 } from "components";
-import { getDb } from "lib/db";
-import { Slide } from "@model/slide";
-import { useStore } from "lib/stores/EditorPage";
+import { getDb } from "lib/db/getDb";
+import { Slide } from "model/slide";
+import { useStore } from "lib/stores/presentation";
+import { keyListeners } from "lib/setupKeyListeners";
 
 interface EditorPageProps {
   presentation: PresentationType;
@@ -25,11 +26,9 @@ interface EditorPageProps {
 }
 
 export function EditorPage(props: EditorPageProps) {
-  const { pid, presentation } = props;
+  const { presentation } = props;
 
   const store = useStore();
-
-  const { title } = presentation;
   const slides = useStore((state) => state.presentation.slides);
   const currentSlide = slides[store.currentSlideIdx];
 
@@ -65,13 +64,13 @@ export function EditorPage(props: EditorPageProps) {
           return;
         }
       }
-
-      if (e.keyCode == 37) {
-        store.goToPrevSlide();
-      } else if (e.keyCode == 39) {
-        store.goToNextSlide();
-      }
     };
+
+    const { cleanUp, setUpKeyListener } = keyListeners();
+
+    setUpKeyListener();
+
+    return cleanUp;
   }, []);
 
   return (
@@ -81,7 +80,7 @@ export function EditorPage(props: EditorPageProps) {
       </Head>
       {!store.isPresentationMode ? (
         <>
-          <EditorNavbar title={title} pid={pid} />
+          <EditorNavbar />
           <Grid
             height={"calc(100vh - 70px)"}
             templateRows="repeat(12, 1fr)"
@@ -109,21 +108,12 @@ export function EditorPage(props: EditorPageProps) {
               />
             </GridItem>
             <GridItem rowSpan={1} colSpan={2}>
-              <SlideNavigator
-                onAddNewSlide={store.addNewSlide}
-                currentSlide={store.currentSlideIdx}
-                onClickSlide={store.goToSlide}
-                slides={slides}
-              />
+              <SlideNavigator onClickSlide={store.goToSlide} />
             </GridItem>
           </Grid>{" "}
         </>
       ) : (
-        <FullScreenPresentation
-          slides={slides}
-          currentSlideIdx={store.currentSlideIdx}
-          onClose={store.stopPresentationMode}
-        />
+        <FullScreenPresentation onClose={store.stopPresentationMode} />
       )}
     </>
   );
@@ -158,11 +148,13 @@ export const getServerSideProps: GetServerSideProps<{}> = withPageAuthRequired({
       _id: ObjectId;
     };
 
+    const props: EditorPageProps = {
+      presentation: { ...payload, id: _id.toHexString() },
+      pid: pid as string,
+    };
+
     return {
-      props: {
-        presentation: { ...payload, id: _id.toHexString() },
-        pid,
-      },
+      props,
     };
   },
 });

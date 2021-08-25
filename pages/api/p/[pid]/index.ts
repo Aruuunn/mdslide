@@ -1,15 +1,15 @@
 import { ObjectId } from "mongodb";
-import { getDb } from "lib/db";
-import { catchErrors } from "lib/exceptions/catcherrors";
+import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
+import type { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
+
 import {
   UnAuthorizedException,
   InternalServerException,
   NotFoundException,
 } from "lib/exceptions/common";
-import type { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
-import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
-
+import { getDb } from "lib/db/getDb";
 import { Presentation } from "model/presentation";
+import { catchErrors } from "lib/exceptions/catcherrors";
 import { mapUnderscoreIdToId } from "lib/utils/mapUnderscoreId";
 
 const handler: NextApiHandler = async function (

@@ -1,34 +1,35 @@
+import { ObjectId } from "mongodb";
 import { FC, useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import { Flex, Spacer, IconButton, Icon } from "@chakra-ui/react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 
-import SlideInterface from "model/slide";
-import Presentation from "model/presentation";
-import { getDb } from "lib/db";
+import PresentationInterface from "model/presentation";
+import PresentationModel from "model/presentation";
+import { useStore } from "lib/stores/presentation";
+import { getDb } from "lib/db/getDb";
 import { Logo, FullScreenPresentation, Slide, LoadFonts } from "components";
+import { keyListeners } from "lib/setupKeyListeners";
 
 import "@uiw/react-md-editor/dist/markdown-editor.css";
 import "@uiw/react-markdown-preview/dist/markdown.css";
 
 interface PageProps {
-  slides: SlideInterface[];
+  presentation: PresentationInterface;
 }
 
 const PublishedPresentationPage: FC<PageProps> = (props) => {
-  const { slides } = props;
+  const { presentation } = props;
 
-  const [idx, setIdx] = useState(0);
+  const store = useStore();
+  const slides = store.presentation.slides;
+  const currentSlideIndex = store.currentSlideIdx;
+  const currentSlide = slides[currentSlideIndex];
+
   const [constraint, setConstraint] = useState({ height: 1080, width: 1920 });
   const [presentationMode, setPresentationMode] = useState(false);
+
   const fontFamilies = slides.map((s) => s.fontFamily);
-
-  const currentSlide = slides[idx];
-
-  const nextSlide = () =>
-    setIdx((idx) => (idx + 1 < slides.length ? idx + 1 : idx));
-
-  const prevSlide = () => setIdx((idx) => (idx > 0 ? idx - 1 : idx));
 
   const startPresentationMode = () => setPresentationMode(true);
 
@@ -42,13 +43,13 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
     window.addEventListener("resize", setScreenSize);
     setScreenSize();
 
-    window.onkeydown = (e) => {
-      if (e.keyCode == 37) {
-        prevSlide();
-      } else if (e.keyCode == 39) {
-        nextSlide();
-      }
-    };
+    store.setPresentation(presentation);
+
+    const { cleanUp, setUpKeyListener } = keyListeners();
+
+    setUpKeyListener();
+
+    return cleanUp;
   }, []);
 
   return (
@@ -106,9 +107,9 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
               justify="center"
               width="36px"
               boxShadow="base"
-              aria-hidden={idx === 0}
-              onClick={prevSlide}
-              disabled={idx === 0}
+              aria-hidden={currentSlideIndex === 0}
+              onClick={store.goToPrevSlide}
+              disabled={currentSlideIndex === 0}
               _disabled={{ cursor: "not-allowed" }}
               color="#495464"
               _hover={{ boxShadow: "md" }}
@@ -141,10 +142,10 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
               width="36px"
               boxShadow="base"
               color="#495464"
-              aria-hidden={idx === slides.length - 1}
-              disabled={idx === slides.length - 1}
+              aria-hidden={currentSlideIndex === slides.length - 1}
+              disabled={currentSlideIndex === slides.length - 1}
               _disabled={{ cursor: "not-allowed" }}
-              onClick={nextSlide}
+              onClick={store.goToNextSlide}
               _hover={{ boxShadow: "md" }}
               _focus={{ boxShadow: "md" }}
             >
@@ -153,26 +154,18 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
           </Flex>
         </>
       ) : (
-        <FullScreenPresentation
-          slides={slides}
-          currentSlideIdx={idx}
-          onNextSlide={nextSlide}
-          onPrevSlide={prevSlide}
-          onClose={() => setPresentationMode(false)}
-        />
+        <FullScreenPresentation onClose={() => setPresentationMode(false)} />
       )}
     </>
   );
 };
 
-export const getServerSideProps: GetServerSideProps<PageProps> = async (
-  ctx
-) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { query } = ctx;
   const { slug } = query as { slug: string };
 
   const db = await getDb();
-  const collection = db.getCollection(Presentation);
+  const collection = db.getCollection(PresentationModel);
 
   const presentation = await collection.findOne(
     { pubmeta: { slug }, isPublished: true },
@@ -188,10 +181,16 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
     };
   }
 
+  const { _id, ...payload } = presentation as PresentationModel & {
+    _id: ObjectId;
+  };
+
+  const props: PageProps = {
+    presentation: { ...payload, id: _id.toHexString() },
+  };
+
   return {
-    props: {
-      slides: presentation.slides,
-    },
+    props,
   };
 };
 
