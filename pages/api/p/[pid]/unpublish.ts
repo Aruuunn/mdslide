@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { Presentation } from "model/presentation";
-import { getDb } from "lib/db";
+import { getDb } from "lib/db/getDb";
 import { NextApiHandler } from "next";
 import { catchErrors } from "lib/exceptions/catcherrors";
 import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";

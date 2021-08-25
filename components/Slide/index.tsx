@@ -1,8 +1,9 @@
+import { FC } from "react";
 import { Box, BoxProps } from "@chakra-ui/react";
 import MDEditor from "@uiw/react-md-editor";
-import { FC } from "react";
-import { getScaleFactor } from "./getScaleFactor";
+
 import { getSlideSize } from "./getSlideSize";
+import { getScaleFactor } from "./getScaleFactor";
 
 export type SlideProps = {
   constraintSize: { height: number; width: number };

@@ -1,9 +1,9 @@
-import { catchErrors } from "lib/exceptions/catcherrors";
 import { NextApiHandler } from "next";
+import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0";
+
+import { getDb } from "lib/db/getDb";
 import { Presentation } from "model/presentation";
-import { getSession } from "@auth0/nextjs-auth0";
-import { withApiAuthRequired } from "@auth0/nextjs-auth0";
-import { getDb } from "lib/db";
+import { catchErrors } from "lib/exceptions/catcherrors";
 import { mapUnderscoreIdToId } from "lib/utils/mapUnderscoreId";
 
 const handler: NextApiHandler = async function (req, res) {

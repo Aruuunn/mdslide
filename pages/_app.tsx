@@ -1,12 +1,12 @@
-import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
+import { ChakraProvider } from "@chakra-ui/react";
 import { UserProvider } from "@auth0/nextjs-auth0";
 
-import "focus-visible/dist/focus-visible";
-import theme from "../theme";
+import theme from "config/theme";
 
-import "../styles/global.css";
-import "../styles/editor.css";
+import "focus-visible/dist/focus-visible";
+import "styles/global.css";
+import "styles/editor.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -17,4 +17,5 @@ function MyApp({ Component, pageProps }: AppProps) {
     </ChakraProvider>
   );
 }
+
 export default MyApp;

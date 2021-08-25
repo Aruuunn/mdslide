@@ -7,3 +7,5 @@ export interface Slide {
 
   fontFamily: string;
 }
+
+export default Slide;

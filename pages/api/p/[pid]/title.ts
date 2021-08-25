@@ -1,5 +1,5 @@
 import { BadRequestException } from "lib/exceptions/common";
-import { patchFieldApi } from "@lib/patch-field";
+import { patchFieldApi } from "@lib/decorators/patch-field";
 
 export default patchFieldApi("title", (newTitle) => {
   if (typeof newTitle !== "string" || newTitle.trim().length === 0) {

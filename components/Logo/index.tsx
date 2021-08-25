@@ -10,3 +10,5 @@ export const Logo: FC<LogoProps> = (props) => {
     </Text>
   );
 };
+
+export default Logo;

@@ -1,35 +1,34 @@
-import { useEffect } from "react";
-import { GetServerSideProps } from "next";
-import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Head from "next/head";
 import debounce from "debounce";
+import { useEffect } from "react";
+import { ObjectId } from "mongodb";
+import { GetServerSideProps } from "next";
+import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import { Grid, GridItem } from "@chakra-ui/react";
 
+import PresentationModel from "model/presentation";
+import PresentationType from "model/interfaces/presentation";
 import {
   EditorPanel,
-  Navbar,
+  EditorNavbar,
   PreviewSpace,
   SlideNavigator,
   FullScreenPresentation,
 } from "components";
-import { Presentation as IPresentation } from "model/interfaces/presentation";
-import { Presentation } from "model/presentation";
-import { getDb } from "lib/db";
-import { ObjectId } from "mongodb";
-import { Slide } from "@model/slide";
-import { useStore } from "lib/stores/EditorPage";
+import { getDb } from "lib/db/getDb";
+import { Slide } from "model/slide";
+import { useStore } from "lib/stores/presentation";
+import { keyListeners } from "lib/setupKeyListeners";
 
 interface EditorPageProps {
-  presentation: IPresentation;
+  presentation: PresentationType;
   pid: string;
 }
 
 export function EditorPage(props: EditorPageProps) {
-  const { pid, presentation } = props;
+  const { presentation } = props;
 
   const store = useStore();
-
-  const { title } = presentation;
   const slides = useStore((state) => state.presentation.slides);
   const currentSlide = slides[store.currentSlideIdx];
 
@@ -65,23 +64,23 @@ export function EditorPage(props: EditorPageProps) {
           return;
         }
       }
-
-      if (e.keyCode == 37) {
-        store.goToPrevSlide();
-      } else if (e.keyCode == 39) {
-        store.goToNextSlide();
-      }
     };
+
+    const { cleanUp, setUpKeyListener } = keyListeners();
+
+    setUpKeyListener();
+
+    return cleanUp;
   }, []);
 
   return (
-    <div>
+    <>
       <Head>
         <title>MSLIDE</title>
       </Head>
       {!store.isPresentationMode ? (
         <>
-          <Navbar title={title} pid={pid} />
+          <EditorNavbar />
           <Grid
             height={"calc(100vh - 70px)"}
             templateRows="repeat(12, 1fr)"
@@ -109,25 +108,14 @@ export function EditorPage(props: EditorPageProps) {
               />
             </GridItem>
             <GridItem rowSpan={1} colSpan={2}>
-              <SlideNavigator
-                onAddNewSlide={store.addNewSlide}
-                currentSlide={store.currentSlideIdx}
-                onClickSlide={store.goToSlide}
-                slides={slides}
-              />
+              <SlideNavigator onClickSlide={store.goToSlide} />
             </GridItem>
           </Grid>{" "}
         </>
       ) : (
-        <FullScreenPresentation
-          slides={slides}
-          currentSlideIdx={store.currentSlideIdx}
-          onNextSlide={store.goToNextSlide}
-          onPrevSlide={store.goToPrevSlide}
-          onClose={store.stopPresentationMode}
-        />
+        <FullScreenPresentation />
       )}
-    </div>
+    </>
   );
 }
 
@@ -140,9 +128,9 @@ export const getServerSideProps: GetServerSideProps<{}> = withPageAuthRequired({
 
     const db = await getDb();
 
-    const collection = db.getCollection(Presentation);
+    const collection = db.getCollection(PresentationModel);
 
-    const presentation = await collection.findOne<Presentation>({
+    const presentation = await collection.findOne<PresentationModel>({
       userEmail: user.email,
       _id: new ObjectId(pid as string),
     });
@@ -156,15 +144,17 @@ export const getServerSideProps: GetServerSideProps<{}> = withPageAuthRequired({
       };
     }
 
-    const { _id, ...payload } = presentation as Presentation & {
+    const { _id, ...payload } = presentation as PresentationModel & {
       _id: ObjectId;
     };
 
+    const props: EditorPageProps = {
+      presentation: { ...payload, id: _id.toHexString() },
+      pid: pid as string,
+    };
+
     return {
-      props: {
-        presentation: { ...payload, id: _id.toHexString() },
-        pid,
-      },
+      props,
     };
   },
 });

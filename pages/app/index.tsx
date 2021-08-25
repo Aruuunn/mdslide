@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
-import Head from "next/head";
 import useSWR from "swr";
 import axios from "axios";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useRef, useState } from "react";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import {
   Container,
@@ -12,9 +13,7 @@ import {
   Progress,
 } from "@chakra-ui/react";
 
-import { DashboardNavbar, Slide } from "../../components";
-import { useRouter } from "next/router";
-import LoadFonts from "components/LoadFonts";
+import { HomeNavbar, Slide, LoadFonts } from "components";
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
@@ -45,7 +44,7 @@ export function Index() {
       {isNextRouteLoading ? (
         <Progress size="xs" colorScheme="blackAlpha" isIndeterminate />
       ) : null}
-      <DashboardNavbar isDisabled={isNextRouteLoading} />
+      <HomeNavbar isDisabled={isNextRouteLoading} />
 
       <Container maxW="container.xl">
         <Text

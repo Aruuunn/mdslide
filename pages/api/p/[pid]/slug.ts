@@ -1,12 +1,12 @@
-import { ObjectId, MongoServerError } from "mongodb";
-import { Presentation } from "model/presentation";
-import { getDb } from "lib/db";
-import { BadRequestException } from "lib/exceptions/common";
-import { getSession } from "@auth0/nextjs-auth0";
 import { NextApiHandler } from "next";
-import { withApiAuthRequired } from "@auth0/nextjs-auth0";
-import { catchErrors } from "lib/exceptions/catcherrors";
+import { ObjectId, MongoServerError } from "mongodb";
+import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0";
+
+import { getDb } from "lib/db/getDb";
 import { isValidSlug } from "utils/isValidSlug";
+import { Presentation } from "model/presentation";
+import { catchErrors } from "lib/exceptions/catcherrors";
+import { BadRequestException } from "lib/exceptions/common";
 
 const handler: NextApiHandler = async (req, res) => {
   const { user } = getSession(req, res);

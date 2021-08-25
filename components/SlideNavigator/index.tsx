@@ -1,44 +1,23 @@
+import AutoSizer from "react-virtualized-auto-sizer";
 import { FC, useRef, useEffect } from "react";
 import { FixedSizeList as List } from "react-window";
-import { Flex, Box, IconButton } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { Slide } from "../Slide";
-import { Slide as ISlide } from "model/slide";
+import { Flex, Box } from "@chakra-ui/react";
+
+import Slide from "components/Slide";
+import { useStore } from "lib/stores/presentation";
+import { NewSlideButton } from "./components";
 
 export interface SlideNavigatorProps {
-  onAddNewSlide: () => void;
-  slides: ISlide[];
-  currentSlide: number;
   onClickSlide: (idx: number) => any;
 }
 
-interface NewSlideButtonProps {
-  onClick: () => void;
-}
-
-const NewSlideButton: FC<NewSlideButtonProps> = (props) => {
-  const { onClick } = props;
-
-  return (
-    <IconButton
-      colorScheme="black"
-      height="57.25px"
-      opacity="1"
-      borderRadius="3px"
-      width="100px"
-      onClick={onClick}
-      variant="outline"
-      _hover={{ bg: "black", color: "white", opacity: 1, boxShadow: "none" }}
-      _focus={{ bg: "black", color: "white", opacity: 1, boxShadow: "none" }}
-      aria-label="Add new Slide"
-      icon={<AddIcon />}
-    />
-  );
-};
-
 export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
-  const { onAddNewSlide, slides, currentSlide, onClickSlide } = props;
+  const { onClickSlide } = props;
+
+  const slides = useStore((state) => state.presentation.slides);
+  const currentSlideIndex = useStore((state) => state.currentSlideIdx);
+
+  const onAddNewSlide = useStore((store) => store.addNewSlide);
 
   const listRef = useRef<List<any>>();
 
@@ -81,8 +60,8 @@ export const SlideNavigator: FC<SlideNavigatorProps> = (props) => {
                     onClick={() => {
                       onClickSlide(index);
                     }}
-                    opacity={currentSlide === index ? 1 : 0.8}
-                    border={currentSlide === index ? "2px" : "1px"}
+                    opacity={currentSlideIndex === index ? 1 : 0.8}
+                    border={currentSlideIndex === index ? "2px" : "1px"}
                     borderColor="#495464"
                     as="button"
                     outline="none"
