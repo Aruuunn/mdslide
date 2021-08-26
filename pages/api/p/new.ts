@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
 import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
-import { getDb } from "lib/db";
+import { getDb } from "lib/db/getDb";
 import { Presentation } from "model/presentation";
 import { catchErrors } from "lib/exceptions/catcherrors";
 

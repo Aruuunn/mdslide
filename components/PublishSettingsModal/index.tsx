@@ -14,7 +14,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { PrimaryButton } from "components/PrimayButton";
-import { useStore } from "lib/stores/EditorPage";
+import { useStore } from "@lib/stores/presentation";
 import { Presentation } from "model/interfaces/presentation";
 import { isValidSlug } from "utils/isValidSlug";
 
@@ -224,3 +224,5 @@ export const PublishSettingsModal: FC<PublishSettingsModalProps> = (props) => {
     </Modal>
   );
 };
+
+export default PublishSettingsModal;

@@ -1,67 +1,26 @@
 import dynamic from "next/dynamic";
+import MDEditor from "@uiw/react-md-editor";
 import { FC } from "react";
 import { Box, Text, Flex, Tooltip } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
-import MDEditor from "@uiw/react-md-editor";
 
-const FontPicker = dynamic(() => import("font-picker-react"), {
-  ssr: false,
-});
+import ColorPicker from "components/ColorPicker";
 
 import "@uiw/react-md-editor/dist/markdown-editor.css";
 import "@uiw/react-markdown-preview/dist/markdown.css";
 
+const FontPicker = dynamic(() => import("font-picker-react"), { ssr: false });
+
 export interface EditorPanelProps {
   value: string;
-  setValue: (value: string) => any;
   bgColor: string;
-  setBgColor: (value: string) => any;
   fontColor: string;
-  setFontColor: (value: string) => any;
   fontFamily: string;
+  setValue: (value: string) => any;
+  setBgColor: (value: string) => any;
+  setFontColor: (value: string) => any;
   setFontFamily: (value: string) => any;
 }
-
-interface ColorPickerProps {
-  value: string;
-  setValue: (value: string) => void;
-  label: string;
-  "aria-label": string;
-  id: string;
-}
-
-const ColorPicker: FC<ColorPickerProps> = (props) => {
-  const { value, setValue, label, id, "aria-label": ariaLabel } = props;
-  return (
-    <Flex mr="13px" direction="column" alignItems="center" width="40px">
-      <Box
-        border="1px"
-        borderColor="gray.300"
-        width="40px"
-        height="40px"
-        bg={value}
-        borderRadius="5px"
-      >
-        <Box
-          opacity="0"
-          as="input"
-          id={id}
-          value={value}
-          onChange={(e) => {
-            setValue((e.target as any)?.value || value);
-          }}
-          type="color"
-          width="100%"
-          height="100%"
-        />
-      </Box>
-
-      <label htmlFor={id} aria-label={ariaLabel}>
-        {label}
-      </label>
-    </Flex>
-  );
-};
 
 export const EditorPanel: FC<EditorPanelProps> = (props) => {
   const {
@@ -85,13 +44,7 @@ export const EditorPanel: FC<EditorPanelProps> = (props) => {
         color="#495464"
         bg="#fafafa"
       >
-        <Text
-          style={{ letterSpacing: "0.15em" }}
-          fontWeight="bold"
-          ml="0.5"
-          mr="2"
-          mt="0.7"
-        >
+        <Text className="spaced-bold-text" ml="0.5" mr="2" mt="0.7">
           APPEARANCE
         </Text>
         <Flex mt="18px" width="100%">
@@ -170,3 +123,5 @@ export const EditorPanel: FC<EditorPanelProps> = (props) => {
     </Box>
   );
 };
+
+export default EditorPanel;

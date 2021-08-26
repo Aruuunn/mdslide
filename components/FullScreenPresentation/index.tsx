@@ -1,42 +1,20 @@
 import { FC, useEffect } from "react";
+import { Box, Text } from "@chakra-ui/react";
+import Slide from "components/Slide";
+import LoadFonts from "components/LoadFonts";
+import createToast from "lib/createInfoToast";
+import { useStore } from "lib/stores/presentation";
 
-import { Slide } from "../Slide";
-import { Box, Text, useToast, Flex } from "@chakra-ui/react";
-import { InfoIcon } from "@chakra-ui/icons";
-import { Slide as ISlide } from "model/slide";
-import { LoadFonts } from "components/LoadFonts";
-
-export interface FullScreenPresentationProps {
-  onNextSlide: () => void;
-  onPrevSlide: () => void;
-  onClose: () => void;
-  currentSlideIdx: number;
-  slides: ISlide[];
-}
+export interface FullScreenPresentationProps {}
 
 export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
   props
 ) => {
-  const { onNextSlide, slides, onPrevSlide, onClose, currentSlideIdx } = props;
-  const toast = useToast();
+  const slides = useStore((state) => state.presentation.slides);
+  const currentSlideIndex = useStore((state) => state.currentSlideIdx);
+  const onClose = useStore((store) => store.stopPresentationMode);
 
-  const currentSlide = slides[currentSlideIdx];
-
-  const createToast = (text: string) =>
-    toast({
-      status: "info",
-      isClosable: true,
-      title: "",
-      duration: 4000,
-      render() {
-        return (
-          <Flex alignItems="center" color="white" bg="black" p="5">
-            <InfoIcon mr="4" />
-            {text}
-          </Flex>
-        );
-      },
-    });
+  const currentSlide = slides[currentSlideIndex];
 
   useEffect(() => {
     document.body.onfullscreenchange = () => {
@@ -72,7 +50,7 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
           color={currentSlide.fontColor}
           right="5"
         >
-          {currentSlideIdx + 1}/{slides.length}
+          {currentSlideIndex + 1}/{slides.length}
         </Text>
         <Slide
           constraintSize={{

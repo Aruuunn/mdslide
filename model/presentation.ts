@@ -1,4 +1,4 @@
-import { Entity } from "lib/entity";
+import { Entity } from "@lib/db/entity";
 import type { Slide } from "./slide";
 import type { Presentation as IPresentation } from "./interfaces/presentation";
 
@@ -18,3 +18,5 @@ export class Presentation implements IPresentation {
 
   pubmeta?: { slug: string };
 }
+
+export default Presentation;

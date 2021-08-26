@@ -1,6 +1,6 @@
 import { BadRequestException } from "lib/exceptions/common";
 import { Slide } from "model/slide";
-import { patchFieldApi } from "lib/patch-field";
+import { patchFieldApi } from "@lib/decorators/patch-field";
 import { isValidSlide } from "lib/utils/isValidSlide";
 
 export default patchFieldApi("slides", (slide: Slide, meta) => {

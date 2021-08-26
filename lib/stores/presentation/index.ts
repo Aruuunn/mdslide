@@ -1,37 +1,16 @@
-import { Presentation } from "model/interfaces/presentation";
-import axios from "axios";
 import create from "zustand";
-import { debounce } from "debounce";
-import { Slide } from "@model/slide";
+import Slide from "model/slide";
+import Presentation from "model/interfaces/presentation";
+import { updateSlideRemote } from "./updateSlideRemote";
 
 type MapToPartial<T> = (value: T) => Partial<T>;
 
-const defaultSlideValue: Slide = {
-  fontColor: "black",
-  bgColor: "white",
-  mdContent: "# Type Something..",
-  fontFamily: "Inter",
-};
-
-const updateSlideRemote = debounce(
-  (
-    slide: Slide,
-    pid: string,
-    idx: number,
-    callback: (promise: Promise<any>) => void
-  ) => {
-    const promise = axios.patch(`/api/p/${pid}/slide`, {
-      slides: slide,
-      meta: { index: idx },
-    });
-    callback(promise);
-  },
-  300
-);
-
 type State = {
   currentSlideIdx: number;
-  presentation: Pick<Presentation, "slides" | "isPublished" | "pubmeta"> &
+  presentation: Pick<
+    Presentation,
+    "slides" | "isPublished" | "pubmeta" | "title"
+  > &
     Partial<Pick<Presentation, "id">>;
   lastSlideUpdatePromise: Promise<void> | null;
   isSaving: boolean;
@@ -49,11 +28,23 @@ type Actions = {
   setPresentation: (presentation: Presentation) => void;
   startPresentationMode: () => void;
   stopPresentationMode: () => void;
+  updateLocalTitle: (newTitle: string) => void;
+};
+
+const defaultSlideValue: Slide = {
+  fontColor: "black",
+  bgColor: "white",
+  mdContent: "# Slide",
+  fontFamily: "Inter",
 };
 
 export const useStore = create<State & Actions>((set, get) => ({
   currentSlideIdx: 0,
-  presentation: { slides: [defaultSlideValue], isPublished: false },
+  presentation: {
+    slides: [defaultSlideValue],
+    isPublished: false,
+    title: "Untitled",
+  },
   lastSlideUpdatePromise: null,
   isSaving: false,
   isPresentationMode: false,
@@ -90,7 +81,6 @@ export const useStore = create<State & Actions>((set, get) => ({
       promise.then(() => {
         const { lastSlideUpdatePromise } = get();
         if (lastSlideUpdatePromise === promise) {
-          console.log("setting false");
           set({ isSaving: false });
         }
       });
@@ -115,19 +105,18 @@ export const useStore = create<State & Actions>((set, get) => ({
 
     const lastSlide = slides[slides.length - 1];
 
+    const newSlide = {
+      mdContent: `# Slide ${slides.length + 1} \n`,
+      bgColor: lastSlide?.bgColor ?? "white",
+      fontColor: lastSlide?.fontColor ?? "black",
+      fontFamily: lastSlide?.fontFamily ?? "Inter",
+    };
+
     set({
       currentSlideIdx: slides.length,
       presentation: {
         ...presentation,
-        slides: [
-          ...slides,
-          {
-            mdContent: `# Slide ${slides.length + 1} \n`,
-            bgColor: lastSlide?.bgColor ?? "white",
-            fontColor: lastSlide?.fontColor ?? "black",
-            fontFamily: lastSlide?.fontFamily ?? "Inter",
-          },
-        ],
+        slides: [...slides, newSlide],
       },
     });
 
@@ -142,4 +131,10 @@ export const useStore = create<State & Actions>((set, get) => ({
   stopPresentationMode: () => {
     set({ isPresentationMode: false });
   },
+  updateLocalTitle: (newTitle: string) => {
+    const { presentation } = get();
+    set({ presentation: { ...presentation, title: newTitle } });
+  },
 }));
+
+export default useStore;

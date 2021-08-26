@@ -1,12 +1,15 @@
-import { UnAuthorizedException, NotFoundException } from "./exceptions/common";
+import { ObjectId, UpdateFilter } from "mongodb";
+import { NextApiRequest, NextApiResponse } from "next";
+import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0";
+
+import { getDb } from "lib/db/getDb";
+import { Presentation } from "model/presentation";
 import { BadRequestException } from "lib/exceptions/common";
 import { catchErrors } from "lib/exceptions/catcherrors";
-import { getSession } from "@auth0/nextjs-auth0";
-import { withApiAuthRequired } from "@auth0/nextjs-auth0";
-import { ObjectId, UpdateFilter } from "mongodb";
-import { Presentation } from "../model/presentation";
-import { NextApiRequest, NextApiResponse } from "next";
-import { getDb } from "./db";
+import {
+  UnAuthorizedException,
+  NotFoundException,
+} from "lib/exceptions/common";
 
 export const patchFieldApi = <T, V>(
   property: string,
