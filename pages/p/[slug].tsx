@@ -43,7 +43,7 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
     const setScreenSize = () =>
       setConstraint({
         height: window.innerHeight - 200,
-        width: window.innerWidth,
+        width: window.innerWidth - 100,
       });
 
     window.addEventListener("resize", setScreenSize);
