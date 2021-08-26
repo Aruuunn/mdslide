@@ -12,7 +12,7 @@ export const PrevSlideButton = (props: PrevSlideButtonProps) => {
     <Flex
       as="button"
       aria-label="go to previous slide"
-      ml="5"
+      mr="5"
       p="10px"
       bg="#fafafa"
       borderRadius="50%"
