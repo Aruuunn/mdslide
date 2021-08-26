@@ -17,23 +17,15 @@ import AccountActions from "components/AccountActions";
 import StartPresentationModeButton from "components/StartPresentationModeButton";
 import PublishSettingsModal from "components/PublishSettingsModal";
 import { useStore } from "lib/stores/presentation";
-import { updateRemoteForId } from "lib/updateRemoteTitle";
 
 export interface EditorNavbarProps {}
 
 export const EditorNavbar: FC<EditorNavbarProps> = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const pid = useStore((state) => state.presentation.id);
   const isSaving = useStore((state) => state.isSaving);
   const title = useStore((state) => state.presentation.title);
 
-  const updateRemoteTitle = updateRemoteForId(pid);
-  const updateLocalTitle = useStore((store) => store.updateLocalTitle);
-
-  const updateTitle = async (newTitle: string) => {
-    updateLocalTitle(newTitle);
-    updateRemoteTitle(newTitle.trim() || "Untitled");
-  };
+  const updateTitle = useStore((store) => store.updateTitle);
 
   return (
     <>

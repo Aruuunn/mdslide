@@ -18,7 +18,7 @@ import {
 import { getDb } from "lib/db/getDb";
 import { Slide } from "model/slide";
 import { useStore } from "lib/stores/presentation";
-import { keyListeners } from "lib/setupKeyListeners";
+import { keyListeners } from "@lib/setupKeyListeners";
 
 interface EditorPageProps {
   presentation: PresentationType;

@@ -2,6 +2,7 @@ import create from "zustand";
 import Slide from "model/slide";
 import Presentation from "model/interfaces/presentation";
 import { updateSlideRemote } from "./updateSlideRemote";
+import { updateRemoteForId } from "./updateRemoteTitle";
 
 type MapToPartial<T> = (value: T) => Partial<T>;
 
@@ -12,7 +13,7 @@ type State = {
     "slides" | "isPublished" | "pubmeta" | "title"
   > &
     Partial<Pick<Presentation, "id">>;
-  lastSlideUpdatePromise: Promise<void> | null;
+  lastSlideUpdatePromise: Promise<any> | null;
   isSaving: boolean;
   isPresentationMode: boolean;
 };
@@ -28,7 +29,7 @@ type Actions = {
   setPresentation: (presentation: Presentation) => void;
   startPresentationMode: () => void;
   stopPresentationMode: () => void;
-  updateLocalTitle: (newTitle: string) => void;
+  updateTitle: (newTitle: string) => void;
 };
 
 const defaultSlideValue: Slide = {
@@ -78,7 +79,7 @@ export const useStore = create<State & Actions>((set, get) => ({
     updateSlideRemote(slide, pid, idx, (promise) => {
       set({ lastSlideUpdatePromise: promise });
 
-      promise.then(() => {
+      promise.finally(() => {
         const { lastSlideUpdatePromise } = get();
         if (lastSlideUpdatePromise === promise) {
           set({ isSaving: false });
@@ -131,9 +132,31 @@ export const useStore = create<State & Actions>((set, get) => ({
   stopPresentationMode: () => {
     set({ isPresentationMode: false });
   },
-  updateLocalTitle: (newTitle: string) => {
+  updateTitle: (newTitle: string) => {
     const { presentation } = get();
-    set({ presentation: { ...presentation, title: newTitle } });
+
+    if (!newTitle || newTitle?.trim() === "") {
+      return;
+    }
+
+    updateRemoteForId(presentation.id)(newTitle, (promise) => {
+      const { lastSlideUpdatePromise } = get();
+      const combinedPromise = Promise.allSettled(
+        [promise, lastSlideUpdatePromise].filter(Boolean)
+      );
+
+      combinedPromise.finally(() => {
+        const { lastSlideUpdatePromise } = get();
+        if (lastSlideUpdatePromise === combinedPromise) {
+          set({ isSaving: false, lastSlideUpdatePromise: null });
+        }
+      });
+
+      // @TODO change name to generalize.
+      set({ lastSlideUpdatePromise: combinedPromise });
+    });
+
+    set({ presentation: { ...presentation, title: newTitle }, isSaving: true });
   },
 }));
 
