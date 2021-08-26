@@ -16,7 +16,7 @@ import {
   PrevSlideButton,
   StartPresentationModeButton,
 } from "components";
-import { keyListeners } from "@lib/setupKeyListeners";
+import { keyListeners } from "config/setupKeyListeners";
 
 import "@uiw/react-md-editor/dist/markdown-editor.css";
 import "@uiw/react-markdown-preview/dist/markdown.css";

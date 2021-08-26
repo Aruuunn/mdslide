@@ -18,7 +18,7 @@ import {
 import { getDb } from "lib/db/getDb";
 import { Slide } from "model/slide";
 import { useStore } from "lib/stores/presentation";
-import { keyListeners } from "@lib/setupKeyListeners";
+import { keyListeners } from "lib/setupKeyListeners";
 
 interface EditorPageProps {
   presentation: PresentationType;
@@ -53,18 +53,6 @@ export function EditorPage(props: EditorPageProps) {
 
   useEffect(() => {
     store.setPresentation(presentation);
-
-    window.onkeydown = (e) => {
-      if (typeof window !== "undefined") {
-        const editorEl = window.document.querySelector<HTMLTextAreaElement>(
-          ".w-md-editor-text-input"
-        );
-
-        if (window.document.activeElement === editorEl) {
-          return;
-        }
-      }
-    };
 
     const { cleanUp, setUpKeyListener } = keyListeners();
 
