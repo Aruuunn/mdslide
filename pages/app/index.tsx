@@ -107,7 +107,15 @@ export function Index() {
               {isLoading ? (
                 <Skeleton mt={"10px"} p="5px" width="100%" height="20px" />
               ) : (
-                <Text mt={"10px"} p="5px" ml="5px">
+                <Text
+                  mt={"10px"}
+                  p="5px"
+                  ml="5px"
+                  textOverflow="ellipsis"
+                  overflow="hidden"
+                  whiteSpace="nowrap"
+                  maxWidth="300px"
+                >
                   {presentation?.title}
                 </Text>
               )}
