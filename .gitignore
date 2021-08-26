@@ -7,3 +7,5 @@ temp/
 .next
 .env.local
 public/service-worker.js
+
+yarn-error.log
