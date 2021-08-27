@@ -15,6 +15,7 @@ const handler: NextApiHandler = async function (req, res) {
 
   const presentations = await collection
     .find<Presentation>({ userEmail: user.email })
+    .sort({ createdAt: -1 })
     .project({ title: 1, slides: { $slice: 1 } })
     .toArray();
 

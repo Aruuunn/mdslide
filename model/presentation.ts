@@ -16,6 +16,8 @@ export class Presentation implements IPresentation {
 
   isPublished: boolean;
 
+  createdAt: string;
+
   pubmeta?: { slug: string };
 }
 

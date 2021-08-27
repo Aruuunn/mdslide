@@ -29,6 +29,7 @@ const handler: NextApiHandler = async function (
   ];
   newPresentation.title = "Untitled";
   newPresentation.userEmail = user.email;
+  newPresentation.createdAt = (new Date()).toISOString();
 
   const { insertedId } = await collection.insertOne(newPresentation);
 

@@ -11,6 +11,8 @@ export interface Presentation {
 
   isPublished: boolean;
 
+  createdAt: string;
+
   pubmeta?: { slug: string };
 }
 
