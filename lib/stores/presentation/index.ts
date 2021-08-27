@@ -133,9 +133,13 @@ export const useStore = create<State & Actions>((set, get) => ({
     set({ isPresentationMode: false });
   },
   updateTitle: (newTitle: string) => {
-    const { presentation } = get();
+    const { presentation, isSaving } = get();
 
-    if (!newTitle || newTitle?.trim() === "") {
+    const isInvalid = !newTitle || newTitle?.trim() === "";
+
+    set({ presentation: { ...presentation, title: newTitle }, isSaving: isSaving || !isInvalid });
+
+    if (isInvalid) {
       return;
     }
 
@@ -156,7 +160,6 @@ export const useStore = create<State & Actions>((set, get) => ({
       set({ lastSlideUpdatePromise: combinedPromise });
     });
 
-    set({ presentation: { ...presentation, title: newTitle }, isSaving: true });
   },
 }));
 
