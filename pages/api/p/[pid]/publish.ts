@@ -32,7 +32,7 @@ const handler: NextApiHandler<{ pubmeta: { slug: string } }> = async (
     return;
   }
 
-  const slug = (title as string).toLowerCase() + "_" + pid;
+  const slug = "p" + pid;
 
   await collection.updateOne(filter, {
     $set: { pubmeta: { slug }, isPublished: true },
