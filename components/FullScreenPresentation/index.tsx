@@ -2,6 +2,7 @@ import { FC, useEffect } from "react";
 import { Box, Text, IconButton, Icon } from "@chakra-ui/react";
 import Slide from "components/Slide";
 import LoadFonts from "components/LoadFonts";
+import createErrorToast from "lib/createErrorToast";
 import createToast from "lib/createInfoToast";
 import { useStore } from "lib/stores/presentation";
 
@@ -23,7 +24,11 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
       }
     };
 
-    document.body.requestFullscreen();
+    document.body.requestFullscreen().catch((e) => {
+      console.error(e);
+      onClose();
+      createErrorToast("Unable to start fullscreen mode");
+    });
 
     createToast("Use Left and Right Arrow keys to navigate");
   }, []);

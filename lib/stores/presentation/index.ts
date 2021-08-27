@@ -2,7 +2,7 @@ import create from "zustand";
 import Slide from "model/slide";
 import Presentation from "model/interfaces/presentation";
 import { updateSlideRemote } from "./updateSlideRemote";
-import { updateRemoteForId } from "./updateRemoteTitle";
+import { updateRemoteTitle } from "./updateRemoteTitle";
 
 type MapToPartial<T> = (value: T) => Partial<T>;
 
@@ -139,7 +139,7 @@ export const useStore = create<State & Actions>((set, get) => ({
       return;
     }
 
-    updateRemoteForId(presentation.id)(newTitle, (promise) => {
+    updateRemoteTitle(presentation.id)(newTitle, (promise) => {
       const { lastSlideUpdatePromise } = get();
       const combinedPromise = Promise.allSettled(
         [promise, lastSlideUpdatePromise].filter(Boolean)

@@ -2,7 +2,7 @@ import useSWR from "swr";
 import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import {
   Container,
@@ -13,6 +13,7 @@ import {
   Progress,
 } from "@chakra-ui/react";
 
+import createErrorToast from "lib/createErrorToast";
 import { HomeNavbar, Slide, LoadFonts } from "components";
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
@@ -25,6 +26,7 @@ export function Index() {
 
   if (error) {
     console.error(error);
+    createErrorToast("Something went wrong. Try again later");
   }
 
   const isLoading = !data;

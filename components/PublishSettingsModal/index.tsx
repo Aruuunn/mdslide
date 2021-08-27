@@ -17,6 +17,7 @@ import { PrimaryButton } from "components/PrimayButton";
 import { useStore } from "@lib/stores/presentation";
 import { Presentation } from "model/interfaces/presentation";
 import { isValidSlug } from "utils/isValidSlug";
+import createErrorToast from "lib/createErrorToast";
 
 export interface PublishSettingsModalProps {
   isOpen: boolean;
@@ -50,9 +51,8 @@ export const PublishSettingsModal: FC<PublishSettingsModalProps> = (props) => {
         isPublished: true,
       } as Presentation);
     } catch (e) {
-      // @TODO handle error
-
       console.error(e);
+      createErrorToast("Error publishing the presentation. Try again later");
     } finally {
       setLoading(false);
     }
@@ -69,8 +69,8 @@ export const PublishSettingsModal: FC<PublishSettingsModalProps> = (props) => {
         isPublished: false,
       } as Presentation);
     } catch (e) {
-      // @TODO handle error
       console.error(e);
+      createErrorToast("Something went wrong. Try again later.");
     } finally {
       setLoading(false);
     }
@@ -89,10 +89,10 @@ export const PublishSettingsModal: FC<PublishSettingsModalProps> = (props) => {
         },
       } as Presentation);
     } catch (e) {
-      // @TODO handle error
-
       if (typeof e?.response?.data?.message === "string") {
         setError(e?.response?.data?.message);
+      } else {
+        createErrorToast("Something went wrong. Try again later.");
       }
     } finally {
       setSaved(false);
