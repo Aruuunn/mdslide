@@ -26,7 +26,7 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
         aria-label="go to previous slide"
         position="absolute"
         top="calc(50% - 15px)"
-        left="15px"
+        left="20px"
         p="10px"
         bg="#fafafa"
         borderRadius="50%"
@@ -50,7 +50,7 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
         as="button"
         aria-label="go to next slide"
         top="calc(50% - 15px)"
-        right="15px"
+        right="20px"
         p="10px"
         bg="#fafafa"
         borderRadius="50%"
@@ -85,7 +85,7 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
             bgColor={bgColor}
             fontFamily={fontFamily}
             fontColor={fontColor}
-            constraintSize={{ ...constraint, width: constraint.width - 100 }}
+            constraintSize={{ ...constraint, width: constraint.width - 150 }}
             mdContent={mdContent}
             boxShadow="lg"
           />
