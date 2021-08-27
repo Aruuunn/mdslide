@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, IconButton, Icon } from "@chakra-ui/react";
 import Slide from "components/Slide";
 import LoadFonts from "components/LoadFonts";
 import createToast from "lib/createInfoToast";
@@ -43,6 +43,31 @@ export const FullScreenPresentation: FC<FullScreenPresentationProps> = (
         left="0"
         overflow="hidden"
       >
+        <IconButton
+          aria-label="exit presentation mode"
+          position="fixed"
+          top="5"
+          left="5"
+          bg="transparent"
+          _hover={{
+            bg: "transparent",
+            border: "1px solid " + currentSlide.fontColor,
+          }}
+          zIndex={1}
+          onClick={() => {
+            document.exitFullscreen().finally(() => {
+              onClose();
+            });
+          }}
+        >
+          <Icon height="24px" viewBox="0 0 24 24" width="24px">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path
+              d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"
+              fill={currentSlide.fontColor}
+            />
+          </Icon>
+        </IconButton>
         <Text
           position="fixed"
           top="5"
