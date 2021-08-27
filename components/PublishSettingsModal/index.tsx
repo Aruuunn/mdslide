@@ -131,7 +131,6 @@ export const PublishSettingsModal: FC<PublishSettingsModalProps> = (props) => {
           borderWidth="1px"
           borderColor="#e2e8f0"
           width="100%"
-          color="#495464"
         >
           {presentation.isPublished ? (
             <>
@@ -155,7 +154,6 @@ export const PublishSettingsModal: FC<PublishSettingsModalProps> = (props) => {
                 as="label"
                 htmlFor="slug"
                 fontSize="xs"
-                color="#495464"
                 style={{ letterSpacing: "0.15em" }}
                 fontWeight="bold"
               >
@@ -203,14 +201,14 @@ export const PublishSettingsModal: FC<PublishSettingsModalProps> = (props) => {
                   isSaving ||
                   slug.trim() === presentation?.pubmeta?.slug
                 }
+                _disabled={{ opacity: 0.6 }}
               >
                 Save
               </PrimaryButton>
               <Button
                 bg="white"
-                color="#495464"
-                border="1px solid #495464"
-                _hover={{ bg: "black", color: "white" }}
+                variant="outline"
+                _hover={{ bg: "#f6f6f6" }}
                 isLoading={isLoading}
                 disabled={isLoading}
                 onClick={onUnPublish}
