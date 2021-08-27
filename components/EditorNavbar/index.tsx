@@ -59,12 +59,14 @@ export const EditorNavbar: FC<EditorNavbarProps> = () => {
 
         {isSaving ? (
           <Tooltip label="saving.." aria-label="saving the changes">
-            <Spinner
-              emptyColor="gray.200"
-              color="gray.400"
-              width="25px"
-              height="25px"
-            />
+            <Flex justifyContent="flex-end" width="34px" height="25px">
+              <Spinner
+                emptyColor="gray.200"
+                color="gray.400"
+                width="25px"
+                height="25px"
+              />
+            </Flex>
           </Tooltip>
         ) : (
           <Tooltip label="saved" aria-label="saved to cloud">
