@@ -35,7 +35,7 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
 
   const IsPresentationMode = store.isPresentationMode;
 
-  const [constraint, setConstraint] = useState({ height: 1080, width: 1920 });
+  const [constraint, setConstraint] = useState({ height: 0, width: 0 });
 
   const fontFamilies = slides.map((s) => s.fontFamily);
 
@@ -84,17 +84,18 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
           >
             <PrevSlideButton />
 
-            <Slide
-              constraintSize={constraint}
-              mdContent={currentSlide.mdContent}
-              bgColor={currentSlide.bgColor}
-              fontColor={currentSlide.fontColor}
-              height={constraint.height}
-              fontFamily={currentSlide.fontFamily}
-              width={constraint.width}
-              boxShadow="lg"
-            />
-
+            {constraint.height !== 0 ? (
+              <Slide
+                constraintSize={constraint}
+                mdContent={currentSlide.mdContent}
+                bgColor={currentSlide.bgColor}
+                fontColor={currentSlide.fontColor}
+                height={constraint.height}
+                fontFamily={currentSlide.fontFamily}
+                width={constraint.width}
+                boxShadow="lg"
+              />
+            ) : null}
             <NextSlideButton />
           </Flex>
         </>
