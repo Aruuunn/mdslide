@@ -1,6 +1,8 @@
 import create from "zustand";
+
 import Slide from "model/slide";
 import Presentation from "model/interfaces/presentation";
+import { getTempId } from "lib/utils/getTempId";
 import { updateSlideRemote } from "./updateSlideRemote";
 import { updateRemoteTitle } from "./updateRemoteTitle";
 
@@ -21,7 +23,7 @@ type State = {
 type Actions = {
   getCurrentSlide: () => Slide;
   goToSlide: (index: number) => void;
-  updateSlide: (idx: number, map: MapToPartial<Slide>) => void;
+  updateSlide: (id: string, map: MapToPartial<Slide>) => void;
   updateCurrentSlide: (map: MapToPartial<Slide>) => void;
   goToNextSlide: () => void;
   goToPrevSlide: () => void;
@@ -68,16 +70,20 @@ export const useStore = create<State & Actions>((set, get) => ({
     const { goToSlide, currentSlideIdx } = get();
     goToSlide(currentSlideIdx - 1);
   },
-  updateSlide: (idx: number, map: (slide: Slide) => Partial<Slide>) => {
-    const { presentation } = get();
+  updateSlide: (id: string, map: (slide: Slide) => Partial<Slide>) => {
+    const { presentation, updateSlide } = get();
     const { slides } = presentation;
     const pid = presentation.id;
+
+    const idx = slides.findIndex((s) => s.id === id);
+
+    if (idx === -1) return;
 
     const partialSlide = map(slides[idx]);
 
     const slide = { ...slides[idx], ...partialSlide };
 
-    updateSlideRemote(slide, pid, (promise) => {
+    updateSlideRemote(slide, pid, updateSlide, (promise) => {
       set({ lastSlideUpdatePromise: promise });
 
       promise.finally(() => {
@@ -97,9 +103,13 @@ export const useStore = create<State & Actions>((set, get) => ({
     });
   },
   updateCurrentSlide: (map: (slide: Slide) => Partial<Slide>) => {
-    const { currentSlideIdx, updateSlide } = get();
+    const {
+      currentSlideIdx,
+      updateSlide,
+      presentation: { slides },
+    } = get();
 
-    updateSlide(currentSlideIdx, map);
+    updateSlide(slides[currentSlideIdx].id, map);
   },
   addNewSlide: () => {
     const { presentation, updateSlide } = get();
@@ -109,7 +119,7 @@ export const useStore = create<State & Actions>((set, get) => ({
 
     // TODO
     const newSlide = {
-      id: "",
+      id: getTempId(),
       mdContent: `# Slide ${slides.length + 1} \n`,
       bgColor: lastSlide?.bgColor ?? "white",
       fontColor: lastSlide?.fontColor ?? "black",
@@ -124,7 +134,7 @@ export const useStore = create<State & Actions>((set, get) => ({
       },
     });
 
-    updateSlide(slides.length, (s) => s);
+    updateSlide(newSlide.id, (s) => s);
   },
   setPresentation: (presentation) => {
     set({ presentation });
