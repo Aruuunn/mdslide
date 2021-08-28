@@ -4,15 +4,18 @@ import Slide from "model/slide";
 import createErrorToast from "lib/createErrorToast";
 
 export const updateSlideRemote = debounce(
-  (
-    slide: Slide,
-    pid: string,
-    idx: number,
-    callback: (promise: Promise<any>) => void
-  ) => {
-    const promise = axios.patch(`/api/p/${pid}/slide`, {
-      slides: slide,
-      meta: { index: idx },
+  (slide: Slide, pid: string, callback: (promise: Promise<any>) => void) => {
+    const promise = axios.patch(`/api/p/${pid}/slide/${slide.id || "new"}`, {
+      slide,
+    });
+
+    promise.then((res) => {
+      if (slide.id === "") {
+        const {
+          data: { id },
+        } = res;
+        slide.id = id;
+      }
     });
 
     promise.catch(() => {

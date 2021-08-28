@@ -33,6 +33,7 @@ type Actions = {
 };
 
 const defaultSlideValue: Slide = {
+  id: "",
   fontColor: "black",
   bgColor: "white",
   mdContent: "# Slide",
@@ -76,7 +77,7 @@ export const useStore = create<State & Actions>((set, get) => ({
 
     const slide = { ...slides[idx], ...partialSlide };
 
-    updateSlideRemote(slide, pid, idx, (promise) => {
+    updateSlideRemote(slide, pid, (promise) => {
       set({ lastSlideUpdatePromise: promise });
 
       promise.finally(() => {
@@ -106,7 +107,9 @@ export const useStore = create<State & Actions>((set, get) => ({
 
     const lastSlide = slides[slides.length - 1];
 
+    // TODO
     const newSlide = {
+      id: "",
       mdContent: `# Slide ${slides.length + 1} \n`,
       bgColor: lastSlide?.bgColor ?? "white",
       fontColor: lastSlide?.fontColor ?? "black",
@@ -137,7 +140,10 @@ export const useStore = create<State & Actions>((set, get) => ({
 
     const isInvalid = !newTitle || newTitle?.trim() === "";
 
-    set({ presentation: { ...presentation, title: newTitle }, isSaving: isSaving || !isInvalid });
+    set({
+      presentation: { ...presentation, title: newTitle },
+      isSaving: isSaving || !isInvalid,
+    });
 
     if (isInvalid) {
       return;
@@ -159,7 +165,6 @@ export const useStore = create<State & Actions>((set, get) => ({
       // @TODO change name to generalize.
       set({ lastSlideUpdatePromise: combinedPromise });
     });
-
   },
 }));
 

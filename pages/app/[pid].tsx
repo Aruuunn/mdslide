@@ -20,6 +20,7 @@ import { getDb } from "lib/db/getDb";
 import { Slide } from "model/slide";
 import { useStore } from "lib/stores/presentation";
 import { keyListeners } from "lib/setupKeyListeners";
+import { mapUnderscoreIdToId } from "@lib/utils/mapUnderscoreId";
 
 interface EditorPageProps {
   presentation: PresentationType;
@@ -138,7 +139,11 @@ export const getServerSideProps: GetServerSideProps<{}> = withPageAuthRequired({
     };
 
     const props: EditorPageProps = {
-      presentation: { ...payload, id: _id.toHexString() },
+      presentation: {
+        ...payload,
+        id: _id.toHexString(),
+        slides: payload.slides.map(mapUnderscoreIdToId),
+      },
       pid: pid as string,
     };
 

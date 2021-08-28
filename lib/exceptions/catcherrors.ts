@@ -17,6 +17,8 @@ export const catchErrors: <T>(handler: NextApiHandler<T>) => NextApiHandler<T> =
           return;
         }
 
+        console.error(e);
+
         res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
