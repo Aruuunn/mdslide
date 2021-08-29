@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { ObjectId } from "mongodb";
 import { FC, useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
@@ -61,6 +62,7 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
 
   return (
     <>
+      <Head>{presentation.title}</Head>
       {!IsPresentationMode ? (
         <>
           <LoadFonts fontFamilies={fontFamilies} />

@@ -66,7 +66,7 @@ export function EditorPage(props: EditorPageProps) {
   return (
     <>
       <Head>
-        <title>MSLIDE</title>
+        <title>{presentation.title}</title>
       </Head>
       {!store.isPresentationMode ? (
         <>

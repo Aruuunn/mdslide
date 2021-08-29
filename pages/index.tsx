@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Center, Text, Stack, Button } from "@chakra-ui/react";
@@ -30,6 +31,9 @@ const LandingPage: FC<{}> = () => {
 
   return (
     <>
+      <Head>
+        <title>MDSLIDE</title>
+      </Head>
       <Center height="100vh">
         <Stack>
           <Center>
