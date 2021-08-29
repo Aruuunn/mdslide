@@ -85,7 +85,10 @@ export const PreviewSpace: FC<PreviewSpaceProps> = (props) => {
             bgColor={bgColor}
             fontFamily={fontFamily}
             fontColor={fontColor}
-            constraintSize={{ ...constraint, width: constraint.width - 150 }}
+            constraintSize={{
+              width: constraint.width - 150,
+              height: constraint.height - 100,
+            }}
             mdContent={mdContent}
             boxShadow="lg"
           />
