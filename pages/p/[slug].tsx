@@ -121,7 +121,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const presentation = await collection.findOne(
     { pubmeta: { slug }, isPublished: true },
-    { projection: { slides: 1 } }
+    { projection: { slides: 1, title: 1 } }
   );
 
   if (!presentation) {
