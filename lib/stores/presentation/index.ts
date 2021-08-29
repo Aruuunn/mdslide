@@ -1,42 +1,13 @@
-import { createInfoToast } from "./../../createInfoToast";
 import create from "zustand";
 
 import Slide from "model/slide";
-import Presentation from "model/interfaces/presentation";
 import { getTempId } from "lib/utils/getTempId";
 import { updateSlideRemote } from "./updateSlideRemote";
 import { updateRemoteTitle } from "./updateRemoteTitle";
 import { deleteSlideRemote } from "./deleteSlide";
-
-type MapToPartial<T> = (value: T) => Partial<T>;
-
-type State = {
-  currentSlideIdx: number;
-  presentation: Pick<
-    Presentation,
-    "slides" | "isPublished" | "pubmeta" | "title"
-  > &
-    Partial<Pick<Presentation, "id">>;
-  lastSlideUpdatePromise: Promise<any> | null;
-  isSaving: boolean;
-  isPresentationMode: boolean;
-};
-
-type Actions = {
-  getCurrentSlide: () => Slide;
-  goToSlide: (index: number) => void;
-  updateSlide: (id: string, map: MapToPartial<Slide>) => void;
-  updateCurrentSlide: (map: MapToPartial<Slide>) => void;
-  goToNextSlide: () => void;
-  goToPrevSlide: () => void;
-  addNewSlide: () => void;
-  setPresentation: (presentation: Presentation) => void;
-  startPresentationMode: () => void;
-  stopPresentationMode: () => void;
-  updateTitle: (newTitle: string) => void;
-  deleteSlide: (id: string) => void;
-  deleteCurrentSlide: () => void;
-};
+import { createInfoToast } from "lib/createInfoToast";
+import type { Actions, State } from "./types";
+import { createNewSlide } from "./createNewSlide";
 
 const defaultSlideValue: Slide = {
   id: "",
@@ -53,7 +24,7 @@ export const useStore = create<State & Actions>((set, get) => ({
     isPublished: false,
     title: "Untitled",
   },
-  lastSlideUpdatePromise: null,
+  lastSaveRequestPromise: null,
   isSaving: false,
   isPresentationMode: false,
   getCurrentSlide: () => get().presentation.slides[get().currentSlideIdx],
@@ -75,7 +46,7 @@ export const useStore = create<State & Actions>((set, get) => ({
     goToSlide(currentSlideIdx - 1);
   },
   updateSlide: (id: string, map: (slide: Slide) => Partial<Slide>) => {
-    const { presentation, updateSlide } = get();
+    const { presentation, setLastSaveRequestPromise } = get();
     const { slides } = presentation;
     const pid = presentation.id;
 
@@ -87,16 +58,7 @@ export const useStore = create<State & Actions>((set, get) => ({
 
     const slide = { ...slides[idx], ...partialSlide };
 
-    updateSlideRemote(slide, pid, updateSlide, (promise) => {
-      set({ lastSlideUpdatePromise: promise });
-
-      promise.finally(() => {
-        const { lastSlideUpdatePromise } = get();
-        if (lastSlideUpdatePromise === promise) {
-          set({ isSaving: false });
-        }
-      });
-    });
+    updateSlideRemote(slide, pid, setLastSaveRequestPromise);
 
     set({
       presentation: {
@@ -116,7 +78,7 @@ export const useStore = create<State & Actions>((set, get) => ({
     updateSlide(slides[currentSlideIdx].id, map);
   },
   addNewSlide: () => {
-    const { presentation, updateSlide } = get();
+    const { presentation, updateSlide, setLastSaveRequestPromise } = get();
     const { slides } = presentation;
 
     const lastSlide = slides[slides.length - 1];
@@ -137,7 +99,12 @@ export const useStore = create<State & Actions>((set, get) => ({
       },
     });
 
-    updateSlide(newSlide.id, (s) => s);
+    createNewSlide(
+      newSlide,
+      presentation.id,
+      updateSlide,
+      setLastSaveRequestPromise
+    );
   },
   setPresentation: (presentation) => {
     set({ presentation });
@@ -149,7 +116,7 @@ export const useStore = create<State & Actions>((set, get) => ({
     set({ isPresentationMode: false });
   },
   updateTitle: (newTitle: string) => {
-    const { presentation, isSaving } = get();
+    const { presentation, isSaving, setLastSaveRequestPromise } = get();
 
     const isInvalid = !newTitle || newTitle?.trim() === "";
 
@@ -162,25 +129,10 @@ export const useStore = create<State & Actions>((set, get) => ({
       return;
     }
 
-    updateRemoteTitle(presentation.id)(newTitle, (promise) => {
-      const { lastSlideUpdatePromise } = get();
-      const combinedPromise = Promise.allSettled(
-        [promise, lastSlideUpdatePromise].filter(Boolean)
-      );
-
-      combinedPromise.finally(() => {
-        const { lastSlideUpdatePromise } = get();
-        if (lastSlideUpdatePromise === combinedPromise) {
-          set({ isSaving: false, lastSlideUpdatePromise: null });
-        }
-      });
-
-      // @TODO change name to generalize.
-      set({ lastSlideUpdatePromise: combinedPromise });
-    });
+    updateRemoteTitle(presentation.id)(newTitle, setLastSaveRequestPromise);
   },
   deleteSlide: (id: string) => {
-    const { presentation } = get();
+    const { presentation, setLastSaveRequestPromise } = get();
 
     const { slides, id: pid } = presentation;
 
@@ -191,22 +143,7 @@ export const useStore = create<State & Actions>((set, get) => ({
       return;
     }
 
-    deleteSlideRemote(id, pid, (promise) => {
-      // @TODO reduce redundancy.
-      const { lastSlideUpdatePromise } = get();
-      const combinedPromise = Promise.allSettled(
-        [promise, lastSlideUpdatePromise].filter(Boolean)
-      );
-
-      combinedPromise.finally(() => {
-        const { lastSlideUpdatePromise } = get();
-        if (lastSlideUpdatePromise === combinedPromise) {
-          set({ isSaving: false, lastSlideUpdatePromise: null });
-        }
-      });
-
-      set({ lastSlideUpdatePromise: combinedPromise });
-    });
+    deleteSlideRemote(id, pid, setLastSaveRequestPromise);
 
     set({
       isSaving: true,
@@ -239,6 +176,23 @@ export const useStore = create<State & Actions>((set, get) => ({
     }
 
     deleteSlide(id);
+  },
+  setLastSaveRequestPromise: (promise) => {
+    const { lastSaveRequestPromise } = get();
+
+    const combinedPromise = Promise.allSettled(
+      [lastSaveRequestPromise, promise].filter(Boolean)
+    );
+
+    combinedPromise.finally(() => {
+      const { lastSaveRequestPromise } = get();
+
+      if (lastSaveRequestPromise === combinedPromise) {
+        set({ lastSaveRequestPromise: null, isSaving: false });
+      }
+    });
+
+    set({ lastSaveRequestPromise: combinedPromise, isSaving: true });
   },
 }));
 
