@@ -1,11 +1,10 @@
-import Head from "next/head";
 import { FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Center, Text, Stack, Button } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import Typewriter from "typewriter-effect/dist/core";
 
-import { PrimaryButton } from "components";
+import { PrimaryButton, Meta } from "components";
 
 const LandingPage: FC<{}> = () => {
   const router = useRouter();
@@ -31,9 +30,7 @@ const LandingPage: FC<{}> = () => {
 
   return (
     <>
-      <Head>
-        <title>MDSLIDE</title>
-      </Head>
+      <Meta title="MDSLIDE" url={"https://mdslide.vercel.app"} />
       <Center height="100vh">
         <Stack>
           <Center>

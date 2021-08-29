@@ -1,6 +1,5 @@
 import useSWR from "swr";
 import axios from "axios";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
@@ -14,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 
 import createErrorToast from "lib/createErrorToast";
-import { HomeNavbar, Slide, LoadFonts } from "components";
+import { HomeNavbar, Slide, LoadFonts, Meta } from "components";
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
@@ -39,9 +38,7 @@ export function Index() {
 
   return (
     <Box bg="#fafafa" minHeight="100vh">
-      <Head>
-        <title>Dashboard</title>
-      </Head>
+      <Meta title="Dashboard" url={"https://mdslide.vercel.app/app"} />
       <LoadFonts fontFamilies={fontFamilies} />
       {isNextRouteLoading ? (
         <Progress size="xs" colorScheme="blackAlpha" isIndeterminate />

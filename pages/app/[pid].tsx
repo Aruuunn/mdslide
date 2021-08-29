@@ -15,7 +15,6 @@ import {
   SlideNavigator,
   FullScreenPresentation,
 } from "components";
-import createErrorToast from "lib/createErrorToast";
 import { getDb } from "lib/db/getDb";
 import { Slide } from "model/slide";
 import { useStore } from "lib/stores/presentation";

@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { ObjectId } from "mongodb";
 import { FC, useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
@@ -16,6 +15,7 @@ import {
   NextSlideButton,
   PrevSlideButton,
   StartPresentationModeButton,
+  Meta,
 } from "components";
 import { keyListeners } from "lib/setupKeyListeners";
 
@@ -62,7 +62,10 @@ const PublishedPresentationPage: FC<PageProps> = (props) => {
 
   return (
     <>
-      <Head>{presentation.title}</Head>
+      <Meta
+        title={presentation.title}
+        url={`https://mdslide.vercel.app/p/${presentation.id}`}
+      />
       {!IsPresentationMode ? (
         <>
           <LoadFonts fontFamilies={fontFamilies} />

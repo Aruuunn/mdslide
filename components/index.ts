@@ -13,6 +13,7 @@ export { LoadFonts } from "./LoadFonts";
 export { FullScreenPresentation } from "./FullScreenPresentation";
 export { NextSlideButton } from "./NextSlideButton";
 export { PrevSlideButton } from "./PrevSlideButton";
+export { Meta } from "./Meta";
 export { StartPresentationModeButton } from "./StartPresentationModeButton";
 
 export type { EditorNavbarProps } from "./EditorNavbar";
@@ -27,5 +28,6 @@ export type { SlideProps } from "./Slide";
 export type { ColorPickerProps } from "./ColorPicker";
 export type { AccountActionsProps } from "./AccountActions";
 export type { PublishSettingsModalProps } from "./PublishSettingsModal";
+export type { MetaProps } from "./Meta";
 export type { FullScreenPresentationProps } from "./FullScreenPresentation";
 export type { StartPresentationModeButtonProps } from "./StartPresentationModeButton";
