@@ -1,10 +1,10 @@
 const removeImports = require("next-remove-imports")();
-const withOffline = require("next-offline");
+const withPWA = require("next-pwa");
 
-module.exports = removeImports(
-  withOffline({
-    workboxOpts: {
-      swDest: "../public/service-worker.js",
+module.exports = withPWA(
+  removeImports({
+    pwa: {
+      dest: "public",
     },
   })
 );
