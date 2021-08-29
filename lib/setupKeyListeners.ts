@@ -7,11 +7,19 @@ export function keyListeners() {
       ".w-md-editor-text-input"
     );
 
+    const key = (e as unknown as KeyboardEvent)?.key;
+
+    if (key === "Delete") {
+      const { deleteCurrentSlide } = useStore.getState();
+      deleteCurrentSlide();
+      return;
+    }
+
     if (document.activeElement === editorEl) {
       return;
     }
 
-    switch ((e as unknown as KeyboardEvent)?.key) {
+    switch (key) {
       case "ArrowRight":
         const { goToNextSlide } = useStore.getState();
         goToNextSlide();

@@ -1,3 +1,4 @@
+import { createInfoToast } from "./../../createInfoToast";
 import create from "zustand";
 
 import Slide from "model/slide";
@@ -5,6 +6,7 @@ import Presentation from "model/interfaces/presentation";
 import { getTempId } from "lib/utils/getTempId";
 import { updateSlideRemote } from "./updateSlideRemote";
 import { updateRemoteTitle } from "./updateRemoteTitle";
+import { deleteSlideRemote } from "./deleteSlide";
 
 type MapToPartial<T> = (value: T) => Partial<T>;
 
@@ -32,6 +34,8 @@ type Actions = {
   startPresentationMode: () => void;
   stopPresentationMode: () => void;
   updateTitle: (newTitle: string) => void;
+  deleteSlide: (id: string) => void;
+  deleteCurrentSlide: () => void;
 };
 
 const defaultSlideValue: Slide = {
@@ -117,7 +121,6 @@ export const useStore = create<State & Actions>((set, get) => ({
 
     const lastSlide = slides[slides.length - 1];
 
-    // TODO
     const newSlide = {
       id: getTempId(),
       mdContent: `# Slide ${slides.length + 1} \n`,
@@ -175,6 +178,67 @@ export const useStore = create<State & Actions>((set, get) => ({
       // @TODO change name to generalize.
       set({ lastSlideUpdatePromise: combinedPromise });
     });
+  },
+  deleteSlide: (id: string) => {
+    const { presentation } = get();
+
+    const { slides, id: pid } = presentation;
+
+    const idx = slides.findIndex((s) => s.id === id);
+
+    if (idx === -1) {
+      console.error("Tried deleting slide which is not present. ", id);
+      return;
+    }
+
+    deleteSlideRemote(id, pid, (promise) => {
+      // @TODO reduce redundancy.
+      const { lastSlideUpdatePromise } = get();
+      const combinedPromise = Promise.allSettled(
+        [promise, lastSlideUpdatePromise].filter(Boolean)
+      );
+
+      combinedPromise.finally(() => {
+        const { lastSlideUpdatePromise } = get();
+        if (lastSlideUpdatePromise === combinedPromise) {
+          set({ isSaving: false, lastSlideUpdatePromise: null });
+        }
+      });
+
+      set({ lastSlideUpdatePromise: combinedPromise });
+    });
+
+    set({
+      isSaving: true,
+      presentation: {
+        ...presentation,
+        slides: slides.filter((s) => s.id !== id),
+      },
+    });
+  },
+  deleteCurrentSlide: () => {
+    const {
+      currentSlideIdx,
+      presentation: { slides },
+      deleteSlide,
+    } = get();
+
+    const id = slides[currentSlideIdx].id;
+
+    if (slides.length === 1) {
+      createInfoToast("You need to have atleast one slide");
+      return;
+    }
+
+    if (!window.confirm("Do you really want to delete this slide?")) {
+      return;
+    }
+
+    if (currentSlideIdx === slides.length - 1) {
+      set({ currentSlideIdx: currentSlideIdx - 1 });
+    }
+
+    deleteSlide(id);
   },
 }));
 

@@ -8,40 +8,45 @@ type MapToPartial<T> = (value: T) => Partial<T>;
 
 const tempIds = new Set<string>();
 
+// @TODO dont debounce new slide creation
 const fn = (
   slide: Slide,
   pid: string,
   updateSlide: (id: string, map: MapToPartial<Slide>) => void,
   callback: (promise: Promise<any>) => void
 ) => {
-  if (isTempId(slide.id)) {
-    if (tempIds.has(slide.id)) {
+  const sid = slide.id;
+
+  if (isTempId(sid)) {
+    if (tempIds.has(sid)) {
       return;
     } else {
-      tempIds.add(slide.id);
+      tempIds.add(sid);
     }
   }
 
   const promise = axios.patch(
-    `/api/p/${pid}/slide/${isTempId(slide.id) ? "new" : slide.id}`,
+    `/api/p/${pid}/slide/${isTempId(sid) ? "new" : sid}`,
     {
       slide,
     }
   );
 
   promise.then((res) => {
-    if (isTempId(slide.id)) {
+    if (isTempId(sid)) {
+      console.debug("saving the new id");
+
       const {
         data: { id },
       } = res;
 
-      updateSlide(slide.id, () => ({ id }));
+      updateSlide(sid, () => ({ id }));
     }
   });
 
   promise.catch(() => {
-    if (isTempId(slide.id)) {
-      tempIds.delete(slide.id);
+    if (isTempId(sid)) {
+      tempIds.delete(sid);
     }
 
     createErrorToast("Error saving the slide");
