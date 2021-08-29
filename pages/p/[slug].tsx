@@ -20,6 +20,7 @@ import { keyListeners } from "lib/setupKeyListeners";
 
 import "@uiw/react-md-editor/dist/markdown-editor.css";
 import "@uiw/react-markdown-preview/dist/markdown.css";
+import { mapUnderscoreIdToId } from "@lib/utils/mapUnderscoreId";
 
 interface PageProps {
   presentation: PresentationInterface;
@@ -132,7 +133,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 
   const props: PageProps = {
-    presentation: { ...payload, id: _id.toHexString() },
+    presentation: {
+      ...payload,
+      id: _id.toHexString(),
+      slides: payload.slides.map(mapUnderscoreIdToId),
+    },
   };
 
   return {
