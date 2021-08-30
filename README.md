@@ -102,6 +102,7 @@ You are all set! Open [localhost:3000](http://localhost:3000/) to see the app.
 + Responsive UI for smaller devices.
 + Resizable editor panel.
 + Optimize web accessiblity.
++ Export as pdf, .html, .pptx
 
 ## 🛡 License
 This project is licensed under the MIT License.
