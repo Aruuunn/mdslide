@@ -36,6 +36,7 @@ Try the App: [MDSLIDE](https://mdslide.vercel.app/)
 
 +  ⚡ Make Simple yet Effective Slide Presentations using Markdown.
 +  🌐  Publish your Slide Presentation.
++  💻  Present your/published Slide presentations in Fullscreen.
 + 🎨  Custom background color, font color and fonts.
 + 😎  Synced to the Cloud automatically. No need to save *manually*!
 
