@@ -1,6 +1,6 @@
 {
   "name": "mslide",
-  "version": "0.39.6",
+  "version": "0.39.7",
   "private": true,
   "scripts": {
     "dev": "next dev",
