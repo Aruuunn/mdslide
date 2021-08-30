@@ -96,7 +96,8 @@ You are all set! Open [localhost:3000](http://localhost:3000/) to see the app.
 
 ## ✨ What's next?
 
-+ Retry saving in intervals, if unsaved because of some error.
++ Retry saving in intervals, if unsaved because of some error. (*WORKING*)
++ Upload custom image (Currently only external image links are supported).
 + Collaborative Editing
 + Responsive UI for smaller devices.
 + Resizable editor panel.
