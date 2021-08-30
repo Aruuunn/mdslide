@@ -4,6 +4,26 @@
 Create Minimalistic Slide Presentations using <i>Markdown</i>.
 </p>
 
+<p align="center">
+<a href="https://github.com/arunmurugan78/mdslide/blob/master/LICENSE" target="blank">
+<img src="https://img.shields.io/github/license/arunmurugan78/mdslide?style=flat-square" alt="mdslide licence" />
+</a>
+<a href="https://github.com/arunmurugan78/mdslide/fork" target="blank">
+<img src="https://img.shields.io/github/forks/arunmurugan78/mdslide?style=flat-square" alt="mdslide forks"/>
+</a>
+<a href="https://github.com/arunmurugan78/mdslide/stargazers" target="blank">
+<img src="https://img.shields.io/github/stars/arunmurugan78/mdslide?style=flat-square" alt="mdslide stars"/>
+</a>
+<a href="https://github.com/arunmurugan78/mdslide/issues" target="blank">
+<img src="https://img.shields.io/github/issues/arunmurugan78/mdslide?style=flat-square" alt="mdslide issues"/>
+</a>
+<a href="https://github.com/arunmurugan78/mdslide/pulls" target="blank">
+<img src="https://img.shields.io/github/issues-pr/arunmurugan78/mdslide?style=flat-square" alt="mdslide pull-requests"/>
+</a>
+
+</p>
+
+
 <p align="center" style="margin-top: 20px; margin-bottom: 20px">
 <img src="./public/mockup.png" width="500px" style="margin: auto;"/>
 </p>
