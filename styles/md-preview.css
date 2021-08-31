@@ -19,6 +19,8 @@
 .wmde-markdown li {
   text-align: start;
   width: auto;
+  margin-top: 25px;
+  margin-bottom: 25px;
 }
 
 .wmde-markdown img {
