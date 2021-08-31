@@ -1,0 +1,66 @@
+.wmde-markdown {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  align-items: center;
+}
+
+.wmde-markdown * {
+  width: 100%;
+  text-align: center;
+}
+
+.wmde-markdown ul {
+  width: auto;
+  max-width: 100%;
+}
+.wmde-markdown li {
+  text-align: start;
+  width: auto;
+}
+
+.wmde-markdown img {
+  max-width: 100%;
+  max-height: 100%;
+  height: 100%;
+  width: auto;
+  margin: auto;
+}
+
+/* TODO make it work without !important */
+.wmde-markdown h1,
+.wmde-markdown h2 {
+  border-bottom: none !important;
+  text-align: center;
+}
+
+#font-picker {
+  box-shadow: none;
+  border: 1px solid #e2e8f0;
+  margin-top: 20px;
+  width: 100%;
+}
+
+#font-picker > .dropdown-button {
+  background-color: #f8f8f8;
+}
+
+.font-button {
+  background-color: #fafafa !important;
+}
+
+div[id^="font-picker"] ul li button.active-font {
+  background-color: #f3f3f3 !important;
+}
+
+div[id^="font-picker"] ul li button:hover,
+div[id^="font-picker"] ul li button:focus {
+  background-color: #f6f6f6;
+}
+
+.spaced-bold-text {
+  letter-spacing: 0.15em;
+  font-weight: bold;
+}

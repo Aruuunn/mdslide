@@ -7,6 +7,7 @@ import theme from "config/theme";
 import "focus-visible/dist/focus-visible";
 import "styles/global.css";
 import "styles/editor.css";
+import "styles/md-preview.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
