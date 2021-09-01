@@ -42,7 +42,7 @@ Try the App: [MDSLIDE](https://mdslide.vercel.app/)
 
 ## Demo
 
-<img src="./public/demo.gif" />
+<img src="./public/demo.gif" width="500px"/>
 
 ## 👨‍💻 Built with
 + [Nextjs](https://nextjs.org/): for building both the frontend and backend.
