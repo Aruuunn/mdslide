@@ -40,7 +40,9 @@ Try the App: [MDSLIDE](https://mdslide.vercel.app/)
 + 🎨  Custom background color, font color and fonts.
 + 😎  Synced to the Cloud automatically. No need to save *manually*!
 
+## Demo
 
+<img src="./public/demo.gif" />
 
 ## 👨‍💻 Built with
 + [Nextjs](https://nextjs.org/): for building both the frontend and backend.
