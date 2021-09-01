@@ -20,6 +20,7 @@ export function keyListeners() {
     }
 
     switch (key) {
+      case " ":
       case "ArrowRight":
         const { goToNextSlide } = useStore.getState();
         goToNextSlide();
