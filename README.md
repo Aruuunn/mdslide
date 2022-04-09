@@ -44,6 +44,15 @@ Try the App: [MDSLIDE](https://mdslide.vercel.app/)
 
 <img src="./public/demo.gif" width="500px"/>
 
+## ✨ What's next?
++ Better Image Support.
++ Upload custom image (Currently only external image links are supported).
++ Collaborative Editing
++ Responsive UI for smaller devices.
++ Resizable editor panel.
++ Optimize web accessiblity.
++ Export as pdf, .html, .pptx
+
 ## 👨‍💻 Built with
 + [Nextjs](https://nextjs.org/): for building both the frontend and backend.
 + [Auth0](https://auth0.com/z): Complete User Authentication
@@ -96,13 +105,6 @@ yarn dev
 
 You are all set! Open [localhost:3000](http://localhost:3000/) to see the app.
 
-## ✨ What's next?
-+ Upload custom image (Currently only external image links are supported).
-+ Collaborative Editing
-+ Responsive UI for smaller devices.
-+ Resizable editor panel.
-+ Optimize web accessiblity.
-+ Export as pdf, .html, .pptx
 
 ## 🛡 License
 This project is licensed under the MIT License.
